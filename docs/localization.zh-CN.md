@@ -30,13 +30,16 @@ pnpm --filter happy-desktop-state --filter happy-desktop-ui --filter happy-deskt
 pnpm --dir packages/happy-desktop-electron build
 ```
 
-如需在 Windows 上生成本地安装包，使用项目已有的构建命令：
+如需在 Windows 上生成此 fork 的未签名社区安装包和免安装 ZIP，执行：
 
 ```powershell
-pnpm --dir packages/happy-desktop-electron dist:win
+pnpm desktop:win:zh-cn
 ```
 
-输出位于 `packages/happy-desktop-electron/release/`。公开发行版的签名与发布要求见
+可在命令后传入版本，例如 `pnpm desktop:win:zh-cn 0.0.102-zh-CN.2`。
+输出位于 `packages/happy-desktop-electron/release/zh-cn/`，包含安装程序、ZIP 和
+`SHA256SUMS.txt`。构建命令不会上传或安装它们。
+上游原有 `dist:win` 与强制签名的官方发行流程保留不变。公开发行版的签名与发布要求见
 [releases.md](releases.md)；本地构建不等于已签名的官方发行版。官方更新可能替换此
 分支的中文渲染器。此改动本身不安装、替换或重启你正在使用的 Happy。
 
