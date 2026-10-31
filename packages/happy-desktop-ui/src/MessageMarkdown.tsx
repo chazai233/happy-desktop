@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import {
     createContext,
     createElement,
@@ -105,19 +106,19 @@ const LINK_MENU_PANEL: LinkOpenPlacement = "panel";
 const MarkdownLinkDefaultContext = createContext<LinkOpenPlacement | undefined>(undefined);
 function linkMenuItems(defaultPlacement: LinkOpenPlacement | undefined): MenuItem[] {
     const detail = (placement: LinkOpenPlacement) =>
-        placement === defaultPlacement ? { detail: "Default" } : {};
+        placement === defaultPlacement ? { detail: translate("Default") } : {};
     return [
         {
             kind: "item",
             id: LINK_MENU_BROWSER,
-            label: "Open in browser",
+            label: translate("Open in browser"),
             icon: "open-external",
             ...detail(LINK_MENU_BROWSER),
         },
         {
             kind: "item",
             id: LINK_MENU_PANEL,
-            label: "Open in side panel",
+            label: translate("Open in side panel"),
             icon: "panel-expand",
             ...detail(LINK_MENU_PANEL),
         },
@@ -476,7 +477,7 @@ const MarkdownPre = ({
             </ScrollArea>
             <CopyButton
                 className="happy-message__code-copy"
-                label="Copy code"
+                label={translate("Copy code")}
                 text={fence?.text ?? ""}
             />
         </div>

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { FileTree, type FileTreeNode, type FileTreeProps } from "./FileTree";
@@ -57,8 +58,8 @@ export type FileBrowserProps = {
     fileActionsUnavailable?: string;
 };
 const SCOPES: { value: FileBrowserScope; label: string }[] = [
-    { value: "all", label: "All Files" },
-    { value: "changed", label: "Changes" },
+    { value: "all", label: translate("All Files") },
+    { value: "changed", label: translate("Changes") },
 ];
 /**
  * C-168 FileBrowser — the file listing of a workspace panel.
@@ -112,7 +113,7 @@ export function FileBrowser(props: FileBrowserProps) {
     const deleted = local.deletedLines !== undefined && local.deletedLines > 0;
     return (
         <section
-            aria-label={local.scope === "all" ? "All files" : "Changed files"}
+            aria-label={local.scope === "all" ? translate("All files") : translate("Changed files")}
             className={["happy-file-browser", local.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="file-browser"
             data-testid={local["data-testid"]}
@@ -123,7 +124,7 @@ export function FileBrowser(props: FileBrowserProps) {
                 data-happy-desktop-ui="file-browser-controls"
             >
                 <SegmentedControl
-                    aria-label="Files shown"
+                    aria-label={translate("Files shown")}
                     className="happy-file-browser__scopes"
                     onChange={(scope) => local.onScopeChange?.(scope as FileBrowserScope)}
                     segments={SCOPES.map((scope) => ({
@@ -175,7 +176,7 @@ export function FileBrowser(props: FileBrowserProps) {
                         </span>
                         <div className="happy-file-browser__layouts" role="group">
                             <button
-                                aria-label="List files"
+                                aria-label={translate("List files")}
                                 aria-pressed={local.layout === "flat"}
                                 className="happy-file-browser__layout"
                                 data-active={local.layout === "flat" ? "" : undefined}
@@ -186,7 +187,7 @@ export function FileBrowser(props: FileBrowserProps) {
                                 <Icon name="files" size={14} />
                             </button>
                             <button
-                                aria-label="Nest files into directories"
+                                aria-label={translate("Nest files into directories")}
                                 aria-pressed={local.layout === "tree"}
                                 className="happy-file-browser__layout"
                                 data-active={local.layout === "tree" ? "" : undefined}
@@ -203,7 +204,7 @@ export function FileBrowser(props: FileBrowserProps) {
                             control is not offered. */}
                         {local.onReviewOpen && (local.count ?? 0) > 0 ? (
                             <button
-                                aria-label="Read every change in one scroll"
+                                aria-label={translate("Read every change in one scroll")}
                                 className="happy-file-browser__review"
                                 data-happy-desktop-ui="file-browser-review"
                                 data-testid="file-browser-review"
@@ -230,7 +231,9 @@ export function FileBrowser(props: FileBrowserProps) {
                         onChange={(query) => local.onSearchQueryChange?.(query)}
                         placeholder={
                             local.searchPlaceholder ??
-                            (local.scope === "all" ? "Search all files" : "Search changes")
+                            (local.scope === "all"
+                                ? translate("Search all files")
+                                : translate("Search changes"))
                         }
                         shortcutHint={false}
                         value={local.searchQuery ?? ""}
@@ -248,7 +251,9 @@ export function FileBrowser(props: FileBrowserProps) {
             <div className="happy-file-browser__body" data-happy-desktop-ui="file-browser-body">
                 <FileTree
                     emptyLabel={local.emptyLabel}
-                    label={local.scope === "all" ? "All files" : "Changed files"}
+                    label={
+                        local.scope === "all" ? translate("All files") : translate("Changed files")
+                    }
                     loading={local.loading}
                     loadingLabel={local.loadingLabel}
                     nodes={local.nodes}

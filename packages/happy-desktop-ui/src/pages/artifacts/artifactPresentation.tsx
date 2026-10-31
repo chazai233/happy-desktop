@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type {
     HappyAgentArtifactAuthor,
     HappyAgentArtifactSource,
@@ -71,5 +72,5 @@ export function artifactFileName(path: string): string {
  * agent credited by its own conversation's title, or a bot in its own chat.
  */
 export function artifactMadeBy(author: string, place: string): string {
-    return author === place ? author : `${author} in ${place}`;
+    return author === place ? author : translate("{0} in {1}", author, place);
 }

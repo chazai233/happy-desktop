@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import {
     HappyAgentAutoJoinSettings,
     type HappyAgentAutoJoinSettingsProps,
@@ -11,8 +12,10 @@ export function HappyAgentTaskSettings(props: HappyAgentTaskSettingsProps) {
         <HappyAgentAutoJoinSettings
             {...props}
             entity="task"
-            label="Join other people’s tasks"
-            description="Except ones you left. Turning this off keeps the ones you joined."
+            label={translate("Join other people’s tasks")}
+            description={translate(
+                "Except ones you left. Turning this off keeps the ones you joined.",
+            )}
         />
     );
 }

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties, type HTMLAttributes } from "react";
 import { Avatar, type ToneName } from "./Avatar";
@@ -64,7 +65,7 @@ export function ApprovalCard(props: ApprovalCardProps) {
                         className="happy-desktop-approval-card__banner-label"
                         data-happy-desktop-ui="approval-card-banner-label"
                     >
-                        {approved() ? "Approved" : "Denied"}
+                        {approved() ? translate("Approved") : translate("Denied")}
                     </span>
                 </div>
             ) : null}
@@ -136,7 +137,7 @@ export function ApprovalCard(props: ApprovalCardProps) {
                             className="happy-desktop-approval-card__detail-label"
                             data-happy-desktop-ui="approval-card-detail-label"
                         >
-                            Impact
+                            {translate("Impact")}
                         </span>
                         <p
                             className="happy-desktop-approval-card__impact"
@@ -148,7 +149,7 @@ export function ApprovalCard(props: ApprovalCardProps) {
                             className="happy-desktop-approval-card__detail-label"
                             data-happy-desktop-ui="approval-card-detail-label"
                         >
-                            Resources
+                            {translate("Resources")}
                         </span>
                         <div
                             className="happy-desktop-approval-card__resources"
@@ -174,7 +175,7 @@ export function ApprovalCard(props: ApprovalCardProps) {
                             onClick={() => local.onResolutionChange("approved")}
                             size="small"
                         >
-                            Approve
+                            {translate("Approve")}
                         </Button>
                         <Button
                             data-action="deny"
@@ -183,7 +184,7 @@ export function ApprovalCard(props: ApprovalCardProps) {
                             size="small"
                             variant="secondary"
                         >
-                            Request changes
+                            {translate("Request changes")}
                         </Button>
                     </>
                 ) : (
@@ -197,8 +198,11 @@ export function ApprovalCard(props: ApprovalCardProps) {
                             data-happy-desktop-ui="approval-card-state-label"
                         >
                             {approved()
-                                ? `Approved — ${local.request.agent} can proceed`
-                                : `Denied — ${local.request.agent} will hold this change`}
+                                ? translate("Approved — {0} can proceed", local.request.agent)
+                                : translate(
+                                      "Denied — {0} will hold this change",
+                                      local.request.agent,
+                                  )}
                         </span>
                     </span>
                 )}
@@ -213,7 +217,7 @@ export function ApprovalCard(props: ApprovalCardProps) {
                         className="happy-desktop-approval-card__toggle-label"
                         data-happy-desktop-ui="approval-card-toggle-label"
                     >
-                        Details
+                        {translate("Details")}
                     </span>
                     <Icon name="chevron-down" size={14} />
                 </button>

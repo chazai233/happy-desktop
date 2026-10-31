@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Banner } from "../../Banner";
 import { HappyAgentSettingsSection } from "./HappyAgentSettingsShell";
 
@@ -13,12 +14,17 @@ export interface HappyAgentPasswordSettingsProps {
 export function HappyAgentPasswordSettings(props: HappyAgentPasswordSettingsProps) {
     return (
         <HappyAgentSettingsSection
-            description="Happy fills logins saved in your browsers, on demand. It never stores passwords, imports them in bulk, or copies sessions."
-            title="Saved logins"
+            description={translate(
+                "Happy fills logins saved in your browsers, on demand. It never stores passwords, imports them in bulk, or copies sessions.",
+            )}
+            title={translate("Saved logins")}
         >
             {props.available ? null : (
-                <Banner tone="neutral" title="Available in Happy for macOS and Windows">
-                    Saved logins are read from your browsers on this computer.
+                <Banner
+                    tone="neutral"
+                    title={translate("Available in Happy for macOS and Windows")}
+                >
+                    {translate("Saved logins are read from your browsers on this computer.")}
                 </Banner>
             )}
         </HappyAgentSettingsSection>

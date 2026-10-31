@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useState, type ReactNode } from "react";
 import { Button } from "./Button";
 import {
@@ -111,7 +112,7 @@ export function InlinePage(props: InlinePageProps) {
                     <button
                         aria-label={
                             props.onOpenSide
-                                ? `Open ${props.title} beside the chat`
+                                ? translate("Open {0} beside the chat", props.title)
                                 : `${geometry.collapsed ? "Expand" : "Collapse"} ${props.title}`
                         }
                         className="happy-inline-page__opener"
@@ -131,7 +132,9 @@ export function InlinePage(props: InlinePageProps) {
                     <Button
                         aria-expanded={!geometry.collapsed}
                         aria-label={
-                            geometry.collapsed ? `Expand ${props.title}` : `Collapse ${props.title}`
+                            geometry.collapsed
+                                ? translate("Expand {0}", props.title)
+                                : translate("Collapse {0}", props.title)
                         }
                         data-happy-desktop-ui="inline-page-toggle"
                         icon={geometry.collapsed ? "chevron-right" : "chevron-down"}
@@ -146,7 +149,7 @@ export function InlinePage(props: InlinePageProps) {
                 ) : null}
                 {props.onOpenSide ? (
                     <Button
-                        aria-label={`Open ${props.title} beside the chat`}
+                        aria-label={translate("Open {0} beside the chat", props.title)}
                         data-happy-desktop-ui="inline-page-open"
                         icon="open-external"
                         iconOnly

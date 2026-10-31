@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties, type ReactNode } from "react";
 import { Button } from "./Button";
@@ -83,7 +84,7 @@ export function Banner(props: BannerProps) {
                         : null}
                     {local.onDismiss ? (
                         <button
-                            aria-label="Dismiss"
+                            aria-label={translate("Dismiss")}
                             className="happy-banner__dismiss"
                             data-happy-desktop-ui="banner-dismiss"
                             onClick={() => local.onDismiss?.()}

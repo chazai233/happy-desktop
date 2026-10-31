@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties } from "react";
 import { Banner } from "./Banner";
 import { Button } from "./Button";
@@ -57,14 +58,15 @@ export function HappyAgentCreateTaskPage(props: HappyAgentCreateTaskPageProps) {
                     className="happy-agent-create-task__title"
                     data-happy-desktop-ui="happy-agent-create-task-title"
                 >
-                    Create a new task
+                    {translate("Create a new task")}
                 </h1>
                 <p
                     className="happy-agent-create-task__lede"
                     data-happy-desktop-ui="happy-agent-create-task-lede"
                 >
-                    A task is one piece of work with a conversation and a folder of its own.
-                    Everyone who joins it works in that same conversation.
+                    {translate(
+                        "A task is one piece of work with a conversation and a folder of its own. Everyone who joins it works in that same conversation.",
+                    )}
                 </p>
             </header>
             {/* The name, and Create beside it: the last thing decided up here.
@@ -79,14 +81,14 @@ export function HappyAgentCreateTaskPage(props: HappyAgentCreateTaskPageProps) {
                     data-happy-desktop-ui="happy-agent-create-task-row"
                 >
                     <TextField
-                        aria-label="Name"
+                        aria-label={translate("Name")}
                         className="happy-agent-create-task__name"
                         data-testid="happy-agent-create-task-name"
                         disabled={submitting}
                         fullWidth
                         onSubmit={submit}
                         onValueChange={props.onNameChange}
-                        placeholder="Name, generated if left blank"
+                        placeholder={translate("Name, generated if left blank")}
                         value={props.name}
                     />
                     <Button
@@ -96,7 +98,7 @@ export function HappyAgentCreateTaskPage(props: HappyAgentCreateTaskPageProps) {
                         title={props.submitDisabledReason}
                         variant="secondary"
                     >
-                        {submitting ? "Creating…" : "Create"}
+                        {submitting ? translate("Creating…") : translate("Create")}
                     </Button>
                 </div>
                 {props.submitDisabledReason ? (

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import {
     useRef,
     useState,
@@ -244,7 +245,9 @@ export function MediaVideoTile(props: MediaVideoTileProps) {
             {/* The frame is the play button: a click anywhere on the recording
                 is the oldest control in the medium. */}
             <button
-                aria-label={playing ? `Pause ${props.name}` : `Play ${props.name}`}
+                aria-label={
+                    playing ? translate("Pause {0}", props.name) : translate("Play {0}", props.name)
+                }
                 className="happy-media-video-tile__surface"
                 data-happy-desktop-ui="media-video-tile-surface"
                 onClick={toggle}
@@ -265,7 +268,7 @@ export function MediaVideoTile(props: MediaVideoTileProps) {
                     <span className="happy-media-video-tile__corner">
                         {props.onOpen ? (
                             <button
-                                aria-label={`Open ${props.name}`}
+                                aria-label={translate("Open {0}", props.name)}
                                 className="happy-media-video-tile__control"
                                 data-happy-desktop-ui="media-video-tile-open"
                                 onClick={() => {
@@ -280,7 +283,7 @@ export function MediaVideoTile(props: MediaVideoTileProps) {
                     </span>
                     <span className="happy-media-video-tile__corner">
                         <button
-                            aria-label={playback.muted ? "Unmute" : "Mute"}
+                            aria-label={playback.muted ? translate("Unmute") : translate("Mute")}
                             aria-pressed={playback.muted}
                             className="happy-media-video-tile__control"
                             data-happy-desktop-ui="media-video-tile-mute"
@@ -314,7 +317,7 @@ export function MediaVideoTile(props: MediaVideoTileProps) {
                         {timeFormat(playback.second)}
                     </span>
                     <span
-                        aria-label={`Position in ${props.name}`}
+                        aria-label={translate("Position in {0}", props.name)}
                         aria-valuemax={known ? Math.floor(playback.duration) : 0}
                         aria-valuemin={0}
                         aria-valuenow={playback.second}

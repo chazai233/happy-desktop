@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties, ReactNode } from "react";
 import type {
     HappyAgentSystemMonitorSnapshot,
@@ -123,12 +124,19 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                 <div className="system-monitor__content">
                     <div className="system-monitor__host">
                         <div className="system-monitor__host-copy">
-                            <span className="system-monitor__eyebrow">Machine overview</span>
-                            <h1>{sample?.host.hostname ?? "System Monitor"}</h1>
+                            <span className="system-monitor__eyebrow">
+                                {translate("Machine overview")}
+                            </span>
+                            <h1>{sample?.host.hostname ?? translate("System Monitor")}</h1>
                             <span className="system-monitor__host-meta">
                                 {sample
-                                    ? `${sample.host.osName} · ${sample.host.arch} · Uptime ${uptime(sample.host.uptimeSeconds)}`
-                                    : "CPU, graphics, memory, and storage at a glance"}
+                                    ? translate(
+                                          "{0} · {1} · Uptime {2}",
+                                          sample.host.osName,
+                                          sample.host.arch,
+                                          uptime(sample.host.uptimeSeconds),
+                                      )
+                                    : translate("CPU, graphics, memory, and storage at a glance")}
                             </span>
                         </div>
                         <span
@@ -145,11 +153,11 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                     ) : null}
                     <div className="system-monitor__cards">
                         <Card
-                            title="CPU"
+                            title={translate("CPU")}
                             icon="hardware-chip-outline"
                             tone="cpu"
                             value={sample ? percent(sample.cpu.usagePercent) : "—"}
-                            subtitle={sample?.cpu.model ?? "Waiting for processor data"}
+                            subtitle={sample?.cpu.model ?? translate("Waiting for processor data")}
                             chart={
                                 <Trend
                                     points={history.map((point) => ({
@@ -157,7 +165,7 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                         value: point.cpuPercent,
                                     }))}
                                     maximum={100}
-                                    label="CPU usage history"
+                                    label={translate("CPU usage history")}
                                 />
                             }
                         >
@@ -165,11 +173,11 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                 values={sample?.cpu.perCoreUsagePercent ?? null}
                             />
                             <Detail
-                                label="Logical cores"
+                                label={translate("Logical cores")}
                                 value={sample ? String(sample.cpu.logicalCores) : "—"}
                             />
                             <Detail
-                                label="Frequency"
+                                label={translate("Frequency")}
                                 value={
                                     sample?.cpu.speedMhz == null
                                         ? "—"
@@ -177,7 +185,7 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                 }
                             />
                             <Detail
-                                label="Temperature"
+                                label={translate("Temperature")}
                                 value={temperature(sample?.cpu.temperatureCelsius ?? null)}
                             />
                         </Card>
@@ -190,8 +198,8 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                 sample
                                     ? sample.gpus.length
                                         ? sample.gpus.map((gpu) => gpu.name).join(" · ")
-                                        : "No GPU detected"
-                                    : "Waiting for graphics data"
+                                        : translate("No GPU detected")
+                                    : translate("Waiting for graphics data")
                             }
                             chart={
                                 <Trend
@@ -200,7 +208,7 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                         value: point.gpuPercent,
                                     }))}
                                     maximum={100}
-                                    label="GPU usage history"
+                                    label={translate("GPU usage history")}
                                 />
                             }
                         >
@@ -217,7 +225,7 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                             />
                                         ) : null}
                                         <Detail
-                                            label="Video memory"
+                                            label={translate("Video memory")}
                                             value={
                                                 gpu.memoryTotalBytes === null
                                                     ? "—"
@@ -225,11 +233,11 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                             }
                                         />
                                         <Detail
-                                            label="Temperature"
+                                            label={translate("Temperature")}
                                             value={temperature(gpu.temperatureCelsius)}
                                         />
                                         <Detail
-                                            label="Power"
+                                            label={translate("Power")}
                                             value={
                                                 gpu.powerWatts === null
                                                     ? "—"
@@ -241,20 +249,25 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                             ) : (
                                 <p className="system-monitor__empty">
                                     {sample
-                                        ? "Graphics metrics are unavailable on this machine."
-                                        : "Graphics metrics will appear here."}
+                                        ? translate(
+                                              "Graphics metrics are unavailable on this machine.",
+                                          )
+                                        : translate("Graphics metrics will appear here.")}
                                 </p>
                             )}
                         </Card>
                         <Card
-                            title="Memory"
+                            title={translate("Memory")}
                             icon="layers-outline"
                             tone="memory"
                             value={sample ? bytes(sample.memory.usedBytes) : "—"}
                             subtitle={
                                 sample
-                                    ? `of ${bytes(sample.memory.totalBytes)} physical memory`
-                                    : "Waiting for memory data"
+                                    ? translate(
+                                          "of {0} physical memory",
+                                          bytes(sample.memory.totalBytes),
+                                      )
+                                    : translate("Waiting for memory data")
                             }
                             chart={
                                 <Trend
@@ -263,7 +276,7 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                         value: point.memoryUsedBytes,
                                     }))}
                                     {...(sample ? { maximum: sample.memory.totalBytes } : {})}
-                                    label="Memory usage history"
+                                    label={translate("Memory usage history")}
                                     valueFormat={bytes}
                                 />
                             }
@@ -274,15 +287,15 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                         ? ratio(sample.memory.usedBytes, sample.memory.totalBytes)
                                         : null
                                 }
-                                label="Physical memory used"
+                                label={translate("Physical memory used")}
                             />
                             <Detail
-                                label="Available"
+                                label={translate("Available")}
                                 value={bytes(sample?.memory.availableBytes ?? null)}
                             />
                             {sample && sample.memory.cachedBytes !== null ? (
                                 <Detail
-                                    label="Cached"
+                                    label={translate("Cached")}
                                     value={bytes(sample.memory.cachedBytes)}
                                     meter={ratio(
                                         sample.memory.cachedBytes,
@@ -291,7 +304,7 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                 />
                             ) : null}
                             <Detail
-                                label="Swap"
+                                label={translate("Swap")}
                                 meter={
                                     sample?.memory.swapTotalBytes == null ||
                                     sample.memory.swapUsedBytes === null
@@ -309,27 +322,31 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                             />
                         </Card>
                         <Card
-                            title="Disk"
+                            title={translate("Disk")}
                             icon="server-outline"
                             tone="disk"
                             value={sample?.disks.length ? percent(ratio(diskUsed, diskTotal)) : "—"}
                             subtitle={
                                 sample?.disks.length
-                                    ? `${bytes(diskUsed)} of ${bytes(diskTotal)} used`
-                                    : "No volumes available"
+                                    ? translate(
+                                          "{0} of {1} used",
+                                          bytes(diskUsed),
+                                          bytes(diskTotal),
+                                      )
+                                    : translate("No volumes available")
                             }
                             chart={
                                 <div className="system-monitor__io-history">
                                     <div className="system-monitor__io-legend">
-                                        <span>Read I/O</span>
-                                        <span>Write I/O</span>
+                                        <span>{translate("Read I/O")}</span>
+                                        <span>{translate("Write I/O")}</span>
                                     </div>
                                     <DitherChart
-                                        label="Disk read and write I/O history"
+                                        label={translate("Disk read and write I/O history")}
                                         series={[
                                             {
                                                 id: "read",
-                                                label: "Read",
+                                                label: translate("Read"),
                                                 color: "blue",
                                                 points: history.map((point) => ({
                                                     x: point.sampledAt,
@@ -338,7 +355,7 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                             },
                                             {
                                                 id: "write",
-                                                label: "Write",
+                                                label: translate("Write"),
                                                 color: "orange",
                                                 points: history.map((point) => ({
                                                     x: point.sampledAt,
@@ -354,11 +371,11 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                         >
                             <div className="system-monitor__throughput">
                                 <Detail
-                                    label="Read"
+                                    label={translate("Read")}
                                     value={rate(sample?.diskIo?.readBytesPerSecond ?? null)}
                                 />
                                 <Detail
-                                    label="Write"
+                                    label={translate("Write")}
                                     value={rate(sample?.diskIo?.writeBytesPerSecond ?? null)}
                                 />
                             </div>
@@ -373,10 +390,10 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                                     />
                                     <Meter
                                         value={ratio(disk.usedBytes, disk.totalBytes)}
-                                        label={`${disk.mountPoint} storage used`}
+                                        label={translate("{0} storage used", disk.mountPoint)}
                                     />
                                     <span className="system-monitor__volume-meta">
-                                        {disk.fileSystem ?? "Unknown filesystem"} ·{" "}
+                                        {disk.fileSystem ?? translate("Unknown filesystem")} ·{" "}
                                         {bytes(disk.totalBytes)}
                                     </span>
                                 </div>
@@ -391,13 +408,24 @@ export function HappyAgentSystemMonitorSurfacePage(props: HappyAgentSystemMonito
                     <div className="system-monitor__footer">
                         <span>
                             {history.length > 1
-                                ? `${Math.round(((history.at(-1)?.sampledAt ?? 0) - (history[0]?.sampledAt ?? 0)) / 1000)} seconds of activity`
-                                : "Collecting activity history"}
+                                ? translate(
+                                      "{0} seconds of activity",
+                                      Math.round(
+                                          ((history.at(-1)?.sampledAt ?? 0) -
+                                              (history[0]?.sampledAt ?? 0)) /
+                                              1000,
+                                      ),
+                                  )
+                                : translate("Collecting activity history")}
                         </span>
                         <span>
                             {sample
-                                ? `Sampled ${new Date(sample.sampledAt).toLocaleTimeString("en-US")} · Every ${(sample.intervalMs / 1000).toLocaleString("en-US")}s`
-                                : "Waiting for the first sample"}
+                                ? translate(
+                                      "Sampled {0} · Every {1}s",
+                                      new Date(sample.sampledAt).toLocaleTimeString("en-US"),
+                                      (sample.intervalMs / 1000).toLocaleString("en-US"),
+                                  )
+                                : translate("Waiting for the first sample")}
                         </span>
                     </div>
                 </div>

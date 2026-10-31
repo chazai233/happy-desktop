@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import {
     useCallback,
     useLayoutEffect,
@@ -94,7 +95,7 @@ export function ContextChips(props: ContextChipsProps) {
                     ) : null}
                     {!props.readOnly && props.onRemove ? (
                         <button
-                            aria-label={`Remove ${item.label}`}
+                            aria-label={translate("Remove {0}", item.label)}
                             className="happy-context-chips__remove"
                             data-happy-desktop-ui="context-chips-remove"
                             onClick={() => props.onRemove?.(item.id)}
@@ -204,7 +205,7 @@ export function MentionPicker(props: MentionPickerProps) {
     );
     return (
         <div
-            aria-label={props.label ?? "Mentions"}
+            aria-label={props.label ?? translate("Mentions")}
             className={["happy-mention-picker", props.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="mention-picker"
             data-testid={props["data-testid"]}
@@ -215,7 +216,7 @@ export function MentionPicker(props: MentionPickerProps) {
                 className="happy-mention-picker__header"
                 data-happy-desktop-ui="mention-picker-header"
             >
-                {props.label ?? "Mentions"}
+                {props.label ?? translate("Mentions")}
             </div>
             {candidates().length > 0 ? (
                 candidates().map(row)
@@ -224,7 +225,8 @@ export function MentionPicker(props: MentionPickerProps) {
                     className="happy-mention-picker__empty"
                     data-happy-desktop-ui="mention-picker-empty"
                 >
-                    No mentions match “{props.query}”
+                    {translate("No mentions match “")}
+                    {props.query}”
                 </div>
             )}
         </div>
@@ -1113,7 +1115,7 @@ export function Composer(props: ComposerProps) {
                     >
                         {hasAttachmentAction() ? (
                             <Button
-                                aria-label="Attach file"
+                                aria-label={translate("Attach file")}
                                 disabled={busy}
                                 icon="plus"
                                 iconOnly
@@ -1124,7 +1126,7 @@ export function Composer(props: ComposerProps) {
                         ) : null}
                         {mentionsSupported() ? (
                             <Button
-                                aria-label="Mention someone"
+                                aria-label={translate("Mention someone")}
                                 disabled={busy}
                                 icon="at"
                                 iconOnly
@@ -1137,7 +1139,7 @@ export function Composer(props: ComposerProps) {
                             <Button
                                 aria-expanded={emojiOpen ? "true" : "false"}
                                 aria-haspopup="dialog"
-                                aria-label="Add emoji"
+                                aria-label={translate("Add emoji")}
                                 disabled={busy}
                                 icon="smile"
                                 iconOnly
@@ -1167,7 +1169,7 @@ export function Composer(props: ComposerProps) {
                             >
                                 {props.running ? (
                                     <Button
-                                        aria-label="Stop the agent"
+                                        aria-label={translate("Stop the agent")}
                                         className="happy-composer__send happy-composer__stop"
                                         data-action="stop"
                                         icon="stop"
@@ -1180,7 +1182,7 @@ export function Composer(props: ComposerProps) {
                                     <Button
                                         aria-expanded={stopConfirmOpen}
                                         aria-haspopup="dialog"
-                                        aria-label="Stop subagents"
+                                        aria-label={translate("Stop subagents")}
                                         className="happy-composer__send happy-composer__stop"
                                         data-action="stop"
                                         icon="stop"
@@ -1200,14 +1202,16 @@ export function Composer(props: ComposerProps) {
                                         data-happy-desktop-ui="composer-stop-popover"
                                     >
                                         <ConfirmPopover
-                                            confirmLabel="Stop subagents"
-                                            message="Agents this chat started will stop their current work. Nothing is archived."
+                                            confirmLabel={translate("Stop subagents")}
+                                            message={translate(
+                                                "Agents this chat started will stop their current work. Nothing is archived.",
+                                            )}
                                             onCancel={() => stopConfirmClose("stop")}
                                             onConfirm={() => {
                                                 stopConfirmClose("draft");
                                                 props.onSubagentsStop?.();
                                             }}
-                                            title="Stop all subagents?"
+                                            title={translate("Stop all subagents?")}
                                             tone="danger"
                                         />
                                     </div>
@@ -1215,7 +1219,7 @@ export function Composer(props: ComposerProps) {
                             </div>
                         ) : (
                             <Button
-                                aria-label="Send message"
+                                aria-label={translate("Send message")}
                                 className="happy-composer__send"
                                 disabled={!canSend()}
                                 icon="arrow-up"
@@ -1257,7 +1261,7 @@ export function Composer(props: ComposerProps) {
                 ) : null}
                 {emojiOpen && !busy ? (
                     <div
-                        aria-label="Choose emoji"
+                        aria-label={translate("Choose emoji")}
                         className="happy-composer__popover happy-composer__popover--emoji"
                         data-happy-desktop-ui="composer-emoji-popover"
                         onKeyDown={(event) => {

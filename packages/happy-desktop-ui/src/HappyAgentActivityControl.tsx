@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Fragment, type CSSProperties } from "react";
 
 export interface HappyAgentActivityControlProps {
@@ -44,7 +45,7 @@ export function HappyAgentActivityControl(props: HappyAgentActivityControlProps)
             style={props.style}
         >
             <button
-                aria-label={`Open session details: ${fullSummary}`}
+                aria-label={translate("Open session details: {0}", fullSummary)}
                 className={["happy-agent-activity-transcript__row", props.className]
                     .filter(Boolean)
                     .join(" ")}
@@ -52,7 +53,7 @@ export function HappyAgentActivityControl(props: HappyAgentActivityControlProps)
                 data-testid={props["data-testid"]}
                 disabled={props.disabled || props.onClick === undefined}
                 onClick={props.onClick}
-                title={`Open session details: ${fullSummary}`}
+                title={translate("Open session details: {0}", fullSummary)}
                 type="button"
             >
                 <span className="happy-agent-activity-transcript__primary">

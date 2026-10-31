@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useLayoutEffect, useRef, useState } from "react";
 import { Button } from "./Button";
 import { Ionicon } from "./vectorIcons/VectorIcon";
@@ -62,7 +63,7 @@ export interface SidebarUpdateActionProps {
 const NOTES_COLLAPSE_MS = 240;
 
 function versionLabel(version: string | undefined): string {
-    if (!version) return "New version";
+    if (!version) return translate("New version");
     return /^\d/u.test(version) ? `v${version}` : version;
 }
 
@@ -75,8 +76,8 @@ function versionLabel(version: string | undefined): string {
  */
 function assurance(subject: SidebarUpdateActionProps["subject"]): string {
     return subject === "happyAgent"
-        ? "Running agents keep working."
-        : "Agents keep working during the update.";
+        ? translate("Running agents keep working.")
+        : translate("Agents keep working during the update.");
 }
 
 /**
@@ -107,7 +108,11 @@ export function SidebarUpdateAction(props: SidebarUpdateActionProps) {
     // reader is looking at.
     const subject = props.subject === "happyAgent" ? `Happy Agent ${version}` : version;
     const actionLabel =
-        props.action === "refresh" ? "Refresh" : props.action === "install" ? "Install" : "Restart";
+        props.action === "refresh"
+            ? translate("Refresh")
+            : props.action === "install"
+              ? translate("Install")
+              : translate("Restart");
     const ready = props.status === "downloaded" && props.onAction !== undefined;
     const state =
         props.status === "downloaded"
@@ -168,7 +173,7 @@ export function SidebarUpdateAction(props: SidebarUpdateActionProps) {
             </span>
             {open ? (
                 <div
-                    aria-label="Update"
+                    aria-label={translate("Update")}
                     className="happy-sidebar-update__panel"
                     data-happy-desktop-ui="sidebar-update-action-panel"
                     role="dialog"
@@ -180,7 +185,7 @@ export function SidebarUpdateAction(props: SidebarUpdateActionProps) {
                                 className="happy-sidebar-update__eyebrow"
                                 data-happy-desktop-ui="sidebar-update-action-eyebrow"
                             >
-                                Update
+                                {translate("Update")}
                             </span>
                             <span
                                 className="happy-sidebar-update__subject"
@@ -252,7 +257,7 @@ function motionReduced(): boolean {
 }
 
 function releasesLabel(count: number): string {
-    return count === 1 ? "1 release" : `${count} releases`;
+    return count === 1 ? translate("1 release") : translate("{0} releases", count);
 }
 
 /**
@@ -281,30 +286,34 @@ function UpdateNotes(props: { readonly applying: boolean; readonly notes: Sideba
             <div className="happy-sidebar-update__notes-clip">
                 <div className="happy-sidebar-update__notes-body">
                     <div className="happy-sidebar-update__notes-head">
-                        <span className="happy-sidebar-update__eyebrow">{"What's new"}</span>
+                        <span className="happy-sidebar-update__eyebrow">
+                            {translate("What's new")}
+                        </span>
                         {notes.kind === "list" ? (
                             notes.features.total > 0 && notes.fixes.total > 0 ? (
                                 <span
-                                    aria-label="Kind of change"
+                                    aria-label={translate("Kind of change")}
                                     className="happy-sidebar-update__tabs"
                                     role="tablist"
                                 >
                                     <NotesTab
                                         count={notes.features.total}
-                                        label="Features"
+                                        label={translate("Features")}
                                         onSelect={() => setTab("features")}
                                         selected={selectedTab === "features"}
                                     />
                                     <NotesTab
                                         count={notes.fixes.total}
-                                        label="Fixes"
+                                        label={translate("Fixes")}
                                         onSelect={() => setTab("fixes")}
                                         selected={selectedTab === "fixes"}
                                     />
                                 </span>
                             ) : (
                                 <span className="happy-sidebar-update__kind">
-                                    {selectedTab === "features" ? "Features" : "Fixes"}
+                                    {selectedTab === "features"
+                                        ? translate("Features")
+                                        : translate("Fixes")}
                                     <span className="happy-sidebar-update__tab-count">
                                         {notes[selectedTab].total}
                                     </span>
@@ -320,10 +329,13 @@ function UpdateNotes(props: { readonly applying: boolean; readonly notes: Sideba
                     ) : (
                         <div className="happy-sidebar-update__notes-overflow">
                             <span className="happy-sidebar-update__notes-headline">
-                                {"We've shipped a ton since you last updated."}
+                                {translate("We've shipped a ton since you last updated.")}
                             </span>
                             <span className="happy-sidebar-update__notes-line">
-                                {`That's ${releasesLabel(notes.releaseCount)}. Too much to list here :D`}
+                                {translate(
+                                    "That's {0}. Too much to list here :D",
+                                    releasesLabel(notes.releaseCount),
+                                )}
                             </span>
                             <span className="happy-sidebar-update__notes-line">
                                 <a
@@ -332,7 +344,7 @@ function UpdateNotes(props: { readonly applying: boolean; readonly notes: Sideba
                                     rel="noreferrer"
                                     target="_blank"
                                 >
-                                    Read the changelog ↗
+                                    {translate("Read the changelog ↗")}
                                 </a>
                             </span>
                         </div>
@@ -379,14 +391,14 @@ function NotesList(props: {
             </ul>
             {rest > 0 ? (
                 <span className="happy-sidebar-update__notes-line">
-                    {`+${rest} more · `}
+                    {translate("+{0} more · ", rest)}
                     <a
                         className="happy-sidebar-update__notes-link"
                         href={props.changelogUrl}
                         rel="noreferrer"
                         target="_blank"
                     >
-                        Changelog ↗
+                        {translate("Changelog ↗")}
                     </a>
                 </span>
             ) : null}

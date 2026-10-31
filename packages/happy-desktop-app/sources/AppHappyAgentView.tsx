@@ -1,3 +1,4 @@
+import { translate } from "happy-desktop-ui";
 import { useCallback, useMemo, useRef, useSyncExternalStore, type ReactNode } from "react";
 import type { HappyAgentSystemMonitorStore } from "happy-desktop-state";
 import { HappyAgentSystemMonitorSurfacePage, type MessageReferences } from "happy-desktop-ui";
@@ -1060,7 +1061,7 @@ function taskSidebarItem(task: HappyAgentTask, titleShimmerEnabled: boolean): Si
         ...taskFace(task),
         action: {
             icon: "close" as const,
-            label: `Leave ${task.name}`,
+            label: translate("Leave {0}", task.name),
             reveal: "hover" as const,
         },
         ...sidebarActivity(task.conversation.activity),
@@ -1095,7 +1096,7 @@ function botSubtaskSidebarItems(
                           contextAvatars: [
                               {
                                   id: project.id,
-                                  label: `Project: ${project.name}`,
+                                  label: translate("Project: {0}", project.name),
                                   initials: project.name.slice(0, 1).toUpperCase(),
                                   ...(project.kind === "home" ? { icon: "home" as const } : {}),
                                   ...(project.avatar ? { imageUrl: project.avatar.url } : {}),
@@ -1143,7 +1144,7 @@ function sidebarItems(
             action: {
                 disabled: project.lifecycle.phase !== "ready",
                 icon: "plus" as const,
-                label: `New workspace in ${project.name}`,
+                label: translate("New workspace in {0}", project.name),
                 reveal: "hover" as const,
             },
             ...sidebarLifecycle(project.lifecycle),
@@ -1156,7 +1157,7 @@ function sidebarItems(
                 : {
                       secondaryAction: {
                           icon: "settings" as const,
-                          label: `Settings for ${project.name}`,
+                          label: translate("Settings for {0}", project.name),
                           reveal: "hover" as const,
                       },
                   }),
@@ -1186,7 +1187,7 @@ function sidebarItems(
             // the reader is actually on the row.
             action: {
                 icon: "archive" as const,
-                label: `Archive ${worktree.name}`,
+                label: translate("Archive {0}", worktree.name),
                 reveal: "hover" as const,
             },
             // A worktree whose checkout is still being made, could not be made,
@@ -1284,10 +1285,10 @@ function botAttentionMenuItems(attention: HappyAgentBotAttention): MenuItem[] {
         {
             kind: "item",
             id: ROW_MENU_MUTE,
-            label: attention === "muted" ? "Unmute bot" : "Mute bot",
+            label: attention === "muted" ? translate("Unmute bot") : translate("Mute bot"),
             icon: "bell",
         },
-        { kind: "item", id: ROW_MENU_HIDE, label: "Hide from sidebar", icon: "eye-off" },
+        { kind: "item", id: ROW_MENU_HIDE, label: translate("Hide from sidebar"), icon: "eye-off" },
     ];
 }
 
@@ -1321,7 +1322,7 @@ function rowMenuItems(
             {
                 kind: "item",
                 id: ROW_MENU_ARCHIVE,
-                label: "Archive subtask",
+                label: translate("Archive subtask"),
                 icon: "archive",
                 danger: true,
             },
@@ -1334,17 +1335,22 @@ function rowMenuItems(
         return [
             ...(taskRenamable
                 ? ([
-                      { kind: "item", id: ROW_MENU_RENAME, label: "Rename task", icon: "edit" },
+                      {
+                          kind: "item",
+                          id: ROW_MENU_RENAME,
+                          label: translate("Rename task"),
+                          icon: "edit",
+                      },
                   ] as const)
                 : []),
-            { kind: "item", id: ROW_MENU_LEAVE, label: "Leave task", icon: "close" },
+            { kind: "item", id: ROW_MENU_LEAVE, label: translate("Leave task"), icon: "close" },
             ...(task.canArchive
                 ? ([
                       { kind: "separator" },
                       {
                           kind: "item",
                           id: ROW_MENU_ARCHIVE,
-                          label: "Archive task",
+                          label: translate("Archive task"),
                           icon: "archive",
                           danger: true,
                       },
@@ -1354,7 +1360,7 @@ function rowMenuItems(
     const bot = bots.find((candidate) => candidate.workspaceId === item.id);
     if (bot)
         return [
-            { kind: "item", id: ROW_MENU_RENAME, label: "Rename bot", icon: "edit" },
+            { kind: "item", id: ROW_MENU_RENAME, label: translate("Rename bot"), icon: "edit" },
             { kind: "separator" },
             ...(botAttention
                 ? [...botAttentionMenuItems(botAttention(bot)), { kind: "separator" } as const]
@@ -1362,7 +1368,7 @@ function rowMenuItems(
             {
                 kind: "item",
                 id: ROW_MENU_ARCHIVE,
-                label: "Archive bot",
+                label: translate("Archive bot"),
                 icon: "archive",
                 danger: true,
             },
@@ -1371,12 +1377,17 @@ function rowMenuItems(
     if (!owner) return [];
     if (owner.worktreeId)
         return [
-            { kind: "item", id: ROW_MENU_RENAME, label: "Rename workspace", icon: "edit" },
+            {
+                kind: "item",
+                id: ROW_MENU_RENAME,
+                label: translate("Rename workspace"),
+                icon: "edit",
+            },
             { kind: "separator" },
             {
                 kind: "item",
                 id: ROW_MENU_ARCHIVE,
-                label: "Archive workspace",
+                label: translate("Archive workspace"),
                 icon: "archive",
                 danger: true,
             },
@@ -1385,13 +1396,18 @@ function rowMenuItems(
     // offers neither renaming nor archiving.
     if (owner.project.kind === "home") return [];
     return [
-        { kind: "item", id: ROW_MENU_RENAME, label: "Rename project", icon: "edit" },
-        { kind: "item", id: ROW_MENU_SETTINGS, label: "Project settings…", icon: "settings" },
+        { kind: "item", id: ROW_MENU_RENAME, label: translate("Rename project"), icon: "edit" },
+        {
+            kind: "item",
+            id: ROW_MENU_SETTINGS,
+            label: translate("Project settings…"),
+            icon: "settings",
+        },
         { kind: "separator" },
         {
             kind: "item",
             id: ROW_MENU_ARCHIVE,
-            label: "Archive project",
+            label: translate("Archive project"),
             icon: "archive",
             danger: true,
         },
@@ -1407,12 +1423,12 @@ const TRANSFER_ZONE_PANEL = "happy-agent-panel";
 
 /** Where a tab in the panel's strip can go: the main content, to its leading side. */
 const PANEL_TRANSFER_TARGETS: readonly TabTransferTarget[] = [
-    { zone: TRANSFER_ZONE_MAIN, label: "the main content", side: "leading" },
+    { zone: TRANSFER_ZONE_MAIN, label: translate("the main content"), side: "leading" },
 ];
 
 /** Where a tab in the main strip can go: the panel, to its trailing side. */
 const MAIN_TRANSFER_TARGETS: readonly TabTransferTarget[] = [
-    { zone: TRANSFER_ZONE_PANEL, label: "the side panel", side: "trailing" },
+    { zone: TRANSFER_ZONE_PANEL, label: translate("the side panel"), side: "trailing" },
 ];
 
 /** The live tool tabs currently drawn on one side of the workspace. */
@@ -1494,7 +1510,7 @@ function artifactTabLabelOf(
         entities: messageReferenceEntities(undefined),
         onArtifactOpen: () => undefined,
     }).view({ kind: "artifact", id: artifactId });
-    return view.type === "link" && view !== ARTIFACT_READING ? view.label : "Artifact";
+    return view.type === "link" && view !== ARTIFACT_READING ? view.label : translate("Artifact");
 }
 
 /**
@@ -1652,28 +1668,28 @@ let fileDocumentIdentityNext = 0;
  */
 function tabStripMenu(verb: "Archive" | "Close", left: number, right: number): MenuItem[] {
     return [
-        { kind: "item", id: TAB_MENU_CLOSE, label: `${verb} tab` },
+        { kind: "item", id: TAB_MENU_CLOSE, label: translate("{0} tab", verb) },
         { kind: "separator" },
         {
             kind: "item",
             id: TAB_MENU_CLOSE_OTHERS,
-            label: `${verb} other tabs`,
+            label: translate("{0} other tabs", verb),
             disabled: left + right === 0,
         },
         {
             kind: "item",
             id: TAB_MENU_CLOSE_LEFT,
-            label: `${verb} tabs to the left`,
+            label: translate("{0} tabs to the left", verb),
             disabled: left === 0,
         },
         {
             kind: "item",
             id: TAB_MENU_CLOSE_RIGHT,
-            label: `${verb} tabs to the right`,
+            label: translate("{0} tabs to the right", verb),
             disabled: right === 0,
         },
         { kind: "separator" },
-        { kind: "item", id: TAB_MENU_CLOSE_ALL, label: `${verb} all tabs` },
+        { kind: "item", id: TAB_MENU_CLOSE_ALL, label: translate("{0} all tabs", verb) },
     ];
 }
 
@@ -1941,7 +1957,9 @@ function openGroupFind(
 const MODELS_NOT_CONFIGURED_NOTE = "Sign in to at least one AI to start chatting.";
 
 function composerPlaceholder(groupName: string | undefined): string {
-    return groupName === undefined ? "Message Happy…" : `Message Happy in “${groupName}”…`;
+    return groupName === undefined
+        ? translate("Message Happy…")
+        : translate("Message Happy in “{0}”…", groupName);
 }
 
 /**
@@ -1952,7 +1970,9 @@ function composerPlaceholder(groupName: string | undefined): string {
  * than falling back to jargon about what kind of chat it is.
  */
 function conversationLockedPlaceholder(title: string | undefined): string {
-    return title === undefined || title === "" ? "Running…" : `${title} is running this chat…`;
+    return title === undefined || title === ""
+        ? translate("Running…")
+        : translate("{0} is running this chat…", title);
 }
 
 /** A sidebar row's id: which Happy Agent it belongs to, then the group inside it. */
@@ -2122,22 +2142,22 @@ function hiddenBotsAction(
     return {
         secondaryAction: {
             icon: "eye-off",
-            label: "Hidden bots",
+            label: translate("Hidden bots"),
             reveal: "hover",
             menuItems: [
-                { kind: "label", label: "Hidden bots" },
+                { kind: "label", label: translate("Hidden bots") },
                 ...hidden.map(
                     (bot): MenuItem => ({
                         kind: "item",
                         id: `${BOTS_MENU_SHOW_PREFIX}${bot.id}`,
-                        label: `Show ${bot.name}`,
+                        label: translate("Show {0}", bot.name),
                         icon: "eye",
                     }),
                 ),
                 ...(hidden.length > 1
                     ? ([
                           { kind: "separator" },
-                          { kind: "item", id: BOTS_MENU_SHOW_ALL, label: "Show all" },
+                          { kind: "item", id: BOTS_MENU_SHOW_ALL, label: translate("Show all") },
                       ] as const)
                     : []),
             ],
@@ -2268,7 +2288,7 @@ function happyAgentSections(
         // one is named, and a machine with none is exactly where that is wanted.
         {
             id: happyAgentBotsSectionId(happyAgent.id),
-            label: "Bots",
+            label: translate("Bots"),
             items: [
                 ...happyAgentSidebarTree(happyAgent).bots.flatMap((bot) => {
                     // A hidden bot leaves the list with everything nested
@@ -2303,7 +2323,7 @@ function happyAgentSections(
                       action: {
                           disabled: happyAgent.status !== "connected",
                           icon: "plus" as const,
-                          label: "New bot",
+                          label: translate("New bot"),
                           reveal: "always" as const,
                       },
                   }
@@ -2350,7 +2370,7 @@ function happyAgentTasksSection(
     const offline = happyAgent.status !== "connected";
     return {
         id: happyAgentTasksSectionId(happyAgent.id),
-        label: "Tasks",
+        label: translate("Tasks"),
         items: happyAgentSidebarTree(happyAgent)
             .tasks.flatMap((task) => [
                 taskSidebarItem(task, titleShimmerEnabled),
@@ -2369,7 +2389,7 @@ function happyAgentTasksSection(
                   action: {
                       disabled: offline,
                       icon: "plus" as const,
-                      label: "New task",
+                      label: translate("New task"),
                       reveal: "always" as const,
                       // The chord answers for the machine on screen, so only
                       // that machine's heading shows it.
@@ -2380,16 +2400,16 @@ function happyAgentTasksSection(
                   secondaryAction: {
                       disabled: offline,
                       icon: "search" as const,
-                      label: "Browse tasks",
+                      label: translate("Browse tasks"),
                       reveal: "always" as const,
                   },
                   // Nothing joined yet says so under the heading, with making
                   // the first one right beside it while it can be made.
                   empty: {
-                      ...(offline ? {} : { actionLabel: "New task" }),
-                      description: "Start a task, or browse to join one.",
+                      ...(offline ? {} : { actionLabel: translate("New task") }),
+                      description: translate("Start a task, or browse to join one."),
                       icon: "tasks" as const,
-                      title: "No tasks yet",
+                      title: translate("No tasks yet"),
                   },
               }
             : materialized
@@ -2397,14 +2417,14 @@ function happyAgentTasksSection(
                     action: {
                         disabled: offline,
                         icon: "search" as const,
-                        label: "Browse tasks",
+                        label: translate("Browse tasks"),
                         reveal: "always" as const,
                     },
                     empty: {
-                        ...(offline ? {} : { actionLabel: "Browse tasks" }),
-                        description: "Join a task to keep it here.",
+                        ...(offline ? {} : { actionLabel: translate("Browse tasks") }),
+                        description: translate("Join a task to keep it here."),
                         icon: "tasks" as const,
-                        title: "No tasks yet",
+                        title: translate("No tasks yet"),
                     },
                 }
               : {}),
@@ -2448,11 +2468,11 @@ const SURFACE_CREATE_OFFERS: readonly {
     readonly icon: IconName;
     readonly label: string;
 }[] = [
-    { kind: "todo", icon: "tasks", label: "New todo list" },
-    { kind: "document", icon: "doc", label: "New document" },
-    { kind: "calendar", icon: "calendar", label: "New calendar" },
-    { kind: "system_monitor", icon: "pulse", label: "New system monitor" },
-    { kind: "chat", icon: "users", label: "New chat" },
+    { kind: "todo", icon: "tasks", label: translate("New todo list") },
+    { kind: "document", icon: "doc", label: translate("New document") },
+    { kind: "calendar", icon: "calendar", label: translate("New calendar") },
+    { kind: "system_monitor", icon: "pulse", label: translate("New system monitor") },
+    { kind: "chat", icon: "users", label: translate("New chat") },
 ];
 
 /**
@@ -2573,13 +2593,13 @@ function surfaceSidebarItem(
             ? {
                   disabled: offline,
                   icon: "close" as const,
-                  label: `Leave ${label}`,
+                  label: translate("Leave {0}", label),
                   reveal: "hover" as const,
               }
             : {
                   disabled: offline,
                   icon: "plus" as const,
-                  label: `Join ${label}`,
+                  label: translate("Join {0}", label),
               },
     };
 }
@@ -2661,13 +2681,13 @@ function rowSurfaceMenuItems(
             ? {
                   kind: "item",
                   id: ROW_MENU_SURFACE_REMOVE,
-                  label: "Remove from top of sidebar",
+                  label: translate("Remove from top of sidebar"),
                   icon: "close",
               }
             : {
                   kind: "item",
                   id: ROW_MENU_SURFACE_ADD,
-                  label: "Add to top of sidebar",
+                  label: translate("Add to top of sidebar"),
                   icon: "plus",
               },
         ...(items.length > 0 ? ([{ kind: "separator" }] as const) : []),
@@ -2931,7 +2951,7 @@ function happyAgentSearchSections(
                   id: `${SEARCH_SECTION_PREFIX}none`,
                   items: [],
                   empty: {
-                      description: `Nothing matches “${query.trim()}”.`,
+                      description: translate("Nothing matches “{0}”.", query.trim()),
                       icon: "search",
                   },
               },
@@ -3005,7 +3025,7 @@ function happyAgentProjectsSection(
         // Which machine this is belongs to the connection rail and the window,
         // not to a heading over the list: the heading names the kind of thing
         // beneath it, the way "Bots" does above.
-        label: "Projects",
+        label: translate("Projects"),
         items: hidden
             ? []
             : happyAgentSidebarTree(happyAgent)
@@ -3021,7 +3041,7 @@ function happyAgentProjectsSection(
             : {
                   secondaryAction: {
                       icon: hidden ? ("eye" as const) : ("eye-off" as const),
-                      label: hidden ? "Show projects" : "Hide projects",
+                      label: hidden ? translate("Show projects") : translate("Hide projects"),
                       reveal: "hover" as const,
                   },
               }),
@@ -3033,7 +3053,7 @@ function happyAgentProjectsSection(
                       busy: happyAgent.projectAdd?.pending === true,
                       disabled: happyAgent.status !== "connected",
                       icon: "plus" as const,
-                      label: "Add project",
+                      label: translate("Add project"),
                       reveal: "always" as const,
                   },
                   ...(happyAgent.projectAdd?.error !== undefined
@@ -3050,15 +3070,15 @@ function happyAgentProjectsSection(
                   empty:
                       happyAgent.status === "connected"
                           ? {
-                                description: "Choose a repository folder on this Mac.",
+                                description: translate("Choose a repository folder on this Mac."),
                                 icon: "plus" as const,
-                                title: "No projects yet",
+                                title: translate("No projects yet"),
                             }
                           : {
                                 description: happyAgentEmptyDescription(happyAgent),
                                 icon: "link" as const,
                                 title: happyAgentStatusLabel(happyAgent),
-                                actionLabel: "Open settings",
+                                actionLabel: translate("Open settings"),
                             },
               }
             : {}),
@@ -3138,15 +3158,16 @@ export function hostHappyAgent(
  * heading, and is not repeated here.
  */
 function happyAgentEmptyDescription(happyAgent: AppHappyAgentEntry): string {
-    if (happyAgent.status === "connecting") return "Connecting to this machine…";
-    if (happyAgent.status === "error") return "Its projects will appear once it answers again.";
-    return "Connect this machine to see its projects.";
+    if (happyAgent.status === "connecting") return translate("Connecting to this machine…");
+    if (happyAgent.status === "error")
+        return translate("Its projects will appear once it answers again.");
+    return translate("Connect this machine to see its projects.");
 }
 
 function happyAgentStatusLabel(happyAgent: AppHappyAgentEntry): string {
-    if (happyAgent.status === "connected") return "Connected";
-    if (happyAgent.status === "connecting") return "Connecting…";
-    return happyAgent.status === "error" ? "Not reachable" : "Disconnected";
+    if (happyAgent.status === "connected") return translate("Connected");
+    if (happyAgent.status === "connecting") return translate("Connecting…");
+    return happyAgent.status === "error" ? translate("Not reachable") : translate("Disconnected");
 }
 
 /**
@@ -3179,7 +3200,7 @@ const ARTIFACTS_SIDEBAR_ITEM: SidebarItem = {
     icon: "package",
     id: ARTIFACTS_ITEM,
     kind: "project",
-    label: "Artifacts",
+    label: translate("Artifacts"),
     reorderable: false,
 };
 
@@ -3499,7 +3520,7 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
                       icon: "bell",
                       id: INBOX_ITEM,
                       kind: "action",
-                      label: "Inbox",
+                      label: translate("Inbox"),
                   },
               ]
             : [];
@@ -3507,7 +3528,7 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
     // Search heads the open sidebar, and opens the same palette as ⌘K.
     const sidebarSearchRow = props.commandPalette
         ? {
-              label: "Search",
+              label: translate("Search"),
               shortcut: APP_SHORTCUTS.paletteOpen,
               onOpen: () => commandPaletteStore.paletteOpen(),
           }
@@ -3571,7 +3592,7 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
                       headerAction: {
                           disabled: active?.status !== "connected",
                           icon: "plus" as const,
-                          label: "New…",
+                          label: translate("New…"),
                           menu: surfaceCreateMenu(surfaceSupport),
                       },
                       onHeaderMenuSelect: (id: string) => {
@@ -3584,7 +3605,7 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
                 ? {
                       search: {
                           onValueChange: sidebarSearchStore.queryUpdate,
-                          placeholder: "Search",
+                          placeholder: translate("Search"),
                           value: sidebarSearch.query,
                       },
                   }
@@ -3626,19 +3647,19 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
                 active?.status === "connected" && active.projectsStatus === "error" ? (
                     <Banner
                         action={{
-                            label: "Retry",
+                            label: translate("Retry"),
                             onClick: () => active.session?.workspace.conversationListRetry(),
                         }}
                         tone="danger"
-                        title="Sessions unavailable"
+                        title={translate("Sessions unavailable")}
                     >
-                        {`${active.label} did not return its projects.`}
+                        {translate("{0} did not return its projects.", active.label)}
                     </Banner>
                 ) : active?.status === "connected" && active.projectsStatus === "loading" ? (
                     // Also only while the Happy Agent is up. Losing it resets the list to
                     // loading, and "Loading sessions…" under a footer saying the
                     // machine is unreachable is a promise nothing is keeping.
-                    <Banner tone="neutral">Loading sessions…</Banner>
+                    <Banner tone="neutral">{translate("Loading sessions…")}</Banner>
                 ) : undefined
             }
             itemMenuItems={(item) => {
@@ -3652,7 +3673,14 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
                 const surfaceId = surfaceRowParse(row.id);
                 if (surfaceId !== undefined)
                     return surfaceCatalog.joined.some((surface) => surface.id === surfaceId)
-                        ? [{ kind: "item", id: ROW_MENU_LEAVE, label: "Leave", icon: "close" }]
+                        ? [
+                              {
+                                  kind: "item",
+                                  id: ROW_MENU_LEAVE,
+                                  label: translate("Leave"),
+                                  icon: "close",
+                              },
+                          ]
                         : [];
                 if (happyAgent.status !== "connected") {
                     // Muting and hiding are this window's own record, so a
@@ -4424,7 +4452,7 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
                 {desktop ? <WindowDragRegion /> : null}
                 <EmptyState
                     action={{
-                        label: "Open settings",
+                        label: translate("Open settings"),
                         icon: "settings",
                         onClick: props.onSettingsOpen,
                     }}
@@ -4432,13 +4460,13 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
                         active
                             ? (active.message ??
                               (active.status === "connecting"
-                                  ? `Connecting to ${active.label}…`
-                                  : `${active.label} is disconnected.`))
-                            : "Waiting for this machine's Happy Agent."
+                                  ? translate("Connecting to {0}…", active.label)
+                                  : translate("{0} is disconnected.", active.label)))
+                            : translate("Waiting for this machine's Happy Agent.")
                     }
                     icon={active?.status === "error" ? "shield" : "link"}
                     size="panel"
-                    title={active ? active.label : "No machine"}
+                    title={active ? active.label : translate("No machine")}
                 />
             </>
         );
@@ -4474,7 +4502,7 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
                 {...(props.commandPalette
                     ? {
                           sidebarSearchAction: {
-                              label: "Search",
+                              label: translate("Search"),
                               onClick: () => commandPaletteStore.paletteOpen(),
                           },
                       }
@@ -4482,7 +4510,7 @@ export function AppHappyAgentView(props: AppHappyAgentViewProps) {
                 {...(taskCreateTarget !== undefined
                     ? {
                           sidebarCollapsedAction: {
-                              label: "New task (⌘N)",
+                              label: translate("New task (⌘N)"),
                               onClick: () => props.onTaskCreateOpen?.(taskCreateTarget),
                           },
                       }
@@ -4955,14 +4983,14 @@ function HappyAgentCommandPalette(
                     );
                     highlightIntent();
                 }}
-                placeholder="Search tasks and chats…"
+                placeholder={translate("Search tasks and chats…")}
                 query={palette.query}
             >
                 <CommandPaletteResults
                     activeIndex={palette.activeIndex}
-                    emptyDescription="Try a different search."
-                    emptyLabel="No results"
-                    label="Search results"
+                    emptyDescription={translate("Try a different search.")}
+                    emptyLabel={translate("No results")}
+                    label={translate("Search results")}
                     onActiveIndexChange={(index) => {
                         props.store.activeIndexUpdate(index);
                         highlightIntent();
@@ -5334,11 +5362,11 @@ function artifactSourceChoices(
     places: HappyAgentArtifactPlaces,
 ): readonly HappyAgentArtifactSourceChoice[] {
     return [
-        { kind: "bot", label: "Any bot" },
-        { kind: "task", label: "Any task" },
-        { kind: "project", label: "Any project root" },
-        { kind: "workspace", label: "Any workspace" },
-        { kind: "agent", label: "Any other conversation" },
+        { kind: "bot", label: translate("Any bot") },
+        { kind: "task", label: translate("Any task") },
+        { kind: "project", label: translate("Any project root") },
+        { kind: "workspace", label: translate("Any workspace") },
+        { kind: "agent", label: translate("Any other conversation") },
         ...places.bots.map((bot) => ({ kind: "bot" as const, id: bot.id, label: bot.name })),
         ...places.tasks.map((task) => ({ kind: "task" as const, id: task.id, label: task.name })),
         ...places.projects.flatMap((project) => [
@@ -5403,10 +5431,12 @@ function HappyAgentArtifactCatalogSurface(props: {
     if (catalog.availability === "unsupported")
         return (
             <EmptyState
-                description="This Happy Agent does not keep artifacts. Updating it adds them."
+                description={translate(
+                    "This Happy Agent does not keep artifacts. Updating it adds them.",
+                )}
                 icon="package"
                 size="panel"
-                title="No artifacts here"
+                title={translate("No artifacts here")}
             />
         );
     return (
@@ -5750,10 +5780,14 @@ function HappyAgentSurfaceChat(props: {
             conversation={conversation}
             emptyContent={
                 <EmptyState
-                    description={`Everyone in ${props.surfaceName} reads and writes this chat. Its agent can work on ${props.surfaceName} for whoever asks.`}
+                    description={translate(
+                        "Everyone in {0} reads and writes this chat. Its agent can work on {1} for whoever asks.",
+                        props.surfaceName,
+                        props.surfaceName,
+                    )}
                     icon="chat"
                     size="panel"
-                    title="One chat for everyone here"
+                    title={translate("One chat for everyone here")}
                 />
             }
             focusOnType
@@ -6470,7 +6504,7 @@ function HappyAgentWorkspaceSurface(props: HappyAgentWorkspaceSurfaceProps) {
         ? {
               id: detachedConversationId,
               // Child chats identify themselves by their title, not a generated face.
-              label: detachedConversation?.title ?? "Untitled",
+              label: detachedConversation?.title ?? translate("Untitled"),
               labelShimmer: props.titleShimmerEnabled,
               ...(detachedConversation !== undefined &&
               happyAgentConversationWorking(detachedConversation)
@@ -7012,12 +7046,14 @@ function HappyAgentWorkspaceSurface(props: HappyAgentWorkspaceSurfaceProps) {
                     animation={review.loading ? "snail" : undefined}
                     description={
                         review.loading
-                            ? "Reading every changed file."
-                            : "Nothing in this checkout has changed."
+                            ? translate("Reading every changed file.")
+                            : translate("Nothing in this checkout has changed.")
                     }
                     icon="file-diff"
                     size="panel"
-                    title={review.loading ? "Opening the change…" : "No changes"}
+                    title={
+                        review.loading ? translate("Opening the change…") : translate("No changes")
+                    }
                 />
             );
         return (
@@ -7155,7 +7191,10 @@ function HappyAgentWorkspaceSurface(props: HappyAgentWorkspaceSurfaceProps) {
                               <Banner
                                   data-testid="file-reference-failure"
                                   onDismiss={() => props.workspace.fileOpenFailureDismiss()}
-                                  title={`Could not open ${workspace.fileOpenFailure.path}`}
+                                  title={translate(
+                                      "Could not open {0}",
+                                      workspace.fileOpenFailure.path,
+                                  )}
                                   tone="warning"
                               >
                                   {workspace.fileOpenFailure.message}
@@ -7168,7 +7207,9 @@ function HappyAgentWorkspaceSurface(props: HappyAgentWorkspaceSurfaceProps) {
                     openBot.conversation.id === conversation.value.conversationId ? (
                         <EmptyState
                             animation="chief-of-staff"
-                            description="This bot has elevated permissions to configure Happy around your needs. Tell it how you want Happy to work for you."
+                            description={translate(
+                                "This bot has elevated permissions to configure Happy around your needs. Tell it how you want Happy to work for you.",
+                            )}
                             emphasis="prominent"
                             icon="shield"
                             size="panel"
@@ -7514,11 +7555,11 @@ function HappyAgentWorkspaceSurface(props: HappyAgentWorkspaceSurfaceProps) {
                             onDismiss={() => props.workspace.conversationArchiveConfirmClose()}
                         >
                             <ConfirmPopover
-                                confirmLabel="Archive"
+                                confirmLabel={translate("Archive")}
                                 initialFocus="confirm"
                                 onCancel={() => props.workspace.conversationArchiveConfirmClose()}
                                 onConfirm={conversationArchiveConfirmAnswer}
-                                title="Archive?"
+                                title={translate("Archive?")}
                                 tone="warning"
                             />
                         </ModalOverlay>
@@ -7573,7 +7614,7 @@ function HappyAgentWorkspaceSurface(props: HappyAgentWorkspaceSurfaceProps) {
                                    it offers none. */
                                 openGroup.singleConversationId === undefined ? (
                                     <Button
-                                        aria-label="Create a session in this project"
+                                        aria-label={translate("Create a session in this project")}
                                         disabled={!sessionCreateAvailable}
                                         icon="plus"
                                         iconOnly
@@ -7795,7 +7836,7 @@ function HappyAgentWorkspaceSurface(props: HappyAgentWorkspaceSurfaceProps) {
                             <TransferZone
                                 icon="panel-collapse"
                                 id={TRANSFER_ZONE_MAIN}
-                                label="Open in the main content"
+                                label={translate("Open in the main content")}
                             >
                                 <DeferredPane
                                     current={
@@ -7824,10 +7865,12 @@ function HappyAgentWorkspaceSurface(props: HappyAgentWorkspaceSurfaceProps) {
                                     fallback={
                                         <EmptyState
                                             animation="snail"
-                                            description="The selected file is taking a moment."
+                                            description={translate(
+                                                "The selected file is taking a moment.",
+                                            )}
                                             icon="doc"
                                             size="panel"
-                                            title="Opening file…"
+                                            title={translate("Opening file…")}
                                         />
                                     }
                                     onReveal={props.workspace.mainViewDisplay}
@@ -7944,16 +7987,16 @@ function HappyAgentWorkspaceSurface(props: HappyAgentWorkspaceSurfaceProps) {
                             {...(availability.online
                                 ? {
                                       action: {
-                                          label: "Add project",
+                                          label: translate("Add project"),
                                           icon: "plus" as const,
                                           onClick: () => props.workspace.projectAdd(),
                                       },
                                   }
                                 : {})}
-                            description="Pick one in the sidebar, or add a project."
+                            description={translate("Pick one in the sidebar, or add a project.")}
                             icon="files"
                             size="panel"
-                            title="No project open"
+                            title={translate("No project open")}
                         />
                     )}
                 </>
@@ -7966,8 +8009,9 @@ function happyAgentFileRevalidationBanner(
     error: { readonly message: string } | undefined,
 ): ReactNode {
     return error ? (
-        <Banner tone="warning" title="File may be out of date">
-            Showing the last loaded content. {error.message}
+        <Banner tone="warning" title={translate("File may be out of date")}>
+            {translate("Showing the last loaded content.")}
+            {error.message}
         </Banner>
     ) : null;
 }
@@ -7983,9 +8027,9 @@ function happyAgentFileNotices(file: HappyAgentFileTabSnapshot): ReactNode {
         return happyAgentFileRevalidationBanner(file.revalidationError);
     return (
         <>
-            <Banner tone="danger" title="Could not save this file">
-                {file.saveError.message} Your edit is still here and has not been written to the
-                workspace.
+            <Banner tone="danger" title={translate("Could not save this file")}>
+                {file.saveError.message}
+                {translate("Your edit is still here and has not been written to the workspace.")}
             </Banner>
             {happyAgentFileRevalidationBanner(file.revalidationError)}
         </>
@@ -8334,7 +8378,7 @@ function HappyAgentFileBody(props: {
                 {...(props.saveRefusal === undefined
                     ? {
                           action: {
-                              label: "Retry",
+                              label: translate("Retry"),
                               icon: "arrow-right" as const,
                               onClick: () => {
                                   if (props.happyAgentOnline()) workspace.fileRetry(file.id);
@@ -8345,7 +8389,7 @@ function HappyAgentFileBody(props: {
                 description={file.document.error.message}
                 icon="doc"
                 size="panel"
-                title="File unavailable"
+                title={translate("File unavailable")}
             />
         );
     if (props.saveRefusal)
@@ -8354,7 +8398,7 @@ function HappyAgentFileBody(props: {
                 description={props.saveRefusal}
                 icon="link"
                 size="panel"
-                title="File unavailable while Happy Agent is offline"
+                title={translate("File unavailable while Happy Agent is offline")}
             />
         );
     return (
@@ -8362,12 +8406,12 @@ function HappyAgentFileBody(props: {
             animation="snail"
             description={
                 file.kind === "file"
-                    ? "Reading the file from its workspace."
-                    : "Reading the changed file from its workspace."
+                    ? translate("Reading the file from its workspace.")
+                    : translate("Reading the changed file from its workspace.")
             }
             icon="doc"
             size="panel"
-            title="Loading file…"
+            title={translate("Loading file…")}
         />
     );
 }
@@ -8786,20 +8830,23 @@ function HappyAgentConversationBody(props: {
     if (conversation.type === "loading" && props.unavailable !== undefined)
         return (
             <EmptyState
-                description={`${props.unavailable} The session will finish loading automatically after reconnect.`}
+                description={translate(
+                    "{0} The session will finish loading automatically after reconnect.",
+                    props.unavailable,
+                )}
                 icon="link"
                 size="panel"
-                title="Session waiting for the Happy Agent"
+                title={translate("Session waiting for the Happy Agent")}
             />
         );
     if (conversation.type === "loading")
         return (
             <EmptyState
                 animation="snail"
-                description="Loading the selected local session."
+                description={translate("Loading the selected local session.")}
                 icon="chat"
                 size="panel"
-                title="Loading session…"
+                title={translate("Loading session…")}
             />
         );
     if (conversation.type === "error")
@@ -8808,7 +8855,7 @@ function HappyAgentConversationBody(props: {
                 {...(props.unavailable === undefined
                     ? {
                           action: {
-                              label: "Retry",
+                              label: translate("Retry"),
                               icon: "arrow-right" as const,
                               onClick: () => {
                                   if (props.happyAgentOnline()) props.workspace.conversationRetry();
@@ -8819,7 +8866,7 @@ function HappyAgentConversationBody(props: {
                 description={conversation.error.message}
                 icon="shield"
                 size="panel"
-                title="Session unavailable"
+                title={translate("Session unavailable")}
             />
         );
     return (
@@ -8828,7 +8875,7 @@ function HappyAgentConversationBody(props: {
                 ? {}
                 : {
                       action: {
-                          label: "New session",
+                          label: translate("New session"),
                           icon: "plus" as const,
                           onClick: props.onCreate,
                       },
@@ -8836,10 +8883,10 @@ function HappyAgentConversationBody(props: {
             // The main screen of the whole application when no work is open: an
             // agent standing by, waiting to be given something to do.
             animation="robot"
-            description="Select a session tab or start a new one to begin."
+            description={translate("Select a session tab or start a new one to begin.")}
             icon="chat"
             size="panel"
-            title="No session selected"
+            title={translate("No session selected")}
         />
     );
 }
@@ -8933,7 +8980,7 @@ function workFloatyProjectPlace(
         label: worktree ? worktree.name : project.name,
         mark: {
             type: "project",
-            label: `Project: ${project.name}`,
+            label: translate("Project: {0}", project.name),
             initials: project.name.slice(0, 1).toUpperCase(),
             ...(project.avatar ? { imageUrl: project.avatar.url } : {}),
         },
@@ -9056,7 +9103,7 @@ function workFloatyAgents(subagents: readonly SubagentSummary[]): {
             label,
             mark: { type: "icon", icon: "agents" },
             ...(happyAgentSubagentActive(subagent)
-                ? { trailing: { type: "working", label: `${label} is working` } }
+                ? { trailing: { type: "working", label: translate("{0} is working", label) } }
                 : subagent.totalTokens !== undefined && subagent.totalTokens > 0
                   ? { trailing: { type: "tokens", count: subagent.totalTokens } }
                   : {}),
@@ -9228,7 +9275,7 @@ function HappyAgentConversationSurface(props: {
                 {...(props.unavailable === undefined
                     ? {
                           action: {
-                              label: "Retry",
+                              label: translate("Retry"),
                               icon: "arrow-right" as const,
                               onClick: () => {
                                   if (props.happyAgentOnline()) workspace.conversationRetry();
@@ -9239,7 +9286,7 @@ function HappyAgentConversationSurface(props: {
                 description={conversation.session.error.message}
                 icon="shield"
                 size="panel"
-                title="Session unavailable"
+                title={translate("Session unavailable")}
             />
         );
     const swallow = (operation: Promise<unknown>) => void operation.catch(() => undefined);
@@ -9839,7 +9886,7 @@ function happyAgentGroupArchiveDialog(
                             onClick={() => store.groupArchiveCancel()}
                             variant="ghost"
                         >
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                         <Button
                             disabled={unavailable !== undefined}
@@ -9850,25 +9897,30 @@ function happyAgentGroupArchiveDialog(
                             }}
                             variant="danger"
                         >
-                            Archive {subject}
+                            {translate("Archive")}
+                            {subject}
                         </Button>
                     </>
                 }
                 icon="archive"
                 {...(archive.submitting ? {} : { onClose: () => store.groupArchiveCancel() })}
                 size="small"
-                title={`Archive ${archive.name}?`}
+                title={translate("Archive {0}?", archive.name)}
                 tone="danger"
             >
                 {archive.error ? (
-                    <Banner tone="danger" title={`Could not archive ${subject}`}>
+                    <Banner tone="danger" title={translate("Could not archive {0}", subject)}>
                         {archive.error}
                     </Banner>
                 ) : null}
                 <p>
                     {archive.kind === "worktree"
-                        ? "This removes the workspace from the sidebar and removes its worktree folder."
-                        : "This removes the project and its sessions from the sidebar, archives every workspace under it, and removes those worktree folders. The project's own checkout stays where it is."}
+                        ? translate(
+                              "This removes the workspace from the sidebar and removes its worktree folder.",
+                          )
+                        : translate(
+                              "This removes the project and its sessions from the sidebar, archives every workspace under it, and removes those worktree folders. The project's own checkout stays where it is.",
+                          )}
                 </p>
             </Modal>
         </ModalOverlay>
@@ -9902,7 +9954,7 @@ function happyAgentNamingDialog(
                     footer={
                         <>
                             <Button onClick={() => store.renameCancel()} variant="ghost">
-                                Cancel
+                                {translate("Cancel")}
                             </Button>
                             <Button
                                 disabled={rename.submitting || unavailable !== undefined}
@@ -9912,18 +9964,18 @@ function happyAgentNamingDialog(
                                 }}
                                 variant="primary"
                             >
-                                Rename
+                                {translate("Rename")}
                             </Button>
                         </>
                     }
                     onClose={() => store.renameCancel()}
                     size="small"
-                    title={`Rename ${rename.currentName}`}
+                    title={translate("Rename {0}", rename.currentName)}
                 >
                     <TextField
                         disabled={rename.submitting}
                         fullWidth
-                        label="Name"
+                        label={translate("Name")}
                         onSubmit={() => {
                             if (happyAgentOnline())
                                 void store.renameSubmit().catch(() => undefined);
@@ -10606,7 +10658,7 @@ function HappyAgentPanelBody(props: {
     const artifactView = props.panel.artifactView;
     const artifactTabLabel =
         artifactView === undefined
-            ? "Artifact"
+            ? translate("Artifact")
             : artifactTabLabelOf(titles, titlesStore, artifactView.artifactId);
     const activityTabShown =
         props.panel.activityViewOpen ||
@@ -10623,19 +10675,40 @@ function HappyAgentPanelBody(props: {
             : undefined;
     const baseTabs: TabItem[] = [
         ...(props.panel.filesViewOpen
-            ? [{ closable: true, icon: "files" as const, id: "files", label: "Files" }]
+            ? [{ closable: true, icon: "files" as const, id: "files", label: translate("Files") }]
             : []),
         ...(props.artifacts
-            ? [{ closable: false, icon: "package" as const, id: "artifacts", label: "Artifacts" }]
+            ? [
+                  {
+                      closable: false,
+                      icon: "package" as const,
+                      id: "artifacts",
+                      label: translate("Artifacts"),
+                  },
+              ]
             : []),
         ...(activityTabShown
-            ? [{ closable: true, icon: "agents" as const, id: "activity", label: "Activity" }]
+            ? [
+                  {
+                      closable: true,
+                      icon: "agents" as const,
+                      id: "activity",
+                      label: translate("Activity"),
+                  },
+              ]
             : []),
         ...(props.panel.usageViewOpen
-            ? [{ closable: true, icon: "clock" as const, id: "usage", label: "Usage" }]
+            ? [{ closable: true, icon: "clock" as const, id: "usage", label: translate("Usage") }]
             : []),
         ...(props.panel.devicesViewOpen && props.devices
-            ? [{ closable: true, icon: "link" as const, id: "devices", label: "Devices" }]
+            ? [
+                  {
+                      closable: true,
+                      icon: "link" as const,
+                      id: "devices",
+                      label: translate("Devices"),
+                  },
+              ]
             : []),
         ...(props.panel.fileViewOpen && panelFile
             ? [
@@ -10675,7 +10748,7 @@ function HappyAgentPanelBody(props: {
                                 ? ("terminal" as const)
                                 : ("zap" as const),
                       id: "preview",
-                      label: "Preview",
+                      label: translate("Preview"),
                       preview: true,
                   },
               ]
@@ -10711,13 +10784,13 @@ function HappyAgentPanelBody(props: {
             <TransferZone
                 icon="panel-expand"
                 id={TRANSFER_ZONE_PANEL}
-                label="Open in the side panel"
+                label={translate("Open in the side panel")}
             >
                 <TabbedPane
                     actions={
                         props.canStartBrowser ? (
                             <Button
-                                aria-label="New tab"
+                                aria-label={translate("New tab")}
                                 icon="plus"
                                 iconOnly
                                 onClick={() => props.store.browserAdd()}
@@ -10787,7 +10860,7 @@ function HappyAgentPanelBody(props: {
                                           {
                                               id: "terminal",
                                               icon: "terminal",
-                                              label: "Terminal",
+                                              label: translate("Terminal"),
                                               onSelect: () => props.store.terminalAdd(tabId),
                                           } satisfies BrowserStartTool,
                                       ]
@@ -10797,7 +10870,7 @@ function HappyAgentPanelBody(props: {
                                           {
                                               id: "artifact",
                                               icon: "package",
-                                              label: "New artifact",
+                                              label: translate("New artifact"),
                                               onSelect: () => props.onArtifactNew?.(tabId),
                                           } satisfies BrowserStartTool,
                                       ]
@@ -10831,17 +10904,17 @@ function HappyAgentPanelBody(props: {
                             count={count}
                             emptyLabel={
                                 query !== ""
-                                    ? `Nothing matches “${query}”.`
+                                    ? translate("Nothing matches “{0}”.", query)
                                     : all
                                       ? // A root that failed to read is not an
                                         // empty folder; it is retried on the
                                         // next change in the checkout.
                                         props.workspaceFiles?.directories.get("")?.error
-                                          ? "Files could not be loaded."
-                                          : "No files."
+                                          ? translate("Files could not be loaded.")
+                                          : translate("No files.")
                                       : changesUnavailable
-                                        ? "Git changes are temporarily unavailable."
-                                        : "No changed files."
+                                        ? translate("Git changes are temporarily unavailable.")
+                                        : translate("No changed files.")
                             }
                             onSearchQueryChange={props.onSearchQueryChange}
                             searchQuery={query}
@@ -10906,10 +10979,10 @@ function HappyAgentPanelBody(props: {
                             />
                         ) : (
                             <EmptyState
-                                description="This Happy Agent does not keep artifacts."
+                                description={translate("This Happy Agent does not keep artifacts.")}
                                 icon="package"
                                 size="panel"
-                                title="No artifacts"
+                                title={translate("No artifacts")}
                             />
                         )
                     ) : props.panel.activeViewId === "artifact" ? (
@@ -10927,10 +11000,12 @@ function HappyAgentPanelBody(props: {
                             />
                         ) : (
                             <EmptyState
-                                description="The artifact this conversation pointed at is no longer open."
+                                description={translate(
+                                    "The artifact this conversation pointed at is no longer open.",
+                                )}
                                 icon="package"
                                 size="panel"
-                                title="No artifact open"
+                                title={translate("No artifact open")}
                             />
                         )
                     ) : props.panel.activeViewId === "activity" ? (
@@ -10947,10 +11022,12 @@ function HappyAgentPanelBody(props: {
                             />
                         ) : (
                             <EmptyState
-                                description="Open a session to see its goal, tasks, subagents, and background terminals."
+                                description={translate(
+                                    "Open a session to see its goal, tasks, subagents, and background terminals.",
+                                )}
                                 icon="agents"
                                 size="panel"
-                                title="No session activity"
+                                title={translate("No session activity")}
                             />
                         )
                     ) : props.panel.activeViewId === "usage" ? (
@@ -10963,10 +11040,12 @@ function HappyAgentPanelBody(props: {
                             />
                         ) : (
                             <EmptyState
-                                description="Open a session to see its token, cost, context, and quota usage."
+                                description={translate(
+                                    "Open a session to see its token, cost, context, and quota usage.",
+                                )}
                                 icon="clock"
                                 size="panel"
-                                title="No session usage"
+                                title={translate("No session usage")}
                             />
                         )
                     ) : props.panel.activeViewId === "devices" ? (
@@ -10979,10 +11058,12 @@ function HappyAgentPanelBody(props: {
                             />
                         ) : (
                             <EmptyState
-                                description="Devices and ports reach a workspace on another machine."
+                                description={translate(
+                                    "Devices and ports reach a workspace on another machine.",
+                                )}
                                 icon="link"
                                 size="panel"
-                                title="No devices here"
+                                title={translate("No devices here")}
                             />
                         )
                     ) : props.panel.activeViewId === "preview" ? (
@@ -10996,10 +11077,12 @@ function HappyAgentPanelBody(props: {
                             <ToolCallPreview tool={props.previewTool} />
                         ) : (
                             <EmptyState
-                                description="The selected call is no longer in this conversation view."
+                                description={translate(
+                                    "The selected call is no longer in this conversation view.",
+                                )}
                                 icon="zap"
                                 size="panel"
-                                title="Preview unavailable"
+                                title={translate("Preview unavailable")}
                             />
                         )
                     ) : props.panel.activeViewId === "change" ? (
@@ -11007,10 +11090,12 @@ function HappyAgentPanelBody(props: {
                             <FileChangeDiff file={props.changeDiff} />
                         ) : (
                             <EmptyState
-                                description="This conversation no longer shows that file's edits."
+                                description={translate(
+                                    "This conversation no longer shows that file's edits.",
+                                )}
                                 icon="doc"
                                 size="panel"
-                                title="No changes"
+                                title={translate("No changes")}
                             />
                         )
                     ) : props.panel.activeViewId === HAPPY_AGENT_PANEL_FILE_VIEW_ID ? (
@@ -11018,18 +11103,22 @@ function HappyAgentPanelBody(props: {
                             props.fileBody(panelFile)
                         ) : (
                             <EmptyState
-                                description="The file this conversation pointed at is no longer open."
+                                description={translate(
+                                    "The file this conversation pointed at is no longer open.",
+                                )}
                                 icon="doc"
                                 size="panel"
-                                title="No file open"
+                                title={translate("No file open")}
                             />
                         )
                     ) : activeToolTab ? null : ( // Already drawn above, for every kind of tool.
                         <EmptyState
-                            description="Select Files, Activity, Usage, a preview, or a live tool tab."
+                            description={translate(
+                                "Select Files, Activity, Usage, a preview, or a live tool tab.",
+                            )}
                             icon="files"
                             size="panel"
-                            title="Nothing selected"
+                            title={translate("Nothing selected")}
                         />
                     )}
                 </TabbedPane>
@@ -11085,7 +11174,7 @@ function HappyAgentPanelChatSurface(props: {
                 description={snapshot.message}
                 icon="alert"
                 size="panel"
-                title="This chat could not be opened"
+                title={translate("This chat could not be opened")}
             />
         );
     const chatSnapshot = snapshot.type === "ready" ? snapshot.chat : undefined;
@@ -11207,10 +11296,10 @@ function HappyAgentToolBodies(props: {
                     />
                 ) : (
                     <EmptyState
-                        description="This Happy Agent does not keep artifacts."
+                        description={translate("This Happy Agent does not keep artifacts.")}
                         icon="package"
                         size="panel"
-                        title="No artifacts"
+                        title={translate("No artifacts")}
                     />
                 )
             ) : null}
@@ -11249,10 +11338,10 @@ function HappyAgentTerminalTab(props: {
     if (!terminal)
         return (
             <EmptyState
-                description="This terminal is no longer available."
+                description={translate("This terminal is no longer available.")}
                 icon="terminal"
                 size="panel"
-                title="Terminal closed"
+                title={translate("Terminal closed")}
             />
         );
     return (

@@ -30,6 +30,7 @@ export default defineConfig({
         },
     },
     test: {
+        setupFiles: [resolve(import.meta.dirname, "src/testing/englishLocale.ts")],
         exclude: [...configDefaults.exclude, "eslint/**"],
         // Optical tests take several black/white Retina captures per fixture.
         // Three browsers run concurrently, so the 15s Vitest default is too

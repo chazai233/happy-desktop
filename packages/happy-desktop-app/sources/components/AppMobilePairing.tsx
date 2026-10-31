@@ -1,3 +1,4 @@
+import { translate } from "happy-desktop-ui";
 import { useSyncExternalStore } from "react";
 import type {
     HappyAgentClockStore,
@@ -73,7 +74,8 @@ export function appMobileRelayFromIntegration(
                 ? { kind: "starting" }
                 : {
                       kind: "failed",
-                      message: snapshot.message ?? "The last pairing attempt did not finish.",
+                      message:
+                          snapshot.message ?? translate("The last pairing attempt did not finish."),
                   };
         case "disconnected":
             return snapshot.pairingStarting
@@ -82,7 +84,7 @@ export function appMobileRelayFromIntegration(
                       kind: "failed",
                       message:
                           snapshot.message ??
-                          "The pairing code was cancelled. Try again for a new code.",
+                          translate("The pairing code was cancelled. Try again for a new code."),
                   };
         default:
             return { kind: "starting" };

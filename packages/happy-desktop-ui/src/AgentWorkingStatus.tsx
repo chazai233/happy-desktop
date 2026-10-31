@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties } from "react";
 import { partitionComponentProps } from "./componentProps";
 import { elapsedTimeFormat } from "./elapsedTimeFormat";
@@ -84,7 +85,9 @@ const PHASE_LABELS: Readonly<Record<AgentWorkingPhase, string>> = {
 /** The phase word a scheduled wait shows in place of "Thinking". */
 function waitLabel(wait: AgentWaitStatus): string {
     const remaining = wait.dueAt - wait.now;
-    return remaining > 0 ? `Wait for ${waitRemainingLabel(remaining)}` : "Wait ending";
+    return remaining > 0
+        ? translate("Wait for {0}", waitRemainingLabel(remaining))
+        : translate("Wait ending");
 }
 
 /** Live footer for one active agent turn: loader, elapsed clock, and phase. */
@@ -129,7 +132,7 @@ export function AgentWorkingStatus(props: AgentWorkingStatusProps) {
                             className="happy-agent-working-status__phase"
                             data-happy-desktop-ui="agent-working-status-phase"
                         >
-                            Waiting for answer
+                            {translate("Waiting for answer")}
                         </span>
                     </>
                 ) : (
@@ -180,7 +183,10 @@ export function AgentWorkingStatus(props: AgentWorkingStatusProps) {
                             <span
                                 className="happy-agent-working-status__phase"
                                 data-happy-desktop-ui="agent-working-status-phase"
-                                title={`Until ${waitFinishDateLabel(local.wait.dueAt)}`}
+                                title={translate(
+                                    "Until {0}",
+                                    waitFinishDateLabel(local.wait.dueAt),
+                                )}
                             >
                                 {waitLabel(local.wait)}
                             </span>
@@ -189,7 +195,7 @@ export function AgentWorkingStatus(props: AgentWorkingStatusProps) {
                                 className="happy-agent-working-status__phase"
                                 data-happy-desktop-ui="agent-working-status-phase"
                             >
-                                Waiting
+                                {translate("Waiting")}
                             </span>
                         ) : (
                             <span

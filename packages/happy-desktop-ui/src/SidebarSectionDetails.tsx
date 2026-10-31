@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 export type SidebarSectionContextProps = { text: string; reserveTwoLines?: boolean };
 
 /** Plain, non-interactive section context, capped at two wrapped text lines. */
@@ -35,7 +36,7 @@ export function SidebarSectionTail(props: SidebarSectionTailProps) {
             onClick={props.onToggle}
             type="button"
         >
-            {props.expanded ? "show less" : `+${props.hiddenCount} more`}
+            {props.expanded ? translate("show less") : translate("+{0} more", props.hiddenCount)}
         </button>
     );
 }

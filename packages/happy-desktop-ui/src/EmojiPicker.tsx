@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { TextField } from "./TextField";
@@ -125,7 +126,7 @@ export function EmojiPicker(props: EmojiPickerProps) {
                     fullWidth
                     leadingIcon="search"
                     onValueChange={(value) => local.onQueryChange?.(value)}
-                    placeholder={local.searchPlaceholder ?? "Search emoji"}
+                    placeholder={local.searchPlaceholder ?? translate("Search emoji")}
                     size="small"
                     type="search"
                     value={local.query ?? ""}
@@ -141,7 +142,7 @@ export function EmojiPicker(props: EmojiPickerProps) {
                         className="happy-emoji-picker__label"
                         data-happy-desktop-ui="emoji-picker-recent-label"
                     >
-                        {local.recentLabel ?? "Recently used"}
+                        {local.recentLabel ?? translate("Recently used")}
                     </div>
                     <div
                         className="happy-emoji-picker__grid"
@@ -164,7 +165,7 @@ export function EmojiPicker(props: EmojiPickerProps) {
                         className="happy-emoji-picker__label"
                         data-happy-desktop-ui="emoji-picker-all-label"
                     >
-                        {local.allLabel ?? "All emoji"}
+                        {local.allLabel ?? translate("All emoji")}
                     </div>
                 ) : null}
                 {local.emoji.length > 0 ? (
@@ -188,7 +189,7 @@ export function EmojiPicker(props: EmojiPickerProps) {
                         className="happy-emoji-picker__empty"
                         data-happy-desktop-ui="emoji-picker-empty"
                     >
-                        {local.emptyLabel ?? "No emoji found"}
+                        {local.emptyLabel ?? translate("No emoji found")}
                     </div>
                 )}
             </section>

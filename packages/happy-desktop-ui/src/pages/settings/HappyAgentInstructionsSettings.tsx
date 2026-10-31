@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { useState } from "react";
 import { Banner } from "../../Banner";
 import { Box } from "../../Box";
@@ -63,7 +64,7 @@ export function HappyAgentInstructionsSettings(props: HappyAgentInstructionsSett
         <HappyAgentSettingsSection
             description={active.description}
             rows="cards"
-            title="Global files"
+            title={translate("Global files")}
         >
             <Tabs
                 activeId={active.id}
@@ -72,25 +73,30 @@ export function HappyAgentInstructionsSettings(props: HappyAgentInstructionsSett
                 tabs={props.documents.map(({ id, label }) => ({ id, label }))}
             />
             {active.error ? (
-                <Banner tone="danger" title={`${active.label} unavailable`}>
+                <Banner tone="danger" title={translate("{0} unavailable", active.label)}>
                     {active.error}
                 </Banner>
             ) : active.loading ? (
                 <Box className="happy-agent-settings__pending">
                     <Spinner size={16} />
-                    <span>{`Reading ${active.label}…`}</span>
+                    <span>{translate("Reading {0}…", active.label)}</span>
                 </Box>
             ) : (
                 <Box className="happy-agent-settings__editor">
                     <FileEditor
                         banner={
                             active.saveError ? (
-                                <Banner tone="danger" title="Not saved">
+                                <Banner tone="danger" title={translate("Not saved")}>
                                     {active.saveError}
                                 </Banner>
                             ) : oversize ? (
-                                <Banner tone="warning" title="Too long to keep">
-                                    {`${active.label} is ${bytesLabel(active.bytes)}, and this machine keeps at most ${bytesLabel(active.maximumBytes)}.`}
+                                <Banner tone="warning" title={translate("Too long to keep")}>
+                                    {translate(
+                                        "{0} is {1}, and this machine keeps at most {2}.",
+                                        active.label,
+                                        bytesLabel(active.bytes),
+                                        bytesLabel(active.maximumBytes),
+                                    )}
                                 </Banner>
                             ) : undefined
                         }

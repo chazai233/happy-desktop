@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { useCallback, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { defaultRangeExtractor, useVirtualizer } from "@tanstack/react-virtual";
@@ -124,12 +125,12 @@ const GIT_STATUS: Record<
         tone: "new" | "modified" | "renamed" | "deleted" | "ignored";
     }
 > = {
-    added: { letter: "N", label: "New", tone: "new" },
-    deleted: { letter: "D", label: "Deleted", tone: "deleted" },
-    ignored: { letter: "I", label: "Ignored", tone: "ignored" },
-    modified: { letter: "M", label: "Modified", tone: "modified" },
-    renamed: { letter: "R", label: "Renamed", tone: "renamed" },
-    untracked: { letter: "N", label: "New", tone: "new" },
+    added: { letter: "N", label: translate("New"), tone: "new" },
+    deleted: { letter: "D", label: translate("Deleted"), tone: "deleted" },
+    ignored: { letter: "I", label: translate("Ignored"), tone: "ignored" },
+    modified: { letter: "M", label: translate("Modified"), tone: "modified" },
+    renamed: { letter: "R", label: translate("Renamed"), tone: "renamed" },
+    untracked: { letter: "N", label: translate("New"), tone: "new" },
 };
 const BASE_PADDING = 8;
 const DEFAULT_INDENT = 16;
@@ -591,7 +592,7 @@ function FileTreeRowView(props: FileTreeRowViewProps) {
                 ref={onElement}
                 style={{ paddingLeft }}
             >
-                Loading…
+                {translate("Loading…")}
             </div>
         );
     return (
@@ -756,7 +757,7 @@ export function FileTree(props: FileTreeProps) {
     ]);
     const indent = local.indent ?? DEFAULT_INDENT;
     const virtualized = local.virtualize === true;
-    const moreLabel = local.moreLabel ?? "Show more…";
+    const moreLabel = local.moreLabel ?? translate("Show more…");
     const model = fileTreeRowModel(local.nodes);
     const scrollElement = useRef<HTMLDivElement>(null);
     /**
@@ -964,7 +965,7 @@ export function FileTree(props: FileTreeProps) {
             style={local.style}
             viewportClassName="happy-file-tree__viewport"
             viewportProps={{
-                "aria-label": local.label ?? "Files",
+                "aria-label": local.label ?? translate("Files"),
                 "aria-multiselectable": local.selectedIds ? true : undefined,
                 role: "tree",
                 // The rows carry the tab stop between them; the tree itself is
@@ -978,14 +979,14 @@ export function FileTree(props: FileTreeProps) {
                     className="happy-file-tree__status-line"
                     data-happy-desktop-ui="file-tree-status-line"
                 >
-                    {local.loadingLabel ?? "Loading files…"}
+                    {local.loadingLabel ?? translate("Loading files…")}
                 </div>
             ) : model.rows.length === 0 ? (
                 <div
                     className="happy-file-tree__status-line"
                     data-happy-desktop-ui="file-tree-empty"
                 >
-                    {local.emptyLabel ?? "No files to show."}
+                    {local.emptyLabel ?? translate("No files to show.")}
                 </div>
             ) : virtualized ? (
                 <div className="happy-file-tree__virtual" data-happy-desktop-ui="file-tree-virtual">

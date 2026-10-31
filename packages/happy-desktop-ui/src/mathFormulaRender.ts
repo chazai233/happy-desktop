@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import katex from "katex";
 
 /**
@@ -46,7 +47,10 @@ export function mathFormulaRender(source: string, display: boolean): MathFormula
     } catch (error) {
         value = {
             kind: "failed",
-            message: error instanceof Error ? error.message : "This formula could not be typeset.",
+            message:
+                error instanceof Error
+                    ? error.message
+                    : translate("This formula could not be typeset."),
         };
     }
     if (renders.size >= RENDER_CAPACITY) renders.delete(renders.keys().next().value!);

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { Avatar } from "./Avatar";
 import {
@@ -113,7 +114,7 @@ function tabLeadingMark(tab: TabItem, iconSize: 14 | 16 | 18) {
     if (mark === null)
         return tab.unread ? (
             <span
-                aria-label={`${tab.label} has unread activity`}
+                aria-label={translate("{0} has unread activity", tab.label)}
                 className="happy-tabs__tab-unread happy-tabs__tab-unread--edge"
                 data-happy-desktop-ui="tab-unread"
                 role="img"
@@ -121,7 +122,7 @@ function tabLeadingMark(tab: TabItem, iconSize: 14 | 16 | 18) {
         ) : null;
     return (
         <span
-            aria-label={tab.unread ? `${tab.label} has unread activity` : undefined}
+            aria-label={tab.unread ? translate("{0} has unread activity", tab.label) : undefined}
             className="happy-tabs__tab-icon"
             data-happy-desktop-ui={tab.unread ? "tab-unread" : "tab-icon"}
         >
@@ -142,7 +143,7 @@ function tabActivityMark(tab: TabItem) {
     if (tab.awaitingInput)
         return (
             <span
-                aria-label={`${tab.label} is waiting for your answer`}
+                aria-label={translate("{0} is waiting for your answer", tab.label)}
                 className="happy-tabs__tab-question"
                 data-happy-desktop-ui="tab-awaiting-input"
                 role="img"
@@ -150,11 +151,12 @@ function tabActivityMark(tab: TabItem) {
                 <Icon name="question" size={12} />
             </span>
         );
-    if (tab.busy) return <Spinner label={`${tab.label} is working`} size={12} tone="muted" />;
+    if (tab.busy)
+        return <Spinner label={translate("{0} is working", tab.label)} size={12} tone="muted" />;
     if (tab.waiting)
         return (
             <span
-                aria-label={`${tab.label} is waiting`}
+                aria-label={translate("{0} is waiting", tab.label)}
                 className="happy-tabs__tab-waiting"
                 data-happy-desktop-ui="tab-waiting"
                 role="img"
@@ -165,7 +167,7 @@ function tabActivityMark(tab: TabItem) {
     if (tab.dirty)
         return (
             <span
-                aria-label={`${tab.label} has unsaved changes`}
+                aria-label={translate("{0} has unsaved changes", tab.label)}
                 className="happy-tabs__tab-dirty"
                 data-happy-desktop-ui="tab-dirty"
                 role="img"
@@ -412,7 +414,7 @@ export function Tabs(props: TabsProps) {
                           : ("panel-expand" as const),
                   id: `${TRANSFER_MENU_PREFIX}${target.zone}`,
                   kind: "item" as const,
-                  label: `Move to ${target.label}`,
+                  label: translate("Move to {0}", target.label),
               }))
             : [];
         const items: MenuItem[] =
@@ -738,7 +740,7 @@ export function Tabs(props: TabsProps) {
                         </span>
                         {tab.voiceFocus ? (
                             <span
-                                aria-label="Voice focus"
+                                aria-label={translate("Voice focus")}
                                 className="happy-tabs__tab-voice"
                                 data-happy-desktop-ui="tab-voice"
                                 role="img"
@@ -786,7 +788,7 @@ export function Tabs(props: TabsProps) {
                                             aria-keyshortcuts={
                                                 active() ? local.closeShortcut?.aria : undefined
                                             }
-                                            aria-label={local.closeLabel ?? "Close tab"}
+                                            aria-label={local.closeLabel ?? translate("Close tab")}
                                             className="happy-tabs__tab-close"
                                             data-happy-desktop-ui="tab-close"
                                             onClick={(event) => {

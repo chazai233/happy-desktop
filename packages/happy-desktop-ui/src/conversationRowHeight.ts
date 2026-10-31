@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import {
     entryKey,
     type AgentTurnTraceSummary,
@@ -1006,12 +1007,12 @@ function computeNoticeHeight(
 ): number {
     if (!expanded) return 32;
     const details = [
-        { label: "Provider", value: entry.provider },
-        { label: "Phase", value: entry.phase },
-        { label: "Instance", value: entry.instanceId },
+        { label: translate("Provider"), value: entry.provider },
+        { label: translate("Phase"), value: entry.phase },
+        { label: translate("Instance"), value: entry.instanceId },
         ...(entry.elapsedMs === undefined
             ? []
-            : [{ label: "Elapsed", value: computeElapsedLabel(entry.elapsedMs) }]),
+            : [{ label: translate("Elapsed"), value: computeElapsedLabel(entry.elapsedMs) }]),
     ];
     const available = Math.max(1, width - COMPUTE_DETAIL_INSET);
     const rows: { height: number; width: number }[] = [];

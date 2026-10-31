@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Badge, type BadgeVariant } from "./Badge";
 import { Icon, type IconName } from "./Icon";
 export type SetupOptionStatus = {
@@ -76,7 +77,7 @@ export function SetupOptionCard(props: SetupOptionCardProps) {
                             className="happy-setup-option__recommended"
                             data-happy-desktop-ui="setup-option-recommended"
                         >
-                            Recommended
+                            {translate("Recommended")}
                         </span>
                     ) : null}
                     {props.status

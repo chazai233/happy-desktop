@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties, type ReactNode } from "react";
 import { Icon } from "./Icon";
@@ -105,13 +106,13 @@ export function Toolbar(props: ToolbarProps) {
                                       <Icon name="search" size={14} />
                                   </span>
                                   <input
-                                      aria-label={search.placeholder ?? "Search"}
+                                      aria-label={search.placeholder ?? translate("Search")}
                                       className="happy-toolbar__search-input"
                                       data-happy-desktop-ui="toolbar-search-input"
                                       onInput={(event) =>
                                           search.onChange(event.currentTarget.value)
                                       }
-                                      placeholder={search.placeholder ?? "Search"}
+                                      placeholder={search.placeholder ?? translate("Search")}
                                       type="text"
                                       value={search.value}
                                   />

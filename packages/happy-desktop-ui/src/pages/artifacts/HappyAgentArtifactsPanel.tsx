@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import type {
     HappyAgentArtifactCatalogSnapshot,
@@ -42,11 +43,19 @@ export function HappyAgentArtifactsPanel(props: HappyAgentArtifactsPanelProps) {
     const placeName = context?.place?.kind === "workspace" ? "workspace" : "project";
     const segments: SegmentedControlSegment[] = context
         ? [
-              { value: "chat", label: "This chat" },
+              { value: "chat", label: translate("This chat") },
               ...(context.place
-                  ? [{ value: "place", label: placeName === "workspace" ? "Workspace" : "Project" }]
+                  ? [
+                        {
+                            value: "place",
+                            label:
+                                placeName === "workspace"
+                                    ? translate("Workspace")
+                                    : translate("Project"),
+                        },
+                    ]
                   : []),
-              { value: "all", label: "All" },
+              { value: "all", label: translate("All") },
           ]
         : [];
     // A place this chat does not have reads as the chat itself, which is what
@@ -68,7 +77,7 @@ export function HappyAgentArtifactsPanel(props: HappyAgentArtifactsPanelProps) {
                     data-happy-desktop-ui="happy-agent-artifacts-panel-scope"
                 >
                     <SegmentedControl
-                        aria-label="Show artifacts from"
+                        aria-label={translate("Show artifacts from")}
                         fullWidth
                         onChange={(value) => props.onScopeChange(value as HappyAgentArtifactScope)}
                         segments={segments}
@@ -84,7 +93,7 @@ export function HappyAgentArtifactsPanel(props: HappyAgentArtifactsPanelProps) {
             >
                 <div className="happy-agent-artifacts-panel__content">
                     {catalog.error ? (
-                        <Banner tone="danger" title="May be out of date">
+                        <Banner tone="danger" title={translate("May be out of date")}>
                             {catalog.error.message}
                         </Banner>
                     ) : null}
@@ -94,14 +103,23 @@ export function HappyAgentArtifactsPanel(props: HappyAgentArtifactsPanelProps) {
                                 catalog.loading
                                     ? undefined
                                     : reach === "chat"
-                                      ? "Finished work this chat publishes appears here."
+                                      ? translate("Finished work this chat publishes appears here.")
                                       : reach === "place"
-                                        ? `Finished work published in this ${placeName} appears here.`
-                                        : "Finished work any agent publishes appears here."
+                                        ? translate(
+                                              "Finished work published in this {0} appears here.",
+                                              placeName,
+                                          )
+                                        : translate(
+                                              "Finished work any agent publishes appears here.",
+                                          )
                             }
                             icon={catalog.loading ? "clock" : "package"}
                             size="panel"
-                            title={catalog.loading ? "Loading artifacts…" : "No artifacts yet"}
+                            title={
+                                catalog.loading
+                                    ? translate("Loading artifacts…")
+                                    : translate("No artifacts yet")
+                            }
                         />
                     ) : (
                         <div
@@ -134,7 +152,7 @@ export function HappyAgentArtifactsPanel(props: HappyAgentArtifactsPanelProps) {
                                 size="small"
                                 variant="ghost"
                             >
-                                Show older
+                                {translate("Show older")}
                             </Button>
                         </div>
                     ) : null}

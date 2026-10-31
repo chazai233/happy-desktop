@@ -1,3 +1,4 @@
+import { translate, uiLocale } from "./localization/translate";
 import { calendarDateDiff, calendarDateOf, calendarTimeZoneLocal } from "happy-desktop-state";
 
 /**
@@ -16,7 +17,7 @@ function format(zone: LocalTimeZone, options: Intl.DateTimeFormatOptions): Intl.
     const key = JSON.stringify([zone.locale ?? null, zone.timeZone ?? null, options]);
     let value = formats.get(key);
     if (value === undefined) {
-        value = new Intl.DateTimeFormat(zone.locale, {
+        value = new Intl.DateTimeFormat(zone.locale ?? uiLocale, {
             ...options,
             ...(zone.timeZone === undefined ? {} : { timeZone: zone.timeZone }),
         });
@@ -67,7 +68,7 @@ export function localListTime(at: number, now: number, zone: LocalTimeZone = {})
  */
 export function localAgoTime(at: number, now: number, zone: LocalTimeZone = {}): string {
     const minutes = Math.floor(Math.max(0, now - at) / 60_000);
-    if (minutes < 1) return "now";
+    if (minutes < 1) return translate("now");
     if (minutes < 60) return `${minutes}m`;
     if (minutes < 24 * 60) return `${Math.floor(minutes / 60)}h`;
     const days = localDaysFrom(now, at, zone);
@@ -101,9 +102,9 @@ export function localMoment(at: number, now: number | undefined, zone: LocalTime
     const time = localClockTime(at, zone);
     const days = now === undefined ? undefined : localDaysFrom(now, at, zone);
     if (days === 0) return time;
-    if (days === 1) return `tomorrow at ${time}`;
+    if (days === 1) return translate("tomorrow at {0}", time);
     if (days !== undefined && days > 1 && days < 7)
-        return `${format(zone, { weekday: "long" }).format(at)} at ${time}`;
+        return translate("{0} at {1}", format(zone, { weekday: "long" }).format(at), time);
     const sameYear =
         now !== undefined &&
         format(zone, { year: "numeric" }).format(at) ===
@@ -114,5 +115,5 @@ export function localMoment(at: number, now: number | undefined, zone: LocalTime
             ? { month: "short", day: "numeric" }
             : { month: "short", day: "numeric", year: "numeric" },
     ).format(at);
-    return `${date} at ${time}`;
+    return translate("{0} at {1}", date, time);
 }

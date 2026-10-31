@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties } from "react";
 import { Avatar } from "./Avatar";
 import { Banner } from "./Banner";
@@ -70,26 +71,26 @@ export function HappyAgentTaskBrowseDialog(props: HappyAgentTaskBrowseDialogProp
                 data-testid={props["data-testid"]}
                 footer={
                     <Button onClick={props.onClose} variant="ghost">
-                        Done
+                        {translate("Done")}
                     </Button>
                 }
                 icon="tasks"
                 onClose={props.onClose}
                 size="medium"
                 style={props.style}
-                title="Browse tasks"
+                title={translate("Browse tasks")}
             >
                 <div
                     className="happy-agent-task-browse-dialog"
                     data-happy-desktop-ui="happy-agent-task-browse-dialog"
                 >
                     {props.joinDisabledReason ? (
-                        <Banner tone="neutral" title="Happy Agent unavailable">
+                        <Banner tone="neutral" title={translate("Happy Agent unavailable")}>
                             {props.joinDisabledReason}
                         </Banner>
                     ) : null}
                     {props.error ? (
-                        <Banner tone="danger" title="Couldn’t join task">
+                        <Banner tone="danger" title={translate("Couldn’t join task")}>
                             {props.error}
                         </Banner>
                     ) : null}
@@ -98,11 +99,11 @@ export function HappyAgentTaskBrowseDialog(props: HappyAgentTaskBrowseDialogProp
                             className="happy-agent-task-browse-dialog__empty"
                             data-happy-desktop-ui="happy-agent-task-browse-dialog-empty"
                         >
-                            No active tasks on this Happy Agent yet.
+                            {translate("No active tasks on this Happy Agent yet.")}
                         </p>
                     ) : (
                         <ul
-                            aria-label="Tasks"
+                            aria-label={translate("Tasks")}
                             className="happy-agent-task-browse-dialog__list"
                             data-happy-desktop-ui="happy-agent-task-browse-dialog-list"
                         >
@@ -134,16 +135,16 @@ export function HappyAgentTaskBrowseDialog(props: HappyAgentTaskBrowseDialogProp
                                     </span>
                                     {task.joined ? (
                                         <Button
-                                            aria-label={`Open ${task.name}`}
+                                            aria-label={translate("Open {0}", task.name)}
                                             onClick={() => props.onOpen(task.id)}
                                             size="small"
                                             variant="secondary"
                                         >
-                                            Open
+                                            {translate("Open")}
                                         </Button>
                                     ) : (
                                         <Button
-                                            aria-label={`Join ${task.name}`}
+                                            aria-label={translate("Join {0}", task.name)}
                                             disabled={props.joinDisabledReason !== undefined}
                                             loading={task.joining === true}
                                             onClick={() => props.onJoin(task.id)}
@@ -151,7 +152,7 @@ export function HappyAgentTaskBrowseDialog(props: HappyAgentTaskBrowseDialogProp
                                             title={props.joinDisabledReason}
                                             variant="primary"
                                         >
-                                            Join
+                                            {translate("Join")}
                                         </Button>
                                     )}
                                 </li>

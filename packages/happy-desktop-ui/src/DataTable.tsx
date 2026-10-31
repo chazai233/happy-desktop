@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties, type ReactNode } from "react";
 import { Icon } from "./Icon";
@@ -140,7 +141,7 @@ export function DataTable(props: DataTableProps) {
                                 <TableCheckbox
                                     checked={allSelected()}
                                     indeterminate={!allSelected() && someSelected()}
-                                    label={local.selectLabel ?? "Select all rows"}
+                                    label={local.selectLabel ?? translate("Select all rows")}
                                     onChange={(checked) => local.onToggleAll?.(checked)}
                                     testid="data-table-select-all"
                                 />
@@ -172,7 +173,7 @@ export function DataTable(props: DataTableProps) {
                                     className="happy-data-table__sr"
                                     data-happy-desktop-ui="data-table-actions-header"
                                 >
-                                    Actions
+                                    {translate("Actions")}
                                 </span>
                             </th>
                         ) : null}
@@ -197,7 +198,7 @@ export function DataTable(props: DataTableProps) {
                                     >
                                         <TableCheckbox
                                             checked={row.selected ?? false}
-                                            label={local.selectLabel ?? "Select row"}
+                                            label={local.selectLabel ?? translate("Select row")}
                                             onChange={(checked) =>
                                                 local.onToggleRow?.(row.id, checked)
                                             }

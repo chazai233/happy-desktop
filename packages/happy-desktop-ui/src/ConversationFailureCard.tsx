@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties } from "react";
 import type { ConversationErrorAssistance, ConversationFailure } from "happy-desktop-state";
 import { Button } from "./Button";
@@ -132,7 +133,7 @@ export function ConversationFailureCard(props: ConversationFailureCardProps) {
                                                 </code>
                                                 <CopyButton
                                                     className="happy-conversation-failure-card__copy"
-                                                    label={`Copy ${segment.text}`}
+                                                    label={translate("Copy {0}", segment.text)}
                                                     text={segment.text}
                                                 />
                                             </span>

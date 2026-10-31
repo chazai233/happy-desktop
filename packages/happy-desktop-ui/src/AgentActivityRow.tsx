@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Fragment, useState, type CSSProperties } from "react";
 import type {
     ConversationActivity,
@@ -227,23 +228,28 @@ function toolVerb(
     presentation?: ConversationActivityPresentation,
 ): string {
     if (presentation?.type === "agentSpawn") {
-        if (status === "awaitingApproval") return "Awaiting approval to spawn";
-        if (status === "failed") return "Failed to spawn";
-        if (status === "stopped") return "Stopped spawning";
-        return status === "running" ? "Spawning" : "Spawned";
+        if (status === "awaitingApproval") return translate("Awaiting approval to spawn");
+        if (status === "failed") return translate("Failed to spawn");
+        if (status === "stopped") return translate("Stopped spawning");
+        return status === "running" ? translate("Spawning") : translate("Spawned");
     }
-    if (status === "awaitingApproval") return "Awaiting approval";
-    if (status === "stopped") return "Stopped";
+    if (status === "awaitingApproval") return translate("Awaiting approval");
+    if (status === "stopped") return translate("Stopped");
     const active = status === "running";
     const lower = name.toLowerCase();
     if (presentation?.type === "compaction") {
-        return status === "failed" ? "Failed" : active ? "Compacting" : "Compacted";
+        return status === "failed"
+            ? translate("Failed")
+            : active
+              ? translate("Compacting")
+              : translate("Compacted");
     }
-    if (presentation?.type === "search") return active ? "Searching" : "Searched";
+    if (presentation?.type === "search")
+        return active ? translate("Searching") : translate("Searched");
     /* A read that turned out to be a picture still says it read it; every
        other call that presents files is named by what it presented. */
     if (presentation?.type === "media")
-        return /(read|view)/.test(lower) ? "Read" : mediaNoun(presentation.items);
+        return /(read|view)/.test(lower) ? translate("Read") : mediaNoun(presentation.items);
     // An artifact's tools say what they did to it in their own words: the
     // generic family below would read `edit_artifact_files` as an edit of a
     // file called "Edit artifact files".
@@ -252,35 +258,46 @@ function toolVerb(
         presentation?.type === "page" ||
         ARTIFACT_TOOL.test(lower)
     ) {
-        if (status === "failed") return "Failed";
+        if (status === "failed") return translate("Failed");
         if (presentation?.type === "page" || lower === "show_page")
-            return active ? "Showing" : "Showed";
-        if (lower === "edit_artifact_files") return active ? "Opening" : "Opened";
-        if (lower === "create_artifact") return active ? "Creating" : "Created";
-        return active ? "Updating" : "Updated";
+            return active ? translate("Showing") : translate("Showed");
+        if (lower === "edit_artifact_files")
+            return active ? translate("Opening") : translate("Opened");
+        if (lower === "create_artifact")
+            return active ? translate("Creating") : translate("Created");
+        return active ? translate("Updating") : translate("Updated");
     }
-    if (presentation?.type === "exploration") return active ? "Exploring" : "Explored";
+    if (presentation?.type === "exploration")
+        return active ? translate("Exploring") : translate("Explored");
     // Typing into a terminal that is already running is not the same act as
     // starting one, and it is certainly not editing a file: `write_stdin` would
     // otherwise fall through to the write/edit family below and claim to have
     // edited something called "Write stdin".
     if (presentation?.type === "backgroundTerminalInteraction" || TERMINAL_INPUT_TOOL.test(lower))
-        return active ? "Typing" : "Typed";
+        return active ? translate("Typing") : translate("Typed");
     // Waiting ends when a child sends input. That expected wake-up is projected
     // as success; the verb describes the wait rather than a generic tool use.
     const still = toolCallStillGlyph(name);
-    if (lower === "wait_agent" || still === "clock") return active ? "Waiting" : "Waited";
-    if (still === "question") return active ? "Asking" : "Asked";
+    if (lower === "wait_agent" || still === "clock")
+        return active ? translate("Waiting") : translate("Waited");
+    if (still === "question") return active ? translate("Asking") : translate("Asked");
     if (presentation?.type === "execCommand" || /(bash|exec|shell|command|run)/.test(lower))
-        return lower === "powershell" ? "PowerShell" : lower === "bash" ? "Bash" : "Shell";
+        return lower === "powershell"
+            ? "PowerShell"
+            : lower === "bash"
+              ? "Bash"
+              : translate("Shell");
     // Starting or messaging another agent is named like a command is: by what
     // it is, with the call's own words on it beside.
     const delegation = DELEGATION_TOOL_NOUN[lower];
-    if (delegation) return status === "failed" ? "Failed" : delegation;
-    if (/(grep|find|glob|^ls$|list|search)/.test(lower)) return active ? "Exploring" : "Explored";
-    if (/(read|view|cat|open)/.test(lower)) return active ? "Reading" : "Read";
-    if (/(write|edit|patch|update|apply)/.test(lower)) return active ? "Editing" : "Edited";
-    return active ? "Tool" : "Used";
+    if (delegation) return status === "failed" ? translate("Failed") : delegation;
+    if (/(grep|find|glob|^ls$|list|search)/.test(lower))
+        return active ? translate("Exploring") : translate("Explored");
+    if (/(read|view|cat|open)/.test(lower))
+        return active ? translate("Reading") : translate("Read");
+    if (/(write|edit|patch|update|apply)/.test(lower))
+        return active ? translate("Editing") : translate("Edited");
+    return active ? translate("Tool") : translate("Used");
 }
 
 /** What `toolVerb` calls a tool it has no word for. */
@@ -291,27 +308,27 @@ function toolVerbFocused(verb: string): string {
     switch (verb) {
         case "Exploring":
         case "Explored":
-            return "Explore";
+            return translate("Explore");
         case "Typing":
         case "Typed":
-            return "Type";
+            return translate("Type");
         case "Reading":
-            return "Read";
+            return translate("Read");
         case "Editing":
         case "Edited":
-            return "Edit";
+            return translate("Edit");
         case "Waiting":
         case "Waited":
-            return "Wait";
+            return translate("Wait");
         case "Asking":
         case "Asked":
-            return "Ask";
+            return translate("Ask");
         case "Used":
-            return "Tool";
+            return translate("Tool");
         case "Created":
-            return "Create";
+            return translate("Create");
         case "Updated":
-            return "Update";
+            return translate("Update");
         default:
             return verb;
     }
@@ -414,13 +431,13 @@ function explorationSummary(
     }
     return operations
         .map((operation) => {
-            if (operation.kind === "list") return `List ${operation.target}`;
-            if (operation.kind === "read") return `Read ${operation.name}`;
+            if (operation.kind === "list") return translate("List {0}", operation.target);
+            if (operation.kind === "read") return translate("Read {0}", operation.name);
             const detail =
                 operation.query !== undefined && operation.path !== undefined
                     ? `${operation.query} in ${operation.path}`
                     : (operation.query ?? operation.path ?? operation.command);
-            return `Search ${detail}`;
+            return translate("Search {0}", detail);
         })
         .join(" · ");
 }
@@ -431,11 +448,17 @@ function compactionSummary(
     const before = presentation.tokensBefore;
     const after = presentation.tokensAfter;
     if (before === undefined) {
-        return after === undefined ? "context" : `context to ${contextTokenCount(after)} tokens`;
+        return after === undefined
+            ? "context"
+            : translate("context to {0} tokens", contextTokenCount(after));
     }
     return after === undefined
-        ? `context from ${contextTokenCount(before)} tokens`
-        : `context ${contextTokenCount(before)} → ${contextTokenCount(after)} tokens`;
+        ? translate("context from {0} tokens", contextTokenCount(before))
+        : translate(
+              "context {0} → {1} tokens",
+              contextTokenCount(before),
+              contextTokenCount(after),
+          );
 }
 
 /** Context occupancy keeps one useful decimal deeper into the thousands than a file count. */
@@ -454,16 +477,16 @@ function mediaNoun(
 ): string {
     const kinds = new Set(items.map((item) => item.kind));
     const plural = items.length > 1;
-    if (kinds.size !== 1) return "Files";
+    if (kinds.size !== 1) return translate("Files");
     switch (items[0]?.kind) {
         case "image":
-            return plural ? "Images" : "Image";
+            return plural ? translate("Images") : translate("Image");
         case "video":
-            return plural ? "Videos" : "Video";
+            return plural ? translate("Videos") : translate("Video");
         case "document":
-            return plural ? "Documents" : "Document";
+            return plural ? translate("Documents") : translate("Document");
         default:
-            return plural ? "Files" : "File";
+            return plural ? translate("Files") : translate("File");
     }
 }
 
@@ -475,9 +498,9 @@ function statusTone(status: ConversationActivityStatus): "success" | "warning" |
 }
 
 function diffVerb(kind: ConversationFileDiff["kind"]): string {
-    if (kind === "add") return "Added";
-    if (kind === "delete") return "Deleted";
-    return "Edited";
+    if (kind === "add") return translate("Added");
+    if (kind === "delete") return translate("Deleted");
+    return translate("Edited");
 }
 
 /**
@@ -675,17 +698,19 @@ function waitSubject(tool: ConversationToolCall): string | undefined {
     const fields = args as Record<string, ConversationJson>;
     if (tool.toolName === "wait_until") {
         const at = fields.at;
-        return typeof at === "string" || typeof at === "number" ? `until ${at}` : undefined;
+        return typeof at === "string" || typeof at === "number"
+            ? translate("until {0}", at)
+            : undefined;
     }
     if (typeof fields.duration === "string" && fields.duration.trim().length > 0)
-        return `for ${fields.duration.trim()}`;
+        return translate("for {0}", fields.duration.trim());
     const parts = (["days", "hours", "minutes", "seconds"] as const).flatMap((unit) => {
         const count = fields[unit];
         return typeof count === "number" && count > 0
             ? [`${count} ${count === 1 ? unit.slice(0, -1) : unit}`]
             : [];
     });
-    return parts.length > 0 ? `for ${parts.join(" ")}` : undefined;
+    return parts.length > 0 ? translate("for {0}", parts.join(" ")) : undefined;
 }
 
 function argumentFilePath(argumentsValue: ConversationToolCall["arguments"]): string | undefined {
@@ -815,7 +840,8 @@ function PermissionReviewRow(props: { review: ConversationActivityReview }) {
                     data-risk={review.risk}
                     data-happy-desktop-ui="agent-activity-review-risk"
                 >
-                    Risk: {review.risk}
+                    {translate("Risk:")}
+                    {review.risk}
                 </span>
             </span>
         </div>
@@ -1113,7 +1139,7 @@ function AgentToolActivity(props: {
             >
                 {spinning ? (
                     <Spinner
-                        label={`${humanizeToolName(tool.toolName)} is running`}
+                        label={translate("{0} is running", humanizeToolName(tool.toolName))}
                         size={12}
                         tone="muted"
                         variant="circle"
@@ -1223,7 +1249,9 @@ function AgentToolActivity(props: {
                 {singleLine && (spawnedOpen || props.onSelect) ? (
                     // A spawned agent opens itself, wherever its row is drawn.
                     <button
-                        aria-label={spawnedOpen && spawned ? `Open ${spawned.name}` : undefined}
+                        aria-label={
+                            spawnedOpen && spawned ? translate("Open {0}", spawned.name) : undefined
+                        }
                         className="happy-agent-activity__header"
                         data-happy-desktop-ui="agent-activity-header"
                         data-opens={spawnedOpen ? "agent" : undefined}
@@ -1244,7 +1272,9 @@ function AgentToolActivity(props: {
                 ) : (
                     <button
                         aria-expanded={hasBody ? (expanded ? "true" : "false") : undefined}
-                        aria-label={spawnedOpen && spawned ? `Open ${spawned.name}` : undefined}
+                        aria-label={
+                            spawnedOpen && spawned ? translate("Open {0}", spawned.name) : undefined
+                        }
                         className="happy-agent-activity__header"
                         data-happy-desktop-ui="agent-activity-header"
                         data-opens={spawnedOpen ? "agent" : undefined}
@@ -1263,7 +1293,7 @@ function AgentToolActivity(props: {
                        action is one: the header is itself a button in every
                        variant that opens something. */
                     <button
-                        aria-label={`Open ${fileName(filePath)}`}
+                        aria-label={translate("Open {0}", fileName(filePath))}
                         className="happy-agent-activity__open"
                         data-happy-desktop-ui="agent-activity-open"
                         data-path={filePath}
@@ -1279,7 +1309,7 @@ function AgentToolActivity(props: {
                 {focused ? null : (
                     <CopyButton
                         data-happy-desktop-ui="agent-activity-copy"
-                        label="Copy tool detail"
+                        label={translate("Copy tool detail")}
                         text={copyText}
                     />
                 )}
@@ -1338,7 +1368,11 @@ function AgentToolActivity(props: {
                             {row || "\u00a0"}
                         </ChildRow>
                     ))}
-                    {mcpResult.omitted > 0 ? <ChildRow>… {mcpResult.omitted} more</ChildRow> : null}
+                    {mcpResult.omitted > 0 ? (
+                        <ChildRow>
+                            … {mcpResult.omitted} {translate("more")}
+                        </ChildRow>
+                    ) : null}
                 </div>
             ) : null}
 
@@ -1370,13 +1404,16 @@ function AgentToolActivity(props: {
                                               />
                                               {file.omittedLines ? (
                                                   <ChildRow>
-                                                      … {file.omittedLines} more lines
+                                                      … {file.omittedLines}
+                                                      {translate("more lines")}
                                                   </ChildRow>
                                               ) : null}
                                           </div>
                                       ))}
                                       {omittedFiles > 0 ? (
-                                          <ChildRow>… {omittedFiles} more files</ChildRow>
+                                          <ChildRow>
+                                              … {omittedFiles} {translate("more files")}
+                                          </ChildRow>
                                       ) : null}
                                   </>
                               );
@@ -1413,7 +1450,8 @@ function AgentToolActivity(props: {
                                               {line || "\u00a0"}
                                               {execOutput.omitted > 0 && index === headCount - 1 ? (
                                                   <div className="happy-agent-activity__output-elide">
-                                                      … +{execOutput.omitted} lines
+                                                      … +{execOutput.omitted}
+                                                      {translate("lines")}
                                                   </div>
                                               ) : null}
                                           </div>
@@ -1546,7 +1584,7 @@ function AgentReasoningActivity(props: {
                     className="happy-agent-activity__verb"
                     data-happy-desktop-ui="agent-activity-verb"
                 >
-                    {props.streaming ? "Thinking" : "Thought"}
+                    {props.streaming ? translate("Thinking") : translate("Thought")}
                 </span>
                 <ScrollingText
                     className="happy-agent-activity__text"
@@ -1639,18 +1677,21 @@ function AgentMessageActivity(props: {
                     data-happy-desktop-ui="agent-activity-verb"
                 >
                     {props.explanation === undefined
-                        ? "Message"
+                        ? translate("Message")
                         : // A line that names its sender already says who it is from.
                           props.explanation.includes(props.agentId)
                           ? null
-                          : `${props.agentName ?? agentIdShort(props.agentId)} replied`}
+                          : translate(
+                                "{0} replied",
+                                props.agentName ?? agentIdShort(props.agentId),
+                            )}
                 </span>
                 <ScrollingText
                     className="happy-agent-activity__text"
                     data-happy-desktop-ui="agent-activity-text"
                 >
                     {props.explanation === undefined ? (
-                        `from ${props.agentName ?? agentIdShort(props.agentId)}`
+                        translate("from {0}", props.agentName ?? agentIdShort(props.agentId))
                     ) : (
                         <AgentMessageExplanation
                             references={props.references}

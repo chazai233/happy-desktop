@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import type * as Y from "yjs";
 import {
@@ -111,10 +112,12 @@ export function HappyAgentDocumentSurfacePage(props: HappyAgentDocumentSurfacePa
                 return (
                     <div className="happy-agent-document-surface__missing">
                         <EmptyState
-                            description="It may belong to a Happy Agent this one can’t reach."
+                            description={translate(
+                                "It may belong to a Happy Agent this one can’t reach.",
+                            )}
                             icon="doc"
                             size="panel"
-                            title="This document isn’t here"
+                            title={translate("This document isn’t here")}
                         />
                     </div>
                 );
@@ -127,7 +130,8 @@ export function HappyAgentDocumentSurfacePage(props: HappyAgentDocumentSurfacePa
                                 data-testid="happy-agent-document-failure"
                                 role="alert"
                             >
-                                That change couldn’t be saved, so it was undone: {content.failure}
+                                {translate("That change couldn’t be saved, so it was undone:")}
+                                {content.failure}
                             </div>
                         )}
                         <ScrollArea
@@ -159,7 +163,7 @@ export function HappyAgentDocumentSurfacePage(props: HappyAgentDocumentSurfacePa
                             data-testid="happy-agent-document-read-only"
                             role="status"
                         >
-                            Editing this document here needs a newer Happy Agent.
+                            {translate("Editing this document here needs a newer Happy Agent.")}
                         </div>
                         {content.text.trim().length === 0 ? null : (
                             <div

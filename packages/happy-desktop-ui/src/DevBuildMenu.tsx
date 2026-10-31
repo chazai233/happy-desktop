@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useLayoutEffect, useState, type CSSProperties } from "react";
 import { Icon } from "./Icon";
 import { LivePerformanceIndicator, type LivePerformanceStore } from "./LivePerformanceIndicator";
@@ -57,7 +58,7 @@ export function DevBuildMenu(props: DevBuildMenuProps) {
             <button
                 aria-expanded={open}
                 aria-haspopup="dialog"
-                aria-label={`Development build: ${name}`}
+                aria-label={translate("Development build: {0}", name)}
                 className="happy-dev-build-menu__trigger"
                 data-happy-desktop-ui="dev-build-menu-trigger"
                 onClick={() => setOpen((current) => !current)}
@@ -74,7 +75,7 @@ export function DevBuildMenu(props: DevBuildMenuProps) {
             </button>
             {open ? (
                 <div
-                    aria-label="Development panel"
+                    aria-label={translate("Development panel")}
                     aria-modal="false"
                     className="happy-dev-build-menu__menu"
                     data-happy-desktop-ui="dev-build-menu-popover"
@@ -84,7 +85,7 @@ export function DevBuildMenu(props: DevBuildMenuProps) {
                         className="happy-dev-build-menu__eyebrow"
                         data-happy-desktop-ui="dev-build-menu-eyebrow"
                     >
-                        Development
+                        {translate("Development")}
                     </div>
                     {props.onBlueprintOpen ? (
                         <>
@@ -104,9 +105,9 @@ export function DevBuildMenu(props: DevBuildMenuProps) {
                                     <Icon name="braces" size={16} />
                                 </span>
                                 <span className="happy-dev-build-menu__item-copy">
-                                    <span>Open Blueprint</span>
+                                    <span>{translate("Open Blueprint")}</span>
                                     <span className="happy-dev-build-menu__item-detail">
-                                        Component workbench
+                                        {translate("Component workbench")}
                                     </span>
                                 </span>
                             </button>
@@ -157,7 +158,7 @@ export function DevBuildMenu(props: DevBuildMenuProps) {
                                 <Icon name="copy" size={16} />
                             </span>
                             <span className="happy-dev-build-menu__item-copy">
-                                <span>Copy worktree path</span>
+                                <span>{translate("Copy worktree path")}</span>
                                 {props.path ? (
                                     <span className="happy-dev-build-menu__item-detail">
                                         {props.path}

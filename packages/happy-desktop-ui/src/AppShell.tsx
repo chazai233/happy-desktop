@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     useCallback,
@@ -724,7 +725,7 @@ export function AppShell(props: AppShellProps) {
               : FIXED_SIDEBAR_MIN_WIDTH;
     const revealButton = sidebarHidden ? (
         <button
-            aria-label={local.sidebarExpandLabel ?? "Show sidebar"}
+            aria-label={local.sidebarExpandLabel ?? translate("Show sidebar")}
             aria-keyshortcuts={shortcutHintsInteractive ? SIDEBAR_SHORTCUT.aria : undefined}
             className="happy-desktop-app-shell__reveal-button"
             data-floating={revealFloating ? "" : undefined}
@@ -793,8 +794,8 @@ export function AppShell(props: AppShellProps) {
         </div>
     ) : null;
     const sidebarToggleLabel = sidebarHidden
-        ? (local.sidebarExpandLabel ?? "Show sidebar")
-        : (local.sidebarCollapseLabel ?? "Hide sidebar");
+        ? (local.sidebarExpandLabel ?? translate("Show sidebar"))
+        : (local.sidebarCollapseLabel ?? translate("Hide sidebar"));
     const sidebarControls = sidebarTravel ? (
         <div
             className="happy-desktop-app-shell__sidebar-controls"
@@ -974,7 +975,8 @@ export function AppShell(props: AppShellProps) {
                                     {sidebarInteractive && !sidebarTravel ? (
                                         <button
                                             aria-label={
-                                                local.sidebarCollapseLabel ?? "Hide sidebar"
+                                                local.sidebarCollapseLabel ??
+                                                translate("Hide sidebar")
                                             }
                                             aria-keyshortcuts={
                                                 shortcutHintsInteractive
@@ -1004,7 +1006,10 @@ export function AppShell(props: AppShellProps) {
                                     {showSidebarHandle ? (
                                         <ResizeHandle
                                             edge="right"
-                                            label={local.sidebarResizeLabel ?? "Resize sidebar"}
+                                            label={
+                                                local.sidebarResizeLabel ??
+                                                translate("Resize sidebar")
+                                            }
                                             max={sidebarMax}
                                             min={sidebarMin}
                                             onResize={(width) => {
@@ -1048,7 +1053,7 @@ export function AppShell(props: AppShellProps) {
                                 {panelResizable ? (
                                     <ResizeHandle
                                         edge="left"
-                                        label={local.panelResizeLabel ?? "Resize panel"}
+                                        label={local.panelResizeLabel ?? translate("Resize panel")}
                                         max={panelMax}
                                         min={panelMin}
                                         onResize={previewPanelWidth}
@@ -1083,8 +1088,8 @@ export function AppShell(props: AppShellProps) {
                         <button
                             aria-label={
                                 local.panelToggleAction.open
-                                    ? "Hide secondary pane"
-                                    : "Show secondary pane"
+                                    ? translate("Hide secondary pane")
+                                    : translate("Show secondary pane")
                             }
                             aria-pressed={local.panelToggleAction.open}
                             className="happy-desktop-app-shell__panel-toggle"

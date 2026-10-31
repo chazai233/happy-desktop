@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { HappyAgentSurfaceType } from "happy-desktop-state";
 import { Avatar } from "../../Avatar";
 import { Icon, type IconName } from "../../Icon";
@@ -69,33 +70,39 @@ export function surfaceTypeIcon(type: HappyAgentSurfaceType): IconName {
 export function surfaceTypeLabel(type: HappyAgentSurfaceType): string {
     switch (type.kind) {
         case "todo":
-            return "Todo list";
+            return translate("Todo list");
         case "document":
-            return "Document";
+            return translate("Document");
         case "calendar":
-            return "Calendar";
+            return translate("Calendar");
         case "system_monitor":
-            return "System Monitor";
+            return translate("System Monitor");
         case "chat":
-            return "Chat";
+            return translate("Chat");
         case "artifact":
-            return "Artifact";
+            return translate("Artifact");
         case "bot":
-            return "Bot";
+            return translate("Bot");
         case "task":
-            return "Task";
+            return translate("Task");
         case "unsupported":
-            return `Unsupported type “${type.type}”`;
+            return translate("Unsupported type “{0}”", type.type);
     }
 }
 
 /** Who is in a Surface, in words: up to two names, then how many more. */
 export function surfaceMembersText(members: readonly HappyAgentSurfaceMemberView[]): string {
-    if (members.length === 0) return "Nobody has joined";
+    if (members.length === 0) return translate("Nobody has joined");
     if (members.length === 1) return members[0]!.name;
-    if (members.length === 2) return `${members[0]!.name} and ${members[1]!.name}`;
+    if (members.length === 2) return translate("{0} and {1}", members[0]!.name, members[1]!.name);
     const others = members.length - 2;
-    return `${members[0]!.name}, ${members[1]!.name} and ${String(others)} ${others === 1 ? "other" : "others"}`;
+    return translate(
+        "{0}, {1} and {2} {3}",
+        members[0]!.name,
+        members[1]!.name,
+        String(others),
+        others === 1 ? "other" : "others",
+    );
 }
 
 /** Up to two initials from a name, for a face with no photo. */

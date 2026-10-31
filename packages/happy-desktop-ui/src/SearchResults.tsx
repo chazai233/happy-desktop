@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Fragment, type CSSProperties, type ReactNode } from "react";
 import { Avatar, type ToneName } from "./Avatar";
 import { Icon, type IconName } from "./Icon";
@@ -38,7 +39,7 @@ const groupLabels: Record<SearchResultType, string> = {
     channel: "Channels",
     file: "Files",
     user: "People",
-    message: "Messages",
+    message: translate("Messages"),
 };
 const defaultIcons: Record<SearchResultType, IconName> = {
     channel: "hash",
@@ -247,7 +248,7 @@ export function SearchResults(props: SearchResultsProps) {
                         className="happy-search-results__empty-label"
                         data-happy-desktop-ui="search-results-empty-label"
                     >
-                        {props.emptyLabel ?? "No results"}
+                        {props.emptyLabel ?? translate("No results")}
                     </span>
                 </div>
             )}

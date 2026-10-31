@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 const HANDLE_HEIGHT = 8;
@@ -74,7 +75,7 @@ export function SplitColumn(props: SplitColumnProps) {
                 {props.top}
             </div>
             <div
-                aria-label={props.resizeLabel ?? "Resize"}
+                aria-label={props.resizeLabel ?? translate("Resize")}
                 aria-orientation="horizontal"
                 aria-valuemin={minBottom}
                 aria-valuenow={Math.round(bottomHeight)}

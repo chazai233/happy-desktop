@@ -1,3 +1,4 @@
+import { translate } from "happy-desktop-ui";
 import type {
     HappyAgentBot,
     HappyAgentBotSubtask,
@@ -299,27 +300,27 @@ const RECENT_LIMIT = 8;
 export const COMMAND_PALETTE_PREVIEW_LIMIT = 6;
 
 const THEME_SEGMENTS: readonly { readonly value: ThemeMode; readonly label: string }[] = [
-    { value: "system", label: "System" },
-    { value: "light", label: "Light" },
-    { value: "dark", label: "Dark" },
-    { value: "midnight", label: "Midnight" },
-    { value: "custom", label: "Custom" },
+    { value: "system", label: translate("System") },
+    { value: "light", label: translate("Light") },
+    { value: "dark", label: translate("Dark") },
+    { value: "midnight", label: translate("Midnight") },
+    { value: "custom", label: translate("Custom") },
 ];
 
 const SCROLLBAR_SEGMENTS: readonly {
     readonly value: ScrollbarVisibility;
     readonly label: string;
 }[] = [
-    { value: "automatic", label: "Automatic" },
-    { value: "always", label: "Always visible" },
+    { value: "automatic", label: translate("Automatic") },
+    { value: "always", label: translate("Always visible") },
 ];
 
 const LINK_OPEN_SEGMENTS: readonly {
     readonly value: HappyAgentLinkOpenPlacement;
     readonly label: string;
 }[] = [
-    { value: "panel", label: "Side panel" },
-    { value: "browser", label: "Browser" },
+    { value: "panel", label: translate("Side panel") },
+    { value: "browser", label: translate("Browser") },
 ];
 
 /**
@@ -342,7 +343,7 @@ const SETTINGS_JUMPS: readonly {
 }[] = [
     {
         id: "settings:general",
-        title: "Settings › General",
+        title: translate("Settings › General"),
         section: "general",
         sectionLabel: "General",
         icon: "settings",
@@ -350,7 +351,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:sharing",
-        title: "Settings › Sharing",
+        title: translate("Settings › Sharing"),
         section: "sharing",
         sectionLabel: "Sharing",
         icon: "files",
@@ -358,7 +359,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:account",
-        title: "Settings › Account",
+        title: translate("Settings › Account"),
         section: "account",
         sectionLabel: "Account",
         icon: "users",
@@ -366,7 +367,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:experimental",
-        title: "Settings › Experimental",
+        title: translate("Settings › Experimental"),
         section: "experimental",
         sectionLabel: "Experimental",
         icon: "zap",
@@ -374,7 +375,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:file-tiers",
-        title: "Settings › File tiers",
+        title: translate("Settings › File tiers"),
         section: "file-tiers",
         sectionLabel: "File tiers",
         icon: "file-diff",
@@ -382,7 +383,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:instructions",
-        title: "Settings › Instructions",
+        title: translate("Settings › Instructions"),
         section: "instructions",
         sectionLabel: "Instructions",
         icon: "doc",
@@ -390,7 +391,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:secrets",
-        title: "Settings › Secrets",
+        title: translate("Settings › Secrets"),
         section: "secrets",
         sectionLabel: "Secrets",
         icon: "lock",
@@ -398,7 +399,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:providers",
-        title: "Settings › Providers",
+        title: translate("Settings › Providers"),
         section: "providers",
         sectionLabel: "Providers",
         icon: "globe",
@@ -406,7 +407,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:usage",
-        title: "Settings › Usage",
+        title: translate("Settings › Usage"),
         section: "usage",
         sectionLabel: "Usage",
         icon: "zap",
@@ -414,7 +415,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:mobile-access",
-        title: "Settings › Mobile access",
+        title: translate("Settings › Mobile access"),
         section: "mobile-access",
         sectionLabel: "Mobile access",
         icon: "mobile",
@@ -422,7 +423,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:debug",
-        title: "Settings › Dev tools",
+        title: translate("Settings › Dev tools"),
         section: "debug",
         sectionLabel: "Dev tools",
         icon: "code",
@@ -430,7 +431,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:voice",
-        title: "Settings › Voice",
+        title: translate("Settings › Voice"),
         section: "voice",
         sectionLabel: "Voice",
         icon: "call",
@@ -438,7 +439,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:default-model",
-        title: "Default model",
+        title: translate("Default model"),
         section: "general",
         sectionLabel: "General",
         icon: "settings",
@@ -447,7 +448,7 @@ const SETTINGS_JUMPS: readonly {
     },
     {
         id: "settings:permission-mode",
-        title: "Default access mode",
+        title: translate("Default access mode"),
         section: "general",
         sectionLabel: "General",
         icon: "settings",
@@ -815,7 +816,7 @@ function workOffers(context: CommandPaletteContext): WorkOffer[] {
             row: {
                 kind: "command",
                 id: `chat:${session.id}`,
-                title: session.title?.trim() || `Session ${session.id.slice(0, 8)}`,
+                title: session.title?.trim() || translate("Session {0}", session.id.slice(0, 8)),
                 meta: `Closed · ${groupMeta(owner.project, owner.worktree)}`,
                 // Closed sessions wear the recents glyph, exactly as the
                 // workspace's own history menu marks them.
@@ -951,8 +952,8 @@ function settingRows(input: CommandPaletteInput): CommandPaletteSettingRow[] {
             setting: "themeMode",
             id: "setting:theme",
             icon: "sun",
-            label: "Theme",
-            description: "Applies to this window immediately",
+            label: translate("Theme"),
+            description: translate("Applies to this window immediately"),
             controlId: "happy-agent-palette-theme",
             control: {
                 kind: "segmented",
@@ -966,8 +967,8 @@ function settingRows(input: CommandPaletteInput): CommandPaletteSettingRow[] {
             setting: "scrollbarVisibility",
             id: "setting:scrollbars",
             icon: "settings",
-            label: "Scrollbars",
-            description: "Automatic hides two seconds after user scrolling stops",
+            label: translate("Scrollbars"),
+            description: translate("Automatic hides two seconds after user scrolling stops"),
             controlId: "happy-agent-palette-scrollbars",
             control: {
                 kind: "segmented",
@@ -981,9 +982,10 @@ function settingRows(input: CommandPaletteInput): CommandPaletteSettingRow[] {
             setting: "linkOpenPlacement",
             id: "setting:link-open",
             icon: "globe",
-            label: "Open links in",
-            description:
+            label: translate("Open links in"),
+            description: translate(
                 "Side panel keeps the page beside the conversation; Browser hands it to the machine's own",
+            ),
             controlId: "happy-agent-palette-link-open",
             control: {
                 kind: "segmented",
@@ -997,8 +999,8 @@ function settingRows(input: CommandPaletteInput): CommandPaletteSettingRow[] {
             setting: "titleShimmer",
             id: "setting:title-shimmer",
             icon: "zap",
-            label: "Shimmer active titles",
-            description: "Animates running session, project, and workspace names",
+            label: translate("Shimmer active titles"),
+            description: translate("Animates running session, project, and workspace names"),
             controlId: "happy-agent-palette-title-shimmer",
             control: {
                 kind: "switch",
@@ -1065,7 +1067,7 @@ function updateRow(context: CommandPaletteContext): CommandPaletteCommandRow | u
     return {
         kind: "command",
         id: "action:update",
-        title: "Update Happy",
+        title: translate("Update Happy"),
         meta: update.version
             ? `Version ${update.version}`
             : update.action === "restart"
@@ -1103,7 +1105,7 @@ function actionOffers(
             row: {
                 kind: "command",
                 id: "action:session-create",
-                title: "New chat",
+                title: translate("New chat"),
                 glyph: { kind: "icon", name: "plus" },
                 shortcut: APP_SHORTCUTS.sessionCreate,
                 command: { kind: "sessionCreate" },
@@ -1115,7 +1117,7 @@ function actionOffers(
             row: {
                 kind: "command",
                 id: "action:task-create",
-                title: "New task",
+                title: translate("New task"),
                 glyph: { kind: "icon", name: "tasks" },
                 shortcut: APP_SHORTCUTS.taskCreate,
                 command: { kind: "taskCreate" },
@@ -1127,7 +1129,7 @@ function actionOffers(
             row: {
                 kind: "command",
                 id: "action:workspace-create",
-                title: "New workspace",
+                title: translate("New workspace"),
                 glyph: { kind: "icon", name: "branch" },
                 command: { kind: "workspaceCreate" },
             },
@@ -1140,7 +1142,7 @@ function actionOffers(
             row: {
                 kind: "command",
                 id: "action:sidebar-toggle",
-                title: sidebar.hidden ? "Show sidebar" : "Hide sidebar",
+                title: sidebar.hidden ? translate("Show sidebar") : translate("Hide sidebar"),
                 glyph: {
                     kind: "icon",
                     name: sidebar.hidden ? "sidebar-expand" : "sidebar-collapse",
@@ -1156,7 +1158,9 @@ function actionOffers(
             row: {
                 kind: "command",
                 id: "action:panel-toggle",
-                title: panel.open ? "Hide secondary pane" : "Show secondary pane",
+                title: panel.open
+                    ? translate("Hide secondary pane")
+                    : translate("Show secondary pane"),
                 glyph: { kind: "icon", name: panel.open ? "panel-collapse" : "panel-expand" },
                 shortcut: APP_SHORTCUTS.panelToggle,
                 command: { kind: "panelToggle" },
@@ -1167,7 +1171,7 @@ function actionOffers(
         row: {
             kind: "command",
             id: "action:settings",
-            title: "Open settings",
+            title: translate("Open settings"),
             glyph: { kind: "icon", name: "settings" },
             command: { kind: "settingsOpen" },
         },
@@ -1200,10 +1204,10 @@ export function commandPaletteSuggestionSections(
     return [
         ...(update ? [{ id: "update" as const, rows: [update] }] : []),
         recent.length > 0
-            ? { id: "recent" as const, label: "Recent", rows: recent }
+            ? { id: "recent" as const, label: translate("Recent"), rows: recent }
             : {
                   id: "actions" as const,
-                  label: "Actions",
+                  label: translate("Actions"),
                   rows: actionOffers(context).map((offer) => offer.row),
               },
     ];
@@ -1248,7 +1252,7 @@ export function commandPaletteResults(input: CommandPaletteInput): CommandPalett
         }[] = [
             {
                 id: "work",
-                label: "Work",
+                label: translate("Work"),
                 rows: workRanked(
                     offers.filter((offer) => offer.tier < 2),
                     input,
@@ -1256,10 +1260,14 @@ export function commandPaletteResults(input: CommandPaletteInput): CommandPalett
                     SECTION_LIMIT,
                 ),
             },
-            { id: "tabs", label: "Files", rows: rankedOf(tabRows(input), SECTION_LIMIT) },
+            {
+                id: "tabs",
+                label: translate("Files"),
+                rows: rankedOf(tabRows(input), SECTION_LIMIT),
+            },
             {
                 id: "actions",
-                label: "Actions",
+                label: translate("Actions"),
                 rows: rankedOf(
                     actionOffers(input, updateRow(input)).flatMap((offer) => {
                         const rank = rowRank(
@@ -1275,7 +1283,7 @@ export function commandPaletteResults(input: CommandPaletteInput): CommandPalett
             },
             {
                 id: "settings",
-                label: "Settings",
+                label: translate("Settings"),
                 rows: rankedOf(settingsSectionRows(input), SECTION_LIMIT),
             },
         ];
@@ -1297,7 +1305,7 @@ export function commandPaletteResults(input: CommandPaletteInput): CommandPalett
             SECTION_LIMIT,
         ).map((entry) => entry.row);
         if (archived.length > 0)
-            sections.push({ id: "archived", label: "Archived", rows: archived });
+            sections.push({ id: "archived", label: translate("Archived"), rows: archived });
     }
     return numberedResults(sections);
 }

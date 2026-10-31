@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { ReactNode } from "react";
 import { Button } from "./Button";
 import type { MobilePairingMethod } from "./MobilePairingOptions";
@@ -36,11 +37,11 @@ export interface DesktopMobilePairingOptions {
 
 /** The subtitle over the codes, or over the emoji step once a phone connects directly. */
 export function desktopMobilePairingOptionsCopy(options: DesktopMobilePairingOptions): string {
-    if (options.completed) return "Your phone can now reach this computer directly.";
-    if (options.verifying) return "Check the emoji on this computer and on your phone.";
+    if (options.completed) return translate("Your phone can now reach this computer directly.");
+    if (options.verifying) return translate("Check the emoji on this computer and on your phone.");
     return options.method === undefined
-        ? "Open Happy on your phone and scan either code."
-        : "Open Happy on your phone and scan the code.";
+        ? translate("Open Happy on your phone and scan either code.")
+        : translate("Open Happy on your phone and scan the code.");
 }
 
 export interface DesktopMobileSetupProps {
@@ -73,7 +74,7 @@ const ENCRYPTION_DOCS_URL = "https://happy.engineering/docs/security/";
 export function MobileAppCopy(props: { onExternalOpen?(url: string): void }) {
     return (
         <>
-            Download the end-to-end encrypted mobile app.{" "}
+            {translate("Download the end-to-end encrypted mobile app.")}{" "}
             <EncryptionLink onExternalOpen={props.onExternalOpen} />
         </>
     );
@@ -83,7 +84,7 @@ export function MobileAppCopy(props: { onExternalOpen?(url: string): void }) {
 export function GetMobileAppCopy(props: { onExternalOpen?(url: string): void }) {
     return (
         <>
-            Scan with your phone’s camera. End-to-end encrypted.{" "}
+            {translate("Scan with your phone’s camera. End-to-end encrypted.")}{" "}
             <EncryptionLink onExternalOpen={props.onExternalOpen} />
         </>
     );
@@ -102,7 +103,7 @@ function EncryptionLink(props: { onExternalOpen?(url: string): void }) {
             rel="noopener noreferrer"
             target="_blank"
         >
-            How it works
+            {translate("How it works")}
         </a>
     );
 }
@@ -117,7 +118,7 @@ export function MobileStoreDownload(props: {
             <div
                 className="happy-desktop-mobile-setup__platform"
                 role="group"
-                aria-label="Phone platform"
+                aria-label={translate("Phone platform")}
             >
                 <Button
                     aria-pressed={props.platform === "ios"}
@@ -139,7 +140,7 @@ export function MobileStoreDownload(props: {
             <QRCode
                 data={STORE_URLS[props.platform]}
                 data-testid="happy-mobile-store-qr"
-                label="QR code to download Happy mobile app"
+                label={translate("QR code to download Happy mobile app")}
                 mark={props.platform === "ios" ? "app-store" : "google-play"}
                 size={176}
             />
@@ -173,7 +174,7 @@ export function DesktopMobileSetup(props: DesktopMobileSetupProps) {
         // Approval replaces only the QR body, not the retained linking page or its sticker.
         transitionKey: `desktop-mobile-${step.kind}`,
     } as const;
-    const skip = { label: "Skip mobile setup", onSelect: props.onSkip };
+    const skip = { label: translate("Skip mobile setup"), onSelect: props.onSkip };
 
     // One screen gets the app onto the phone: what to do with the code, the
     // platform pick, and the store code. Confirming it asks for the pairing code.
@@ -181,11 +182,11 @@ export function DesktopMobileSetup(props: DesktopMobileSetupProps) {
         return (
             <SetupPage
                 {...frame}
-                action={{ label: "Downloaded and opened", onSelect: props.onContinue }}
+                action={{ label: translate("Downloaded and opened"), onSelect: props.onContinue }}
                 copy={<GetMobileAppCopy onExternalOpen={props.onExternalOpen} />}
                 scene="closed-lock"
                 secondary={skip}
-                title="Get Mobile App"
+                title={translate("Get Mobile App")}
             >
                 <MobileStoreDownload
                     platform={step.platform}
@@ -204,9 +205,13 @@ export function DesktopMobileSetup(props: DesktopMobileSetupProps) {
                 copy={desktopMobilePairingOptionsCopy(props.pairingOptions)}
                 scene="closed-lock"
                 {...(props.pairingOptions.completed
-                    ? { action: { label: "Continue", onSelect: props.onContinue } }
+                    ? { action: { label: translate("Continue"), onSelect: props.onContinue } }
                     : { secondary: skip })}
-                title={props.pairingOptions.completed ? "Mobile App Linked" : "Link Mobile App"}
+                title={
+                    props.pairingOptions.completed
+                        ? translate("Mobile App Linked")
+                        : translate("Link Mobile App")
+                }
             >
                 {props.pairingOptions.view}
             </SetupPage>
@@ -215,7 +220,7 @@ export function DesktopMobileSetup(props: DesktopMobileSetupProps) {
     return (
         <SetupPage
             {...frame}
-            action={{ label: "Continue", onSelect: props.onContinue }}
+            action={{ label: translate("Continue"), onSelect: props.onContinue }}
             scene="confetti-ball"
             {...(step.online
                 ? {}
@@ -223,10 +228,10 @@ export function DesktopMobileSetup(props: DesktopMobileSetupProps) {
                       status: {
                           label:
                               step.message ??
-                              "Remote control resumes when your computer is online.",
+                              translate("Remote control resumes when your computer is online."),
                       },
                   })}
-            title="Mobile App Linked"
+            title={translate("Mobile App Linked")}
         />
     );
 }

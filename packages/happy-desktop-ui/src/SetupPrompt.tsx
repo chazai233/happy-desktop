@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { CopyButton } from "./CopyButton";
 
 export interface SetupPromptProps {
@@ -39,7 +40,7 @@ export function SetupPrompt(props: SetupPromptProps) {
                     caption="Copy"
                     copiedCaption="Copied"
                     data-happy-desktop-ui="setup-prompt-copy"
-                    label={`Copy ${props.label}`}
+                    label={translate("Copy {0}", props.label)}
                     {...(props.onCopy ? { onCopy: props.onCopy } : {})}
                     text={props.prompt}
                 />

@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import type {
     HappyAgentInboxItem,
@@ -98,7 +99,7 @@ export function HappyAgentInboxPage(props: HappyAgentInboxPageProps) {
                 <Toolbar
                     height={SURFACE_HEADER_HEIGHT}
                     subtitle={inboxSubtitle(pendingCount, answeredCount, props.loading)}
-                    title="Inbox"
+                    title={translate("Inbox")}
                 />
             </div>
             <ScrollArea
@@ -108,12 +109,12 @@ export function HappyAgentInboxPage(props: HappyAgentInboxPageProps) {
             >
                 <div className="happy-agent-inbox__content">
                     {props.error ? (
-                        <Banner tone="danger" title="Questions may be out of date">
+                        <Banner tone="danger" title={translate("Questions may be out of date")}>
                             {props.error.message}
                         </Banner>
                     ) : null}
                     {props.unavailable ? (
-                        <Banner tone="neutral" title="Happy Agent reconnecting">
+                        <Banner tone="neutral" title={translate("Happy Agent reconnecting")}>
                             {props.unavailable}
                         </Banner>
                     ) : null}
@@ -128,18 +129,26 @@ export function HappyAgentInboxPage(props: HappyAgentInboxPageProps) {
                             animation={props.loading ? "snail" : "sparkles"}
                             description={
                                 props.loading
-                                    ? "Reading what this Happy Agent's agents are waiting on."
-                                    : "When an agent needs a decision, it waits for you here."
+                                    ? translate(
+                                          "Reading what this Happy Agent's agents are waiting on.",
+                                      )
+                                    : translate(
+                                          "When an agent needs a decision, it waits for you here.",
+                                      )
                             }
                             icon={props.loading ? "clock" : "check-circle"}
-                            title={props.loading ? "Loading inbox…" : "Nothing to decide"}
+                            title={
+                                props.loading
+                                    ? translate("Loading inbox…")
+                                    : translate("Nothing to decide")
+                            }
                         />
                     ) : null}
 
                     {pendingCount > 0 ? (
                         <SectionLabel
                             count={pendingCount}
-                            label="Waiting"
+                            label={translate("Waiting")}
                             testid="happy-agent-inbox-section-waiting"
                         />
                     ) : null}
@@ -185,10 +194,10 @@ export function HappyAgentInboxPage(props: HappyAgentInboxPageProps) {
                                 <Icon name="check-circle" size={16} />
                             </span>
                             <strong className="happy-agent-inbox__caught-up-title">
-                                All caught up
+                                {translate("All caught up")}
                             </strong>
                             <span className="happy-agent-inbox__caught-up-detail">
-                                Everything this HappyAgent asked has an answer.
+                                {translate("Everything this HappyAgent asked has an answer.")}
                             </span>
                         </p>
                     ) : null}
@@ -196,7 +205,7 @@ export function HappyAgentInboxPage(props: HappyAgentInboxPageProps) {
                     {answeredCount > 0 ? (
                         <SectionLabel
                             count={answeredCount}
-                            label="Answered"
+                            label={translate("Answered")}
                             testid="happy-agent-inbox-section"
                         />
                     ) : null}
@@ -240,9 +249,10 @@ function SectionLabel(props: { count: number; label: string; testid: string }) {
 }
 
 function inboxSubtitle(pending: number, answered: number, loading?: boolean): string {
-    if (loading) return "Loading…";
-    if (pending === 0) return answered === 0 ? "No questions" : `All ${answered} answered`;
-    return `${pending} waiting${answered > 0 ? ` · ${answered} answered` : ""}`;
+    if (loading) return translate("Loading…");
+    if (pending === 0)
+        return answered === 0 ? translate("No questions") : translate("All {0} answered", answered);
+    return translate("{0} waiting{1}", pending, answered > 0 ? ` · ${answered} answered` : "");
 }
 
 interface InboxItemHeaderProps {
@@ -304,7 +314,7 @@ function InboxItemHeader(props: InboxItemHeaderProps & { status?: string }) {
                         size="small"
                         variant="ghost"
                     >
-                        Open session
+                        {translate("Open session")}
                     </Button>
                 ) : null}
             </span>
@@ -378,7 +388,7 @@ function InboxPendingItem(props: InboxPendingItemProps) {
                     onSend={() => onMessageSubmit(props.item.id)}
                     onValueChange={(value) => onMessageChange(props.item.id, value)}
                     pending={submission?.type === "pending"}
-                    placeholder="Or say what to do instead…"
+                    placeholder={translate("Or say what to do instead…")}
                     submitDisabled={props.unavailable !== undefined}
                     value={props.message}
                 />
@@ -432,7 +442,7 @@ function InboxAnsweredItem(props: InboxItemHeaderProps) {
                                     chosen.join(", ")
                                 ) : (
                                     <span className="happy-agent-inbox__answer-empty">
-                                        No answer recorded
+                                        {translate("No answer recorded")}
                                     </span>
                                 )}
                             </dd>

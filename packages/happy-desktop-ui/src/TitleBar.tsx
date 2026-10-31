@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties, type HTMLAttributes, type ReactNode } from "react";
 import { KeyCap } from "./Badge";
@@ -73,7 +74,7 @@ export function SearchField(props: SearchFieldProps) {
                 <Icon name="search" size={14} />
             </span>
             <input
-                aria-label={props.placeholder ?? "Search"}
+                aria-label={props.placeholder ?? translate("Search")}
                 className="happy-search-field__input"
                 data-happy-desktop-ui="search-field-input"
                 onClick={() => props.onOpen?.()}
@@ -90,7 +91,7 @@ export function SearchField(props: SearchFieldProps) {
                     }
                     if (event.key === "Enter") props.onSubmit?.(event.currentTarget.value);
                 }}
-                placeholder={props.placeholder ?? "Search"}
+                placeholder={props.placeholder ?? translate("Search")}
                 readOnly={props.onOpen !== undefined}
                 type="text"
                 value={props.value}

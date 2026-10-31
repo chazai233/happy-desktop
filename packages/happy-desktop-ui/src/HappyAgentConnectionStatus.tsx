@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties } from "react";
 import { Button } from "./Button";
 import { Spinner } from "./Spinner";
@@ -120,7 +121,7 @@ export function HappyAgentConnectionStatus(props: HappyAgentConnectionStatusProp
                     </span>
                     {canRetry ? (
                         <Button onClick={props.onRetry} size="small" type="button" variant="ghost">
-                            Retry now
+                            {translate("Retry now")}
                         </Button>
                     ) : null}
                 </div>

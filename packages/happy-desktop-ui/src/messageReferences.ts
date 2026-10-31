@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import {
     formatHappyFileUrl,
     formatHappyReferenceUrl,
@@ -140,7 +141,7 @@ export function messageReferencesResolve(
                 return match.label.trim().length > 0
                     ? match.label
                     : match.syntax === "legacyTag"
-                      ? "an unavailable reference"
+                      ? translate("an unavailable reference")
                       : "";
             if (link.type === "file") {
                 if (match.image || match.label.trim().length > 0) return match.source;
@@ -178,7 +179,7 @@ function linkPlainWords(match: HappyLinkMatch, references: MessageReferences | u
     const written = labelPlain(match.label);
     if (written.length > 0) return written;
     if (link?.type === "file") return link.file.path;
-    return match.syntax === "legacyTag" ? "an unavailable reference" : "";
+    return match.syntax === "legacyTag" ? translate("an unavailable reference") : "";
 }
 
 /**

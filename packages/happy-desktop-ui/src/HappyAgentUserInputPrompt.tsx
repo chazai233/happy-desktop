@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useState, type CSSProperties } from "react";
 import { userInputRuleText, type HappyAgentUserInputPromptVariant } from "./userInputRule";
 import type { HappyAgentUserInputRequest, UserError } from "happy-desktop-state";
@@ -230,7 +231,7 @@ export function HappyAgentUserInputPrompt(props: HappyAgentUserInputPromptProps)
                         ? {}
                         : {
                               action: {
-                                  label: "Retry",
+                                  label: translate("Retry"),
                                   onClick: () =>
                                       props.onAnswer?.(
                                           request.requestId,
@@ -246,7 +247,7 @@ export function HappyAgentUserInputPrompt(props: HappyAgentUserInputPromptProps)
                           })}
                     data-testid="happy-agent-user-input-error"
                     tone="danger"
-                    title="Answer not sent"
+                    title={translate("Answer not sent")}
                 >
                     {props.error.message}
                 </Banner>
@@ -273,17 +274,17 @@ export function HappyAgentUserInputPrompt(props: HappyAgentUserInputPromptProps)
                                 ? undefined
                                 : (props.submitDisabledReason ??
                                   (props.onAnswer === undefined
-                                      ? "Answers are unavailable"
+                                      ? translate("Answers are unavailable")
                                       : undefined))
                         }
                         variant="secondary"
                     >
                         {resolved ? (
-                            "Submitted"
+                            translate("Submitted")
                         ) : props.pending ? (
-                            <ShimmerText tone="inherit">Submit</ShimmerText>
+                            <ShimmerText tone="inherit">{translate("Submit")}</ShimmerText>
                         ) : (
-                            "Submit"
+                            translate("Submit")
                         )}
                     </Button>
                 </div>

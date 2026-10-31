@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { useId } from "react";
 import { Banner } from "../../Banner";
 import { Box } from "../../Box";
@@ -33,18 +34,19 @@ export function HappyAgentAutoJoinSettings(
         // and says once when it is unreachable; `unavailable` only disables here.
         <>
             {props.error ? (
-                <Banner tone="danger" title={`${Noun} settings unavailable`}>
+                <Banner tone="danger" title={translate("{0} settings unavailable", Noun)}>
                     {props.error}
                 </Banner>
             ) : null}
             {props.saveError ? (
-                <Banner tone="danger" title={`${Noun} preference not saved`}>
+                <Banner tone="danger" title={translate("{0} preference not saved", Noun)}>
                     {props.saveError}
                 </Banner>
             ) : null}
             {props.status === "unsupported" ? (
-                <Banner tone="neutral" title={`${Noun} settings unavailable`}>
-                    {props.unsupportedMessage ?? "This connection does not provide user settings."}
+                <Banner tone="neutral" title={translate("{0} settings unavailable", Noun)}>
+                    {props.unsupportedMessage ??
+                        translate("This connection does not provide user settings.")}
                 </Banner>
             ) : null}
             <FormRow
@@ -52,14 +54,14 @@ export function HappyAgentAutoJoinSettings(
                     props.status === "loading" ? (
                         <Box className="happy-agent-settings__pending">
                             <Spinner size={16} />
-                            <span>Reading preference…</span>
+                            <span>{translate("Reading preference…")}</span>
                         </Box>
                     ) : (
                         <Box className="happy-agent-settings__pending">
                             {props.saving ? (
                                 <>
                                     <Spinner size={16} />
-                                    <span role="status">Saving…</span>
+                                    <span role="status">{translate("Saving…")}</span>
                                 </>
                             ) : null}
                             <Switch

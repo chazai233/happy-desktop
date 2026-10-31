@@ -1,3 +1,5 @@
+import { translate } from "./localization/translate";
+import { thinkingLevelLabel } from "./localization/modelLabels";
 import { useState, type CSSProperties } from "react";
 import type {
     HappyAgentMenusSnapshot,
@@ -154,7 +156,9 @@ export function HappyAgentControlMenu(props: HappyAgentControlMenuProps) {
                 <button
                     aria-expanded={expanded ? "true" : "false"}
                     aria-haspopup="menu"
-                    aria-label={props.label === undefined ? "More options" : `${props.label}…`}
+                    aria-label={
+                        props.label === undefined ? translate("More options") : `${props.label}…`
+                    }
                     className="happy-agent-control__trigger happy-agent-control__trigger--menu"
                     data-happy-desktop-ui="happy-agent-control-menu-trigger"
                     disabled={props.disabled}
@@ -239,10 +243,10 @@ export type HappyAgentSessionControlsProps = {
 };
 
 const PERMISSION_LABELS: Record<HappyAgentPermissionMode, string> = {
-    auto: "Auto",
-    workspace_write: "Workspace write",
-    read_only: "Read only",
-    full_access: "Full access",
+    auto: translate("Auto"),
+    workspace_write: translate("Workspace write"),
+    read_only: translate("Read only"),
+    full_access: translate("Full access"),
 };
 
 function currentModelName(menus: HappyAgentMenusSnapshot): string {
@@ -251,7 +255,11 @@ function currentModelName(menus: HappyAgentMenusSnapshot): string {
 
 function currentEffortLabel(menus: HappyAgentMenusSnapshot): string {
     const current = menus.effortOptions.find((option) => option.current);
-    return current?.label ?? menus.currentEffort ?? "Default";
+    return current
+        ? thinkingLevelLabel(current.level)
+        : menus.currentEffort
+          ? thinkingLevelLabel(menus.currentEffort)
+          : translate("Default");
 }
 
 /**
@@ -275,14 +283,16 @@ export function HappyAgentSessionControls(props: HappyAgentSessionControlsProps)
     const effortItems: MenuItem[] = (menus?.effortOptions ?? []).map((option) => ({
         kind: "item",
         id: option.level,
-        label: option.isDefault ? `${option.label} (default)` : option.label,
+        label: option.isDefault
+            ? translate("{0} (default)", thinkingLevelLabel(option.level))
+            : thinkingLevelLabel(option.level),
         icon: option.current ? "check" : undefined,
     }));
 
     const permissionItems: MenuItem[] = (menus?.permissionModeOptions ?? []).map((option) => ({
         kind: "item",
         id: option.mode,
-        label: option.label,
+        label: PERMISSION_LABELS[option.mode],
         icon: option.current ? "check" : undefined,
     }));
 
@@ -295,7 +305,7 @@ export function HappyAgentSessionControls(props: HappyAgentSessionControlsProps)
 
     const currentTierLabel =
         menus?.serviceTierOptions.find((option) => option.current)?.label ??
-        (menus ? "Unavailable" : "…");
+        (menus ? translate("Unavailable") : "…");
 
     const control = (field: HappyAgentSessionControlField) => {
         if (field === "model")
@@ -305,7 +315,7 @@ export function HappyAgentSessionControls(props: HappyAgentSessionControlsProps)
                     disabled={props.disabled || !menus}
                     items={modelItems}
                     key={field}
-                    label="Model"
+                    label={translate("Model")}
                     menuPlacement={props.menuPlacement}
                     variant={props.variant}
                     menuWidth={240}
@@ -323,7 +333,7 @@ export function HappyAgentSessionControls(props: HappyAgentSessionControlsProps)
                     disabled={props.disabled || !menus}
                     items={effortItems}
                     key={field}
-                    label="Effort"
+                    label={translate("Effort")}
                     menuPlacement={props.menuPlacement}
                     variant={props.variant}
                     onSelect={(id) => props.onEffortChange(id as HappyAgentThinkingLevel)}
@@ -352,7 +362,7 @@ export function HappyAgentSessionControls(props: HappyAgentSessionControlsProps)
                 disabled={props.disabled || !menus}
                 items={serviceTierItems}
                 key={field}
-                label={props.variant === "ghost" ? undefined : "Speed"}
+                label={props.variant === "ghost" ? undefined : translate("Speed")}
                 menuPlacement={props.menuPlacement}
                 variant={props.variant}
                 onSelect={(id) => {

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Button } from "./Button";
 
 export type WorkTabControlsProps = {
@@ -14,7 +15,11 @@ export function WorkTabControls(props: WorkTabControlsProps) {
     return (
         <span className="happy-work-tab-controls" data-happy-desktop-ui="work-tab-controls">
             <Button
-                aria-label={props.floatyOpen ? "Hide task activity" : "Show task activity"}
+                aria-label={
+                    props.floatyOpen
+                        ? translate("Hide task activity")
+                        : translate("Show task activity")
+                }
                 aria-pressed={props.floatyOpen}
                 className="happy-work-tab-controls__toggle"
                 icon="list"

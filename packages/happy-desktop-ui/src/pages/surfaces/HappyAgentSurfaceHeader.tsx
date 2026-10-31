@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { ReactNode } from "react";
 import { Button } from "../../Button";
 import { PanelHeader } from "../../PanelHeader";
@@ -74,7 +75,11 @@ export function HappyAgentSurfaceHeader(props: HappyAgentSurfaceHeaderProps) {
             )}
             {props.width ? (
                 <Button
-                    aria-label={props.width.expanded ? "Center the page" : "Use the full width"}
+                    aria-label={
+                        props.width.expanded
+                            ? translate("Center the page")
+                            : translate("Use the full width")
+                    }
                     aria-pressed={props.width.expanded}
                     className="happy-agent-surface-header__width"
                     data-testid="happy-agent-surface-width-toggle"
@@ -82,7 +87,11 @@ export function HappyAgentSurfaceHeader(props: HappyAgentSurfaceHeaderProps) {
                     iconOnly
                     onClick={props.width.onToggle}
                     size="small"
-                    title={props.width.expanded ? "Center the page" : "Use the full width"}
+                    title={
+                        props.width.expanded
+                            ? translate("Center the page")
+                            : translate("Use the full width")
+                    }
                     variant="ghost"
                 />
             ) : null}
@@ -99,14 +108,14 @@ export function HappyAgentSurfaceHeader(props: HappyAgentSurfaceHeaderProps) {
                     working={props.chat.working === true}
                     title={
                         props.chat.open
-                            ? "Close the chat"
+                            ? translate("Close the chat")
                             : agentChat
-                              ? "Open the chat with the agent everyone here shares"
-                              : "Open the chat everyone here shares"
+                              ? translate("Open the chat with the agent everyone here shares")
+                              : translate("Open the chat everyone here shares")
                     }
                     variant="ghost"
                 >
-                    {agentChat ? "Agent" : "Chat"}
+                    {agentChat ? translate("Agent") : translate("Chat")}
                 </Button>
             ) : null}
         </PanelHeader>

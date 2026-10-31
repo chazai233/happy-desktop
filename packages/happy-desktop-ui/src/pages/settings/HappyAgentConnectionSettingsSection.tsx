@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { ReactNode } from "react";
 import { Banner } from "../../Banner";
 import { HappyAgentSettingsSection } from "./HappyAgentSettingsShell";
@@ -20,7 +21,7 @@ export function HappyAgentConnectionSettingsSection(
     return (
         <HappyAgentSettingsSection title={props.connectionLabel}>
             {props.unavailable ? (
-                <Banner tone="neutral" title="Connection unavailable">
+                <Banner tone="neutral" title={translate("Connection unavailable")}>
                     {props.unavailable}
                 </Banner>
             ) : null}

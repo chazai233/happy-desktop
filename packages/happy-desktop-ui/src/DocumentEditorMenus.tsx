@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import {
     type DefaultSuggestionItem,
     LinkToolbarExtension,
@@ -37,31 +38,41 @@ const SLASH_BLOCKS: readonly {
     readonly icon: OcticonName;
     readonly aliases: readonly string[];
 }[] = [
-    { key: "paragraph", title: "Text", icon: "typography", aliases: ["paragraph", "p"] },
-    { key: "heading", title: "Heading 1", icon: "heading", aliases: ["h1", "title"] },
-    { key: "heading_2", title: "Heading 2", icon: "heading", aliases: ["h2", "subtitle"] },
-    { key: "heading_3", title: "Heading 3", icon: "heading", aliases: ["h3"] },
+    { key: "paragraph", title: translate("Text"), icon: "typography", aliases: ["paragraph", "p"] },
+    { key: "heading", title: translate("Heading 1"), icon: "heading", aliases: ["h1", "title"] },
+    {
+        key: "heading_2",
+        title: translate("Heading 2"),
+        icon: "heading",
+        aliases: ["h2", "subtitle"],
+    },
+    { key: "heading_3", title: translate("Heading 3"), icon: "heading", aliases: ["h3"] },
     {
         key: "bullet_list",
-        title: "Bulleted list",
+        title: translate("Bulleted list"),
         icon: "list-unordered",
         aliases: ["ul", "bullet", "list"],
     },
     {
         key: "numbered_list",
-        title: "Numbered list",
+        title: translate("Numbered list"),
         icon: "list-ordered",
         aliases: ["ol", "numbered", "list"],
     },
     {
         key: "check_list",
-        title: "Checklist",
+        title: translate("Checklist"),
         icon: "tasklist",
         aliases: ["todo", "task", "checkbox"],
     },
-    { key: "quote", title: "Quote", icon: "quote", aliases: ["blockquote"] },
-    { key: "code_block", title: "Code", icon: "code", aliases: ["code block", "pre"] },
-    { key: "divider", title: "Divider", icon: "horizontal-rule", aliases: ["hr", "rule", "line"] },
+    { key: "quote", title: translate("Quote"), icon: "quote", aliases: ["blockquote"] },
+    { key: "code_block", title: translate("Code"), icon: "code", aliases: ["code block", "pre"] },
+    {
+        key: "divider",
+        title: translate("Divider"),
+        icon: "horizontal-rule",
+        aliases: ["hr", "rule", "line"],
+    },
 ];
 
 /** The slash menu's entries, made from BlockNote's own block actions. */
@@ -196,7 +207,7 @@ function LinkField(props: {
             }}
         >
             <input
-                aria-label="Link address"
+                aria-label={translate("Link address")}
                 autoFocus
                 className="happy-document-editor__link-field"
                 data-testid="document-editor-link-field"
@@ -207,14 +218,14 @@ function LinkField(props: {
                     event.stopPropagation();
                     props.onCancel();
                 }}
-                placeholder="Paste or type a link"
+                placeholder={translate("Paste or type a link")}
                 spellCheck={false}
                 type="url"
                 value={url}
             />
             <BarButton
                 icon="check"
-                label="Apply link"
+                label={translate("Apply link")}
                 onPress={() => {
                     const trimmed = url.trim();
                     if (trimmed.length > 0) props.onApply(trimmed);
@@ -226,15 +237,15 @@ function LinkField(props: {
 }
 
 const TEXT_STYLES = [
-    { style: "bold", icon: "bold", label: "Bold", shortcut: commandShortcut("b") },
-    { style: "italic", icon: "italic", label: "Italic", shortcut: commandShortcut("i") },
+    { style: "bold", icon: "bold", label: translate("Bold"), shortcut: commandShortcut("b") },
+    { style: "italic", icon: "italic", label: translate("Italic"), shortcut: commandShortcut("i") },
     {
         style: "strike",
         icon: "strikethrough",
-        label: "Strikethrough",
+        label: translate("Strikethrough"),
         shortcut: commandShortcut("s", { shift: true }),
     },
-    { style: "code", icon: "code", label: "Code", shortcut: commandShortcut("e") },
+    { style: "code", icon: "code", label: translate("Code"), shortcut: commandShortcut("e") },
 ] as const satisfies readonly {
     style: string;
     icon: OcticonName;
@@ -297,7 +308,7 @@ export function DocumentFormattingToolbar() {
             <BarButton
                 data-testid="document-editor-link"
                 icon="link"
-                label="Link"
+                label={translate("Link")}
                 shortcut={LINK_SHORTCUT}
                 onPress={() => setLinking(true)}
                 pressed={state.link.length > 0}
@@ -344,12 +355,12 @@ export function DocumentLinkToolbar(props: LinkToolbarProps) {
             </a>
             <BarButton
                 icon="link-external"
-                label="Open link"
+                label={translate("Open link")}
                 onPress={() => window.open(props.url, "_blank", "noopener,noreferrer")}
             />
             <BarButton
                 icon="pencil"
-                label="Edit link"
+                label={translate("Edit link")}
                 onPress={() => {
                     props.setToolbarPositionFrozen?.(true);
                     setEditing(true);
@@ -357,7 +368,7 @@ export function DocumentLinkToolbar(props: LinkToolbarProps) {
             />
             <BarButton
                 icon="x"
-                label="Remove link"
+                label={translate("Remove link")}
                 onPress={() => {
                     links.deleteLink(props.range.from);
                     props.setToolbarOpen?.(false);
@@ -393,7 +404,7 @@ export function DocumentSideMenu() {
             data-happy-desktop-ui="document-editor-side-menu"
         >
             <button
-                aria-label="Add a block"
+                aria-label={translate("Add a block")}
                 className="happy-document-editor__side-button"
                 data-testid="document-editor-add-block"
                 onClick={add}
@@ -402,7 +413,7 @@ export function DocumentSideMenu() {
                 <Octicon name="plus" size={16} />
             </button>
             <button
-                aria-label="Drag to move"
+                aria-label={translate("Drag to move")}
                 className="happy-document-editor__side-button"
                 data-testid="document-editor-drag-block"
                 draggable

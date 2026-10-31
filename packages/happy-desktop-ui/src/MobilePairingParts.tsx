@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { ReactNode } from "react";
 import { Box } from "./Box";
 import { CopyButton } from "./CopyButton";
@@ -43,7 +44,7 @@ export function PairingCode(props: {
                     caption="Copy auth link"
                     copiedCaption="Link copied"
                     data-testid={`${props.testId}-copy`}
-                    label="Copy auth link"
+                    label={translate("Copy auth link")}
                     text={props.data}
                 />
                 {props.countdown === false ? null : (
@@ -60,7 +61,8 @@ export function PairingExpiry(props: { readonly expiresAt: number; readonly now:
             className="happy-mobile-pairing__expiry"
             data-happy-desktop-ui="mobile-pairing-expiry"
         >
-            Expires in {pairingCountdown(props.expiresAt, props.now)}
+            {translate("Expires in")}
+            {pairingCountdown(props.expiresAt, props.now)}
         </span>
     );
 }
@@ -85,7 +87,9 @@ export function PairingCodePlaceholder(props: {
             </span>
             {props.countdown === false ? null : (
                 <Box className="happy-mobile-pairing__code-footer">
-                    <span className="happy-mobile-pairing__expiry">Getting a code…</span>
+                    <span className="happy-mobile-pairing__expiry">
+                        {translate("Getting a code…")}
+                    </span>
                 </Box>
             )}
         </Box>

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type AssistantMarkName } from "./AssistantMark";
 import {
     DesktopMobileSetup,
@@ -180,7 +181,11 @@ const DAEMON_START_COMMAND = "happy-agent start";
 function downloadProgress(download: LocalOnboardingDownload | undefined): SetupPageProgress {
     if (!download || download.totalBytes <= 0) return { kind: "waiting" };
     return {
-        detail: `${byteSize(download.receivedBytes)} of ${byteSize(download.totalBytes)}`,
+        detail: translate(
+            "{0} of {1}",
+            byteSize(download.receivedBytes),
+            byteSize(download.totalBytes),
+        ),
         fraction: download.receivedBytes / download.totalBytes,
         kind: "measured",
     };
@@ -195,14 +200,14 @@ function agentSetupProgress(phase: LocalOnboardingAgentSetupPhase): SetupPagePro
 function agentSetupStatus(phase: LocalOnboardingAgentSetupPhase): SetupPageStatus {
     switch (phase.kind) {
         case "preparing":
-            return { label: "Preparing…", progress: { kind: "waiting" } };
+            return { label: translate("Preparing…"), progress: { kind: "waiting" } };
         case "downloading":
-            return { label: "Downloading…", progress: downloadProgress(phase.download) };
+            return { label: translate("Downloading…"), progress: downloadProgress(phase.download) };
         case "retrying":
-            return { busy: true, label: `${phase.message} Retrying…` };
+            return { busy: true, label: translate("{0} Retrying…", phase.message) };
         case "ready":
         case "starting":
-            return { label: "Starting…", progress: agentSetupProgress(phase) };
+            return { label: translate("Starting…"), progress: agentSetupProgress(phase) };
     }
 }
 
@@ -296,15 +301,15 @@ function assistantAuthenticationEntry(
     const detail = (() => {
         switch (assistant.authentication) {
             case "checking":
-                return "Checking…";
+                return translate("Checking…");
             case "valid":
-                return "Ready ✓";
+                return translate("Ready ✓");
             case "invalid":
-                return "Sign in by running:";
+                return translate("Sign in by running:");
             case "error":
-                return "Couldn't verify. Sign in:";
+                return translate("Couldn't verify. Sign in:");
             case "unavailable":
-                return "Install by running:";
+                return translate("Install by running:");
         }
     })();
     // What to do about it: get the thing, or sign in to the thing that is
@@ -318,7 +323,7 @@ function assistantAuthenticationEntry(
                 return {
                     command: vendor.install[installShell],
                     kind: "command",
-                    label: `${vendor.name} install command`,
+                    label: translate("{0} install command", vendor.name),
                     ...(onCommandCopy
                         ? {
                               onCopy: () =>
@@ -331,7 +336,7 @@ function assistantAuthenticationEntry(
                 return {
                     command: vendor.signIn,
                     kind: "command",
-                    label: `${vendor.name} sign-in command`,
+                    label: translate("{0} sign-in command", vendor.name),
                     ...(onCommandCopy
                         ? {
                               onCopy: () =>
@@ -370,12 +375,12 @@ const HAPPY_DOCS = "~/.happy/docs";
 const AGENT_PROMPTS = [
     {
         id: "custom",
-        label: "My setup is custom",
+        label: translate("My setup is custom"),
         text: `Set up Happy Agent on this computer with my custom model access: an API key, Bedrock, a gateway, or a custom base URL or proxy for Claude Code or Codex. Read the env block in ~/.claude/settings.json and ~/.codex/config.toml, then add the matching provider to Happy's happy.toml. Guide: ${HAPPY_DOCS}/configuration.md (Providers).`,
     },
     {
         id: "sign-in",
-        label: "Sign me in",
+        label: translate("Sign me in"),
         text: `Sign me in to Claude Code, Codex, or Grok on this computer so Happy can use it. Guide: ${HAPPY_DOCS}/configuration.md (Providers).`,
     },
 ] as const;
@@ -397,17 +402,17 @@ function customAuthenticationEntry(
     const prompts: SetupAssistantAction = {
         ...(promptsOpen ? { defaultOpen: true } : {}),
         kind: "prompts",
-        label: "Set up with your agent",
+        label: translate("Set up with your agent"),
         ...(onCommandCopy
             ? { onCopy: () => onCommandCopy({ assistant: "custom", kind: "agent-prompt" }) }
             : {}),
         prompts: AGENT_PROMPTS,
-        title: "Paste one into the coding agent you already use",
+        title: translate("Paste one into the coding agent you already use"),
     };
     switch (custom.authentication) {
         case "valid":
             return {
-                detail: "Ready ✓",
+                detail: translate("Ready ✓"),
                 id: "custom",
                 mark: "custom",
                 name: CUSTOM_NAME,
@@ -415,7 +420,7 @@ function customAuthenticationEntry(
             };
         case "checking":
             return {
-                detail: "Checking…",
+                detail: translate("Checking…"),
                 id: "custom",
                 mark: "custom",
                 name: CUSTOM_NAME,
@@ -426,8 +431,8 @@ function customAuthenticationEntry(
                 action: prompts,
                 detail:
                     custom.providers.length > 0
-                        ? `Couldn't verify ${custom.providers.join(", ")}`
-                        : "Couldn't verify",
+                        ? translate("Couldn't verify {0}", custom.providers.join(", "))
+                        : translate("Couldn't verify"),
                 id: "custom",
                 mark: "custom",
                 name: CUSTOM_NAME,
@@ -436,7 +441,7 @@ function customAuthenticationEntry(
         case "invalid":
             return {
                 action: prompts,
-                detail: "API key, Bedrock, other",
+                detail: translate("API key, Bedrock, other"),
                 id: "custom",
                 mark: "custom",
                 name: CUSTOM_NAME,
@@ -449,7 +454,7 @@ function customAuthenticationEntry(
 const CHECKING_ASSISTANTS: readonly SetupAssistantEntry[] = [
     ...Object.entries(ASSISTANTS).map(
         ([id, assistant]): SetupAssistantEntry => ({
-            detail: "Checking…",
+            detail: translate("Checking…"),
             id,
             mark: assistant.mark,
             name: assistant.name,
@@ -481,22 +486,22 @@ function machineSetupProject(
             copy: SETUP_COPY,
             hasValidAuthentication: false,
             status: agentSetupStatus(view.phase),
-            title: "Setting up",
+            title: translate("Setting up"),
         };
     if (view.kind === "connecting")
         return {
             copy: SETUP_COPY,
             hasValidAuthentication: false,
-            status: { label: "Starting…", progress: { kind: "waiting" } },
-            title: "Setting up",
+            status: { label: translate("Starting…"), progress: { kind: "waiting" } },
+            title: translate("Setting up"),
         };
     if (view.kind === "examining")
         return {
             assistants: CHECKING_ASSISTANTS,
             copy: SUBSCRIPTIONS_COPY,
             hasValidAuthentication: false,
-            status: { busy: true, label: "Checking…" },
-            title: "Checking subscriptions",
+            status: { busy: true, label: translate("Checking…") },
+            title: translate("Checking subscriptions"),
         };
     if (view.kind === "provider-authentication") {
         const states = [
@@ -514,15 +519,15 @@ function machineSetupProject(
                 assistants,
                 hasValidAuthentication: true,
                 status: { label: "" },
-                title: "You're set",
+                title: translate("You're set"),
             };
         if (states.includes("checking"))
             return {
                 assistants,
                 copy: SUBSCRIPTIONS_COPY,
                 hasValidAuthentication: false,
-                status: { busy: true, label: "Checking…" },
-                title: "Checking subscriptions",
+                status: { busy: true, label: translate("Checking…") },
+                title: translate("Checking subscriptions"),
             };
         // A failed check is a settled answer, not one still coming: each failed
         // card carries its remedy, and Happy keeps checking in the background
@@ -530,17 +535,17 @@ function machineSetupProject(
         if (states.includes("error"))
             return {
                 assistants,
-                copy: "Sign in again, or set up a custom endpoint with your agent.",
+                copy: translate("Sign in again, or set up a custom endpoint with your agent."),
                 hasValidAuthentication: false,
-                status: { label: "Happy notices as soon as one works." },
-                title: "Couldn't verify a subscription",
+                status: { label: translate("Happy notices as soon as one works.") },
+                title: translate("Couldn't verify a subscription"),
             };
         return {
             assistants,
-            copy: "One signed-in CLI is required.",
+            copy: translate("One signed-in CLI is required."),
             hasValidAuthentication: false,
-            status: { busy: true, label: "Waiting for sign-in…" },
-            title: "Sign in to a CLI",
+            status: { busy: true, label: translate("Waiting for sign-in…") },
+            title: translate("Sign in to a CLI"),
         };
     }
     return undefined;
@@ -624,7 +629,7 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
                     ? {
                           action: {
                               disabled: !machineSetup.hasValidAuthentication,
-                              label: "Continue",
+                              label: translate("Continue"),
                               onSelect: props.onAssistantsContinue,
                           },
                       }
@@ -650,14 +655,18 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
         return (
             <SetupPage
                 {...frame}
-                action={{ label: "Continue", onSelect: props.onAssistantsContinue }}
-                copy="Installed and connected."
+                action={{ label: translate("Continue"), onSelect: props.onAssistantsContinue }}
+                copy={translate("Installed and connected.")}
                 data-testid="local-onboarding-screen"
                 scene="owl"
-                title="Happy Agent is running"
+                title={translate("Happy Agent is running")}
             >
                 <div className="happy-local-onboarding__facts">
-                    {view.version ? <span>Happy Agent {view.version}</span> : null}
+                    {view.version ? (
+                        <span>
+                            {translate("Happy Agent")} {view.version}
+                        </span>
+                    ) : null}
                     {view.nodeVersion ? <span>Node {view.nodeVersion}</span> : null}
                 </div>
             </SetupPage>
@@ -669,8 +678,8 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
                 {...frame}
                 data-testid="local-onboarding-screen"
                 scene="snail"
-                status={{ busy: true, label: view.message ?? "Checking…" }}
-                title="Checking this machine"
+                status={{ busy: true, label: view.message ?? translate("Checking…") }}
+                title={translate("Checking this machine")}
             />
         );
 
@@ -678,15 +687,15 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
         return (
             <SetupPage
                 {...frame}
-                copy="Install Node.js to continue."
+                copy={translate("Install Node.js to continue.")}
                 data-testid="local-onboarding-screen"
                 scene="wand"
-                status={{ busy: true, label: "Waiting for Node.js…" }}
-                title="Node.js is required"
+                status={{ busy: true, label: translate("Waiting for Node.js…") }}
+                title={translate("Node.js is required")}
             />
         );
 
-    const skipMobile = { label: "Skip mobile setup", onSelect: props.onHappyMobileSkip };
+    const skipMobile = { label: translate("Skip mobile setup"), onSelect: props.onHappyMobileSkip };
 
     if (view.kind === "happy-mobile-checking")
         return (
@@ -695,8 +704,8 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
                 data-testid="local-onboarding-screen"
                 scene="snail"
                 secondary={skipMobile}
-                status={{ busy: true, label: "Checking…" }}
-                title="Checking Happy Mobile"
+                status={{ busy: true, label: translate("Checking…") }}
+                title={translate("Checking Happy Mobile")}
             />
         );
 
@@ -706,7 +715,7 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
                 {...frame}
                 action={{
                     busy: view.busy,
-                    label: "Link Mobile App",
+                    label: translate("Link Mobile App"),
                     onSelect: props.onHappyMobileConnect,
                 }}
                 className="happy-local-onboarding__mobile"
@@ -715,7 +724,7 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
                 scene="alien-monster"
                 secondary={skipMobile}
                 {...(view.message ? { status: { label: view.message } } : {})}
-                title="Get Mobile App"
+                title={translate("Get Mobile App")}
             />
         );
 
@@ -727,12 +736,17 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
                 copy={desktopMobilePairingOptionsCopy(props.happyMobilePairingOptions)}
                 data-testid="local-onboarding-screen"
                 {...(props.happyMobilePairingOptions.completed
-                    ? { action: { label: "Continue", onSelect: props.onHappyMobileConnect } }
+                    ? {
+                          action: {
+                              label: translate("Continue"),
+                              onSelect: props.onHappyMobileConnect,
+                          },
+                      }
                     : { secondary: skipMobile })}
                 title={
                     props.happyMobilePairingOptions.completed
-                        ? "Mobile App Linked"
-                        : "Link Mobile App"
+                        ? translate("Mobile App Linked")
+                        : translate("Link Mobile App")
                 }
             >
                 {props.happyMobilePairingOptions.view}
@@ -745,17 +759,17 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
                 {...frame}
                 action={{
                     busy: view.retrying,
-                    label: "Try again",
+                    label: translate("Try again"),
                     onSelect: props.onConnectRetry,
                 }}
                 command={DAEMON_START_COMMAND}
-                copy="Run the command below, then retry."
+                copy={translate("Run the command below, then retry.")}
                 data-testid="local-onboarding-screen"
                 scene="owl"
                 // Whatever actually refused, verbatim, so a daemon failing for a
                 // nameable reason does not look like a button that does nothing.
                 status={{ label: view.message }}
-                title="Can't reach Happy Agent"
+                title={translate("Can't reach Happy Agent")}
             />
         );
 
@@ -768,8 +782,8 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
                           action: {
                               busy: view.update.busy,
                               label: view.update.version
-                                  ? `Update to ${view.update.version}`
-                                  : "Update Happy Agent",
+                                  ? translate("Update to {0}", view.update.version)
+                                  : translate("Update Happy Agent"),
                               onSelect: props.onAgentUpdate,
                               width: 280,
                           },
@@ -778,13 +792,16 @@ export function LocalOnboardingScreen(props: LocalOnboardingScreenProps) {
                     : {
                           // Nothing to press: Happy checks for the update by
                           // itself and offers it here as soon as there is one.
-                          status: { busy: true, label: "Waiting for a newer Happy Agent…" },
+                          status: {
+                              busy: true,
+                              label: translate("Waiting for a newer Happy Agent…"),
+                          },
                       })}
                 // What refused, verbatim: it names the version the data needs.
                 copy={view.message}
                 data-testid="local-onboarding-screen"
                 scene="owl"
-                title="Update Happy Agent to continue"
+                title={translate("Update Happy Agent to continue")}
             />
         );
 

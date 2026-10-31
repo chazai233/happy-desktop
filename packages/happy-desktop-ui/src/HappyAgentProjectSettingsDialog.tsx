@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties } from "react";
 import { Avatar } from "./Avatar";
 import { Banner } from "./Banner";
@@ -161,7 +162,7 @@ function contentsSummary(contents: { worktrees: number; sessions: number }): str
             ? `${String(contents.sessions)} session${contents.sessions === 1 ? "" : "s"}`
             : undefined,
     ].filter((part) => part !== undefined);
-    return parts.length > 0 ? parts.join(" · ") : "No sessions yet";
+    return parts.length > 0 ? parts.join(" · ") : translate("No sessions yet");
 }
 
 /** The choice the controls currently express, as a value that can be compared. */
@@ -196,8 +197,8 @@ const computeEffect: Record<HappyAgentProjectComputeMode, string> = {
 
 /** What the host holds now, said plainly. */
 function computeCurrentLabel(compute: HappyAgentProjectComputeChoice | undefined): string {
-    if (compute === undefined) return "This machine's own setting";
-    return compute.type === "local" ? "This machine, directly" : compute.image;
+    if (compute === undefined) return translate("This machine's own setting");
+    return compute.type === "local" ? translate("This machine, directly") : compute.image;
 }
 
 /**
@@ -205,9 +206,9 @@ function computeCurrentLabel(compute: HappyAgentProjectComputeChoice | undefined
  * to paragraphs; the row beside the commit only has to say which one it is.
  */
 function initialPromptCurrentLabel(prompt: string | undefined): string {
-    if (prompt === undefined) return "Nothing; the first agent waits";
+    if (prompt === undefined) return translate("Nothing; the first agent waits");
     const firstLine = prompt.split(/\r?\n/u)[0]?.trim() ?? "";
-    return firstLine.length > 0 ? firstLine : "A message starting with a blank line";
+    return firstLine.length > 0 ? firstLine : translate("A message starting with a blank line");
 }
 
 /**
@@ -262,7 +263,7 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                             onClick={() => props.onClose()}
                             variant="ghost"
                         >
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                         <Button
                             disabled={
@@ -274,7 +275,7 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                             title={props.submitDisabledReason}
                             variant="primary"
                         >
-                            {props.submitting === true ? "Saving…" : "Save"}
+                            {props.submitting === true ? translate("Saving…") : translate("Save")}
                         </Button>
                     </>
                 }
@@ -282,14 +283,14 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                 onClose={archiving ? undefined : () => props.onClose()}
                 size="medium"
                 style={props.style}
-                title="Project settings"
+                title={translate("Project settings")}
             >
                 <div
                     className="happy-agent-project-settings"
                     data-happy-desktop-ui="happy-agent-project-settings"
                 >
                     {props.submitDisabledReason ? (
-                        <Banner tone="neutral" title="Happy Agent reconnecting">
+                        <Banner tone="neutral" title={translate("Happy Agent reconnecting")}>
                             {props.submitDisabledReason}
                         </Banner>
                     ) : null}
@@ -317,8 +318,10 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                     <TextField
                         disabled={submitting}
                         fullWidth
-                        hint="What this project is called in the sidebar and the tab strip."
-                        label="Name"
+                        hint={translate(
+                            "What this project is called in the sidebar and the tab strip.",
+                        )}
+                        label={translate("Name")}
                         onSubmit={() => {
                             if (committable) props.onSubmit();
                         }}
@@ -332,7 +335,7 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                   data-happy-desktop-ui="happy-agent-project-settings-location"
                               >
                                   <span className="happy-agent-project-settings__label">
-                                      Location
+                                      {translate("Location")}
                                   </span>
                                   <div className="happy-agent-project-settings__path">
                                       <span
@@ -341,11 +344,15 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                       >
                                           {location.displayPath}
                                       </span>
-                                      <CopyButton label="Copy project path" text={location.path} />
+                                      <CopyButton
+                                          label={translate("Copy project path")}
+                                          text={location.path}
+                                      />
                                   </div>
                                   <span className="happy-agent-project-settings__hint">
-                                      The checkout this project runs in. The daemon owns it, so it
-                                      is shown here rather than set.
+                                      {translate(
+                                          "The checkout this project runs in. The daemon owns it, so it is shown here rather than set.",
+                                      )}
                                   </span>
                               </div>
                           ))(props.location)
@@ -368,29 +375,33 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                       data-happy-desktop-ui="happy-agent-project-settings-compute"
                                   >
                                       <span className="happy-agent-project-settings__label">
-                                          Where sessions run
+                                          {translate("Where sessions run")}
                                       </span>
                                       {compute.status === "error" ? (
                                           <Banner
                                               data-testid="happy-agent-project-compute-read-error"
                                               tone="danger"
-                                              title="Not read"
+                                              title={translate("Not read")}
                                           >
                                               {compute.readError ??
-                                                  "This project's compute setting could not be read."}
+                                                  translate(
+                                                      "This project's compute setting could not be read.",
+                                                  )}
                                           </Banner>
                                       ) : null}
                                       {compute.error ? (
                                           <Banner
                                               data-testid="happy-agent-project-compute-error"
                                               tone="danger"
-                                              title="Not saved"
+                                              title={translate("Not saved")}
                                           >
                                               {compute.error}
                                           </Banner>
                                       ) : null}
                                       <SegmentedControl
-                                          aria-label="Where sessions started in this project run"
+                                          aria-label={translate(
+                                              "Where sessions started in this project run",
+                                          )}
                                           data-testid="happy-agent-project-compute-mode"
                                           disabled={inert}
                                           fullWidth
@@ -402,17 +413,17 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                           segments={[
                                               {
                                                   value: "default",
-                                                  label: "Machine default",
+                                                  label: translate("Machine default"),
                                                   icon: "settings",
                                               },
                                               {
                                                   value: "local",
-                                                  label: "This machine",
+                                                  label: translate("This machine"),
                                                   icon: "terminal",
                                               },
                                               {
                                                   value: "docker",
-                                                  label: "Container",
+                                                  label: translate("Container"),
                                                   icon: "package",
                                               },
                                           ]}
@@ -423,7 +434,7 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                               data-testid="happy-agent-project-compute-image"
                                               disabled={inert}
                                               fullWidth
-                                              label="Image"
+                                              label={translate("Image")}
                                               onSubmit={() => {
                                                   if (changed) props.onComputeSubmit?.();
                                               }}
@@ -436,13 +447,13 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                       ) : null}
                                       <span className="happy-agent-project-settings__hint">
                                           {compute.status === "loading"
-                                              ? "Reading what this project is set to…"
+                                              ? translate("Reading what this project is set to…")
                                               : computeEffect[compute.mode]}
                                       </span>
                                       <span className="happy-agent-project-settings__hint">
-                                          Applies to sessions started after it is saved. Anything
-                                          already running stays where it is, and a container in use
-                                          now is left behind rather than reused.
+                                          {translate(
+                                              "Applies to sessions started after it is saved. Anything already running stays where it is, and a container in use now is left behind rather than reused.",
+                                          )}
                                       </span>
                                       {/* Only what has not been settled is
                                           stated. While the choice and the host
@@ -460,7 +471,10 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                                   data-happy-desktop-ui="happy-agent-project-settings-compute-current"
                                                   title={computeCurrentLabel(compute.current)}
                                               >
-                                                  {`Set to: ${computeCurrentLabel(compute.current)}`}
+                                                  {translate(
+                                                      "Set to: {0}",
+                                                      computeCurrentLabel(compute.current),
+                                                  )}
                                               </span>
                                               <Button
                                                   data-testid="happy-agent-project-compute-apply"
@@ -472,7 +486,9 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                                   size="small"
                                                   variant="primary"
                                               >
-                                                  {computing ? "Applying…" : "Apply"}
+                                                  {computing
+                                                      ? translate("Applying…")
+                                                      : translate("Apply")}
                                               </Button>
                                           </div>
                                       ) : null}
@@ -497,23 +513,25 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                       data-happy-desktop-ui="happy-agent-project-settings-setup"
                                   >
                                       <span className="happy-agent-project-settings__label">
-                                          New workspaces
+                                          {translate("New workspaces")}
                                       </span>
                                       {setup.status === "error" ? (
                                           <Banner
                                               data-testid="happy-agent-project-setup-read-error"
                                               tone="danger"
-                                              title="Not read"
+                                              title={translate("Not read")}
                                           >
                                               {setup.readError ??
-                                                  "This project's workspace settings could not be read."}
+                                                  translate(
+                                                      "This project's workspace settings could not be read.",
+                                                  )}
                                           </Banner>
                                       ) : null}
                                       {setup.error ? (
                                           <Banner
                                               data-testid="happy-agent-project-setup-error"
                                               tone="danger"
-                                              title="Not saved"
+                                              title={translate("Not saved")}
                                           >
                                               {setup.error}
                                           </Banner>
@@ -523,7 +541,7 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                           data-happy-desktop-ui="happy-agent-project-settings-commands"
                                       >
                                           <span className="happy-agent-project-settings__sublabel">
-                                              Setup commands
+                                              {translate("Setup commands")}
                                           </span>
                                           {/* The list is the host's reading of the
                                               file, so it is shown the way the path
@@ -535,11 +553,11 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                           >
                                               {setup.status === "loading" ? (
                                                   <span className="happy-agent-project-settings__commands-empty">
-                                                      Reading what this project runs…
+                                                      {translate("Reading what this project runs…")}
                                                   </span>
                                               ) : setup.setupCommands.length === 0 ? (
                                                   <span className="happy-agent-project-settings__commands-empty">
-                                                      No setup commands
+                                                      {translate("No setup commands")}
                                                   </span>
                                               ) : (
                                                   setup.setupCommands.map((command, index) => (
@@ -557,11 +575,13 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                               )}
                                           </div>
                                           <span className="happy-agent-project-settings__hint">
-                                              Run in order in every new workspace once its checkout
-                                              exists. They come from{" "}
-                                              <code>[workspace] setup_commands</code> in the
-                                              project&apos;s <code>happy.toml</code>; edit the file
-                                              to change them.
+                                              {translate(
+                                                  "Run in order in every new workspace once its checkout exists. They come from",
+                                              )}{" "}
+                                              <code>[workspace] setup_commands</code>
+                                              {translate("in the project&apos;s")}
+                                              <code>happy.toml</code>
+                                              {translate("; edit the file to change them.")}
                                           </span>
                                           {props.onSetupFileOpen ? (
                                               <div className="happy-agent-project-settings__setup-actions">
@@ -572,7 +592,7 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                                       size="small"
                                                       variant="ghost"
                                                   >
-                                                      Open happy.toml
+                                                      {translate("Open happy.toml")}
                                                   </Button>
                                               </div>
                                           ) : null}
@@ -581,13 +601,17 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                           data-testid="happy-agent-project-initial-prompt"
                                           disabled={inert}
                                           fullWidth
-                                          hint="Sent to the first agent as soon as a new workspace is ready. Leave it empty to start quiet."
-                                          label="First message"
+                                          hint={translate(
+                                              "Sent to the first agent as soon as a new workspace is ready. Leave it empty to start quiet.",
+                                          )}
+                                          label={translate("First message")}
                                           multiline
                                           onValueChange={(value) =>
                                               props.onInitialPromptChange?.(value)
                                           }
-                                          placeholder="Install dependencies, run the tests, and report what fails before changing anything."
+                                          placeholder={translate(
+                                              "Install dependencies, run the tests, and report what fails before changing anything.",
+                                          )}
                                           rows={4}
                                           value={setup.initialPromptDraft}
                                       />
@@ -603,7 +627,12 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                                       setup.initialPrompt,
                                                   )}
                                               >
-                                                  {`Set to: ${initialPromptCurrentLabel(setup.initialPrompt)}`}
+                                                  {translate(
+                                                      "Set to: {0}",
+                                                      initialPromptCurrentLabel(
+                                                          setup.initialPrompt,
+                                                      ),
+                                                  )}
                                               </span>
                                               <Button
                                                   data-testid="happy-agent-project-initial-prompt-apply"
@@ -615,7 +644,9 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                                   size="small"
                                                   variant="primary"
                                               >
-                                                  {settingUp ? "Applying…" : "Apply"}
+                                                  {settingUp
+                                                      ? translate("Applying…")
+                                                      : translate("Apply")}
                                               </Button>
                                           </div>
                                       ) : null}
@@ -628,12 +659,14 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                             className="happy-agent-project-settings__archive"
                             data-happy-desktop-ui="happy-agent-project-settings-archive"
                         >
-                            <span className="happy-agent-project-settings__label">Archive</span>
+                            <span className="happy-agent-project-settings__label">
+                                {translate("Archive")}
+                            </span>
                             {props.archive.error ? (
                                 <Banner
                                     data-testid="happy-agent-project-archive-error"
                                     tone="danger"
-                                    title="Not archived"
+                                    title={translate("Not archived")}
                                 >
                                     {props.archive.error}
                                 </Banner>
@@ -643,8 +676,13 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                 or take the reader somewhere else to answer it. */}
                             <span className="happy-agent-project-settings__hint">
                                 {confirming
-                                    ? `Archive ${props.name}? It leaves the sidebar with its sessions, and every workspace under it is archived and its worktree folder removed. The project's own checkout stays exactly where it is.`
-                                    : "Takes the project out of the sidebar with its sessions, archives every workspace under it, and removes those workspaces' worktree folders. The project's own checkout is left alone."}
+                                    ? translate(
+                                          "Archive {0}? It leaves the sidebar with its sessions, and every workspace under it is archived and its worktree folder removed. The project's own checkout stays exactly where it is.",
+                                          props.name,
+                                      )
+                                    : translate(
+                                          "Takes the project out of the sidebar with its sessions, archives every workspace under it, and removes those workspaces' worktree folders. The project's own checkout is left alone.",
+                                      )}
                             </span>
                             <div className="happy-agent-project-settings__archive-actions">
                                 {confirming ? (
@@ -655,7 +693,7 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                             size="small"
                                             variant="ghost"
                                         >
-                                            Keep project
+                                            {translate("Keep project")}
                                         </Button>
                                         <Button
                                             data-testid="happy-agent-project-archive-confirm"
@@ -668,7 +706,9 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                             size="small"
                                             variant="danger"
                                         >
-                                            {archiving ? "Archiving…" : `Archive ${props.name}`}
+                                            {archiving
+                                                ? translate("Archiving…")
+                                                : translate("Archive {0}", props.name)}
                                         </Button>
                                     </>
                                 ) : (
@@ -680,7 +720,7 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                         size="small"
                                         variant="danger"
                                     >
-                                        Archive project
+                                        {translate("Archive project")}
                                     </Button>
                                 )}
                             </div>

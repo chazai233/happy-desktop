@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { BadgeVariant } from "../../Badge";
 import { Banner } from "../../Banner";
 import { Box } from "../../Box";
@@ -54,10 +55,10 @@ export type HappyAgentProviderSettingsProps = {
 };
 
 const STATUS_LABELS: Record<HappyAgentProviderStatus, string> = {
-    ready: "Connected",
-    not_authenticated: "Not signed in",
-    not_enabled: "Disabled",
-    no_models: "No models",
+    ready: translate("Connected"),
+    not_authenticated: translate("Not signed in"),
+    not_enabled: translate("Disabled"),
+    no_models: translate("No models"),
 };
 
 const STATUS_VARIANTS: Record<HappyAgentProviderStatus, BadgeVariant> = {
@@ -69,8 +70,8 @@ const STATUS_VARIANTS: Record<HappyAgentProviderStatus, BadgeVariant> = {
 
 /** What has to happen in Happy Agent itself before the provider's models become usable. */
 const STATUS_HINTS: Partial<Record<HappyAgentProviderStatus, string>> = {
-    not_authenticated: "Sign it in from Happy Agent to use its models.",
-    not_enabled: "No agent on this machine may use it.",
+    not_authenticated: translate("Sign it in from Happy Agent to use its models."),
+    not_enabled: translate("No agent on this machine may use it."),
 };
 
 /**
@@ -82,7 +83,7 @@ const STATUS_HINTS: Partial<Record<HappyAgentProviderStatus, string>> = {
 export function HappyAgentProviderSettings(props: HappyAgentProviderSettingsProps) {
     if (props.error)
         return (
-            <Banner tone="danger" title="Providers unavailable">
+            <Banner tone="danger" title={translate("Providers unavailable")}>
                 {props.error}
             </Banner>
         );
@@ -90,32 +91,34 @@ export function HappyAgentProviderSettings(props: HappyAgentProviderSettingsProp
         return (
             <Box className="happy-agent-settings__pending">
                 <Spinner size={16} />
-                <span>Reading the model catalog…</span>
+                <span>{translate("Reading the model catalog…")}</span>
             </Box>
         );
     if (props.providers.length === 0)
         return (
             <EmptyState
-                description="This Happy Agent daemon reports no model providers yet."
+                description={translate("This Happy Agent daemon reports no model providers yet.")}
                 icon="globe"
-                title="No providers"
+                title={translate("No providers")}
             />
         );
     return (
         <>
             {props.unavailable ? (
-                <Banner tone="neutral" title="Happy Agent reconnecting">
+                <Banner tone="neutral" title={translate("Happy Agent reconnecting")}>
                     {props.unavailable}
                 </Banner>
             ) : null}
             {props.saveError ? (
-                <Banner tone="danger" title="Provider unchanged">
+                <Banner tone="danger" title={translate("Provider unchanged")}>
                     {props.saveError}
                 </Banner>
             ) : null}
             <HappyAgentSettingsSection
-                description="Off for a provider stops every agent here using it. Off for a model only hides it from this window’s pickers."
-                title="Model providers"
+                description={translate(
+                    "Off for a provider stops every agent here using it. Off for a model only hides it from this window’s pickers.",
+                )}
+                title={translate("Model providers")}
             >
                 {props.providers.map((provider) => (
                     <article
@@ -155,7 +158,11 @@ export function HappyAgentProviderSettings(props: HappyAgentProviderSettingsProp
                             />
                             {provider.saving ? <Spinner size={16} /> : null}
                             <Switch
-                                aria-label={`${provider.typeName ? `${provider.typeName} · ` : ""}${provider.name} enabled`}
+                                aria-label={translate(
+                                    "{0}{1} enabled",
+                                    provider.typeName ? `${provider.typeName} · ` : "",
+                                    provider.name,
+                                )}
                                 checked={provider.enabled}
                                 disabled={props.unavailable !== undefined || provider.saving}
                                 onChange={(enabled) =>
@@ -180,7 +187,7 @@ export function HappyAgentProviderSettings(props: HappyAgentProviderSettingsProp
                                             </span>
                                             {model.isDefault ? (
                                                 <span className="happy-agent-provider__model-default">
-                                                    Default
+                                                    {translate("Default")}
                                                 </span>
                                             ) : null}
                                         </Box>
@@ -192,7 +199,7 @@ export function HappyAgentProviderSettings(props: HappyAgentProviderSettingsProp
                                         </span>
                                     </Box>
                                     <Switch
-                                        aria-label={`${model.name} enabled`}
+                                        aria-label={translate("{0} enabled", model.name)}
                                         checked={model.enabled}
                                         disabled={
                                             props.unavailable !== undefined ||
@@ -210,7 +217,7 @@ export function HappyAgentProviderSettings(props: HappyAgentProviderSettingsProp
                                     className="happy-agent-provider__models-empty"
                                     data-happy-desktop-ui="happy-agent-provider-models-empty"
                                 >
-                                    This provider offers no models right now.
+                                    {translate("This provider offers no models right now.")}
                                 </span>
                             ) : null}
                         </Box>

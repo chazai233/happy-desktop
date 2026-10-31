@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { useState, useSyncExternalStore, type CSSProperties } from "react";
 import type {
     ComposerSnapshot,
@@ -102,7 +103,7 @@ function rowTime(row: Row): string {
     return row.kind === "message" &&
         row.message.status === "active" &&
         row.message.editedAt !== null
-        ? `${time} · edited`
+        ? translate("{0} · edited", time)
         : time;
 }
 
@@ -213,10 +214,10 @@ export function HappyAgentMessagesSurfacePage(props: HappyAgentMessagesSurfacePa
                         data-testid="happy-agent-messages-editing"
                     >
                         <span className="happy-agent-messages-surface__editing-label">
-                            Editing message
+                            {translate("Editing message")}
                         </span>
                         <Button onClick={props.onMessageEditCancel} size="small" variant="ghost">
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                     </div>
                 )}
@@ -228,7 +229,7 @@ export function HappyAgentMessagesSurfacePage(props: HappyAgentMessagesSurfacePa
             data-happy-desktop-ui="happy-agent-messages-surface-actions"
         >
             <Button
-                aria-label="Edit message"
+                aria-label={translate("Edit message")}
                 icon="edit"
                 iconOnly
                 onClick={() => props.onMessageEditStart(message.id)}
@@ -236,7 +237,7 @@ export function HappyAgentMessagesSurfacePage(props: HappyAgentMessagesSurfacePa
                 variant="ghost"
             />
             <Button
-                aria-label="Delete message"
+                aria-label={translate("Delete message")}
                 icon="trash"
                 iconOnly
                 onClick={() => setDeleting(message.id)}
@@ -250,10 +251,12 @@ export function HappyAgentMessagesSurfacePage(props: HappyAgentMessagesSurfacePa
             return (
                 <div className="happy-agent-messages-surface__empty">
                     <EmptyState
-                        description="It may belong to a Happy Agent this one can’t reach."
+                        description={translate(
+                            "It may belong to a Happy Agent this one can’t reach.",
+                        )}
                         icon="users"
                         size="panel"
-                        title="This chat isn’t here"
+                        title={translate("This chat isn’t here")}
                     />
                 </div>
             );
@@ -262,10 +265,13 @@ export function HappyAgentMessagesSurfacePage(props: HappyAgentMessagesSurfacePa
                 <div className="happy-agent-messages-surface__empty">
                     {snapshot.status === "ready" ? (
                         <EmptyState
-                            description={`Everyone in ${props.surface.name} reads and writes here.`}
+                            description={translate(
+                                "Everyone in {0} reads and writes here.",
+                                props.surface.name,
+                            )}
                             icon="users"
                             size="panel"
-                            title="No messages yet"
+                            title={translate("No messages yet")}
                         />
                     ) : null}
                 </div>
@@ -356,7 +362,7 @@ export function HappyAgentMessagesSurfacePage(props: HappyAgentMessagesSurfacePa
                         footer={
                             <>
                                 <Button onClick={() => setDeleting(undefined)} variant="ghost">
-                                    Cancel
+                                    {translate("Cancel")}
                                 </Button>
                                 <Button
                                     data-testid="happy-agent-messages-delete-confirm"
@@ -366,18 +372,19 @@ export function HappyAgentMessagesSurfacePage(props: HappyAgentMessagesSurfacePa
                                     }}
                                     variant="danger"
                                 >
-                                    Delete
+                                    {translate("Delete")}
                                 </Button>
                             </>
                         }
                         icon="trash"
                         onClose={() => setDeleting(undefined)}
                         size="small"
-                        title="Delete this message?"
+                        title={translate("Delete this message?")}
                     >
                         <p className="happy-agent-messages-surface__confirm">
-                            Everyone in {props.surface.name} will see that it was deleted. This
-                            can’t be undone.
+                            {translate("Everyone in")}
+                            {props.surface.name}
+                            {translate("will see that it was deleted. This can’t be undone.")}
                         </p>
                     </Modal>
                 </ModalOverlay>

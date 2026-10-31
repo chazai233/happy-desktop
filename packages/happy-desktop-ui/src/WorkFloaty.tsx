@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties } from "react";
 import { Avatar } from "./Avatar";
 import { ChangeStats } from "./ChangeStats";
@@ -113,7 +114,7 @@ export function WorkFloaty(props: WorkFloatyProps) {
     );
     return (
         <aside
-            aria-label="Work activity"
+            aria-label={translate("Work activity")}
             className="happy-work-floaty"
             data-happy-desktop-ui="work-floaty"
             data-placement={props.placement ?? "inline"}
@@ -146,7 +147,9 @@ export function WorkFloaty(props: WorkFloatyProps) {
                                     type="button"
                                 >
                                     <span className="happy-work-floaty__mark" />
-                                    <span className="happy-work-floaty__label">History</span>
+                                    <span className="happy-work-floaty__label">
+                                        {translate("History")}
+                                    </span>
                                     <span className="happy-work-floaty__trailing">
                                         <span className="happy-work-floaty__chevron">
                                             <Icon name="chevron-right" size={12} />

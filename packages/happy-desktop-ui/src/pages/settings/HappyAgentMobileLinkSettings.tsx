@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Box } from "../../Box";
 import { Button } from "../../Button";
 import {
@@ -25,10 +26,11 @@ export function happyAgentMobileLinkHeading(
     step: DesktopMobileSetupStep,
     pairingOptions: DesktopMobilePairingOptions,
 ): { readonly title: string; readonly description?: string } {
-    if (step.kind === "intro") return { title: "Get mobile app", description: "Step 1 of 2" };
+    if (step.kind === "intro")
+        return { title: translate("Get mobile app"), description: translate("Step 1 of 2") };
     if (step.kind === "link" && !pairingOptions.completed)
-        return { title: "Link mobile app", description: "Step 2 of 2" };
-    return { title: "Mobile app linked" };
+        return { title: translate("Link mobile app"), description: translate("Step 2 of 2") };
+    return { title: translate("Mobile app linked") };
 }
 
 /**
@@ -58,7 +60,7 @@ export function HappyAgentMobileLinkSettings(props: HappyAgentMobileLinkSettings
                         onPlatformSelect={props.onPlatformSelect}
                     />
                     <Button onClick={props.onContinue} variant="primary">
-                        Downloaded and opened
+                        {translate("Downloaded and opened")}
                     </Button>
                 </Box>
             </HappyAgentSettingsSection>
@@ -74,7 +76,7 @@ export function HappyAgentMobileLinkSettings(props: HappyAgentMobileLinkSettings
                 {props.pairingOptions.completed ? (
                     <Box className="happy-agent-mobile-link__actions">
                         <Button onClick={props.onContinue} variant="primary">
-                            Done
+                            {translate("Done")}
                         </Button>
                     </Box>
                 ) : null}
@@ -90,17 +92,17 @@ export function HappyAgentMobileLinkSettings(props: HappyAgentMobileLinkSettings
                 <PairingResult
                     detail={
                         step.online
-                            ? "Happy Mobile can now reach this computer."
+                            ? translate("Happy Mobile can now reach this computer.")
                             : (step.message ??
-                              "Remote control resumes when your computer is online.")
+                              translate("Remote control resumes when your computer is online."))
                     }
                     icon="checkmark-circle"
-                    title="Mobile app linked"
+                    title={translate("Mobile app linked")}
                     tone="success"
                 >
                     <PairingActions>
                         <Button onClick={props.onContinue} variant="primary">
-                            Done
+                            {translate("Done")}
                         </Button>
                     </PairingActions>
                 </PairingResult>

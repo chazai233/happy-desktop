@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { Button } from "./Button";
@@ -53,11 +54,20 @@ const APPEARANCE_CYCLE: Record<
     HappyAgentAppearanceChoice,
     { readonly next: HappyAgentAppearanceChoice; readonly label: string }
 > = {
-    system: { next: "light", label: "Appearance follows the system. Switch to light." },
-    light: { next: "dark", label: "Appearance is light. Switch to dark." },
-    dark: { next: "system", label: "Appearance is dark. Switch to following the system." },
-    midnight: { next: "system", label: "Appearance is midnight. Switch to following the system." },
-    custom: { next: "system", label: "Appearance is custom. Switch to following the system." },
+    system: { next: "light", label: translate("Appearance follows the system. Switch to light.") },
+    light: { next: "dark", label: translate("Appearance is light. Switch to dark.") },
+    dark: {
+        next: "system",
+        label: translate("Appearance is dark. Switch to following the system."),
+    },
+    midnight: {
+        next: "system",
+        label: translate("Appearance is midnight. Switch to following the system."),
+    },
+    custom: {
+        next: "system",
+        label: translate("Appearance is custom. Switch to following the system."),
+    },
 };
 
 /**
@@ -140,7 +150,7 @@ export function WelcomeScreen(props: WelcomeScreenProps) {
             >
                 <div className="happy-welcome-screen__body" data-happy-desktop-ui="welcome-body">
                     <WelcomeDeck
-                        label="Welcome slides"
+                        label={translate("Welcome slides")}
                         slides={local.slides}
                         tint={local.backdrop?.kind === "sky" ? "sky" : "surface"}
                     />
@@ -150,7 +160,7 @@ export function WelcomeScreen(props: WelcomeScreenProps) {
                         onClick={local.onAction}
                         size="large"
                     >
-                        {local.actionLabel ?? "Go Happy"}
+                        {local.actionLabel ?? translate("Go Happy")}
                     </Button>
                 </div>
             </ScrollArea>

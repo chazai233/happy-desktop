@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { parseDiffFromFile, type SelectedLineRange } from "@pierre/diffs";
 import { FileDiff, useStableCallback } from "@pierre/diffs/react";
 import { useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
@@ -379,7 +380,7 @@ export function ChangedFileDiff(props: ChangedFileDiffProps) {
     }, [commenting, draftLine, draftSide, props.comments]);
     return (
         <section
-            aria-label={`Changes in ${props.path}`}
+            aria-label={translate("Changes in {0}", props.path)}
             className={["happy-changed-file-diff", props.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="changed-file-diff"
             data-mode={mode}
@@ -391,7 +392,7 @@ export function ChangedFileDiff(props: ChangedFileDiffProps) {
                 data-happy-desktop-ui="changed-file-diff-bar"
             >
                 <SegmentedControl
-                    aria-label="How this changed file is shown"
+                    aria-label={translate("How this changed file is shown")}
                     onChange={(value) => props.onModeChange?.(value as ChangedFileDiffMode)}
                     segments={segments}
                     size="compact"
@@ -404,7 +405,7 @@ export function ChangedFileDiff(props: ChangedFileDiffProps) {
                             className="happy-changed-file-diff__updating"
                             data-happy-desktop-ui="changed-file-diff-updating"
                         >
-                            {props.saving ? "Saving…" : "Updating…"}
+                            {props.saving ? translate("Saving…") : translate("Updating…")}
                         </span>
                     ) : null}
                     {/* Only where there is a diff drawn to walk. Preview has no
@@ -413,7 +414,7 @@ export function ChangedFileDiff(props: ChangedFileDiffProps) {
                     {mode === "unified" || mode === "split" ? (
                         <span className="happy-changed-file-diff__steps">
                             <Button
-                                aria-label="Previous change"
+                                aria-label={translate("Previous change")}
                                 data-testid="changed-file-diff-previous-change"
                                 icon="chevron-up"
                                 iconOnly
@@ -422,7 +423,7 @@ export function ChangedFileDiff(props: ChangedFileDiffProps) {
                                 variant="ghost"
                             />
                             <Button
-                                aria-label="Next change"
+                                aria-label={translate("Next change")}
                                 data-testid="changed-file-diff-next-change"
                                 icon="chevron-down"
                                 iconOnly
@@ -438,12 +439,12 @@ export function ChangedFileDiff(props: ChangedFileDiffProps) {
                         lines to wrap. */}
                     {props.onWrapChange !== undefined ? (
                         <SegmentedControl
-                            aria-label="Whether long lines wrap"
+                            aria-label={translate("Whether long lines wrap")}
                             data-testid="changed-file-diff-wrap"
                             onChange={(value) => props.onWrapChange?.(value === "wrap")}
                             segments={[
-                                { value: "wrap", label: "Wrap" },
-                                { value: "scroll", label: "No wrap" },
+                                { value: "wrap", label: translate("Wrap") },
+                                { value: "scroll", label: translate("No wrap") },
                             ]}
                             size="compact"
                             value={props.wrap === true ? "wrap" : "scroll"}

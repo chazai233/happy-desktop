@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import type {
     HappyAgentCalendarEventId,
@@ -221,11 +222,15 @@ export function HappyAgentCalendarSurfacePage(props: HappyAgentCalendarSurfacePa
                     size="small"
                     variant="secondary"
                 >
-                    Today
+                    {translate("Today")}
                 </Button>
                 <div className="happy-agent-calendar-surface__steps">
                     <Button
-                        aria-label={calendar.view === "month" ? "Previous month" : "Previous week"}
+                        aria-label={
+                            calendar.view === "month"
+                                ? translate("Previous month")
+                                : translate("Previous week")
+                        }
                         icon="chevron-left"
                         iconOnly
                         onClick={() => props.onPeriodStep(-1)}
@@ -233,7 +238,11 @@ export function HappyAgentCalendarSurfacePage(props: HappyAgentCalendarSurfacePa
                         variant="ghost"
                     />
                     <Button
-                        aria-label={calendar.view === "month" ? "Next month" : "Next week"}
+                        aria-label={
+                            calendar.view === "month"
+                                ? translate("Next month")
+                                : translate("Next week")
+                        }
                         icon="chevron-right"
                         iconOnly
                         onClick={() => props.onPeriodStep(1)}
@@ -246,15 +255,15 @@ export function HappyAgentCalendarSurfacePage(props: HappyAgentCalendarSurfacePa
                 </h2>
                 {calendar.truncated ? (
                     <span className="happy-agent-calendar-surface__note">
-                        Too many events to show them all here
+                        {translate("Too many events to show them all here")}
                     </span>
                 ) : null}
                 <SegmentedControl
                     data-testid="happy-agent-calendar-view"
                     onChange={(value) => props.onViewChange(value as HappyAgentCalendarView)}
                     segments={[
-                        { value: "month", label: "Month" },
-                        { value: "week", label: "Week" },
+                        { value: "month", label: translate("Month") },
+                        { value: "week", label: translate("Week") },
                     ]}
                     size="small"
                     value={calendar.view}
@@ -275,7 +284,7 @@ export function HappyAgentCalendarSurfacePage(props: HappyAgentCalendarSurfacePa
             <div className="happy-agent-calendar-surface__body">
                 {calendar.status === "missing" ? (
                     <p className="happy-agent-calendar-surface__missing">
-                        This calendar is no longer on this Happy Agent.
+                        {translate("This calendar is no longer on this Happy Agent.")}
                     </p>
                 ) : calendar.view === "month" ? (
                     <HappyAgentCalendarMonthView

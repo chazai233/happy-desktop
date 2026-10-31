@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Icon } from "./Icon";
 
 export type ComposerAttachmentRemoveButtonProps = {
@@ -13,7 +14,7 @@ export type ComposerAttachmentRemoveButtonProps = {
 export function ComposerAttachmentRemoveButton(props: ComposerAttachmentRemoveButtonProps) {
     return (
         <button
-            aria-label={`Remove ${props.name}`}
+            aria-label={translate("Remove {0}", props.name)}
             className="happy-composer-attachment-remove"
             data-happy-desktop-ui="composer-attachment-remove"
             onClick={props.onRemove}

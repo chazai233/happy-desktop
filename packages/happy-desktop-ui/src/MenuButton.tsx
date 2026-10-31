@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useCallback, useId, useRef, useState } from "react";
 import { Button, type ButtonSize, type ButtonVariant } from "./Button";
 import { Icon, type IconName, type IconProps } from "./Icon";
@@ -144,7 +145,12 @@ export function MenuButton(props: MenuButtonProps) {
                   {
                       id: previousPageId,
                       kind: "item" as const,
-                      label: `Previous ${pageName} (${String(currentPage)} of ${String(pageCount)})`,
+                      label: translate(
+                          "Previous {0} ({1} of {2})",
+                          pageName,
+                          String(currentPage),
+                          String(pageCount),
+                      ),
                   },
               ]
             : []),
@@ -154,7 +160,12 @@ export function MenuButton(props: MenuButtonProps) {
                   {
                       id: nextPageId,
                       kind: "item" as const,
-                      label: `More ${pageName} (${String(currentPage + 2)} of ${String(pageCount)})`,
+                      label: translate(
+                          "More {0} ({1} of {2})",
+                          pageName,
+                          String(currentPage + 2),
+                          String(pageCount),
+                      ),
                   },
               ]
             : []),
@@ -168,7 +179,7 @@ export function MenuButton(props: MenuButtonProps) {
     const popoverContent = (
         <>
             <button
-                aria-label="Close menu"
+                aria-label={translate("Close menu")}
                 className="happy-menu-button__backdrop"
                 data-happy-desktop-ui="menu-button-backdrop"
                 onClick={() => close(true)}

@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties, ReactNode } from "react";
 import { Button } from "../../Button";
 import { EmptyState } from "../../EmptyState";
@@ -40,10 +41,10 @@ export function HappyAgentSurfaceChatPanel(props: HappyAgentSurfaceChatPanelProp
             case "opening":
                 return (
                     <EmptyState
-                        description="Everyone here shares one chat."
+                        description={translate("Everyone here shares one chat.")}
                         icon="chat"
                         size="panel"
-                        title="Opening the chat…"
+                        title={translate("Opening the chat…")}
                     />
                 );
             case "failed":
@@ -52,7 +53,7 @@ export function HappyAgentSurfaceChatPanel(props: HappyAgentSurfaceChatPanelProp
                         description={props.state.message}
                         icon="chat"
                         size="panel"
-                        title="The chat couldn’t be opened"
+                        title={translate("The chat couldn’t be opened")}
                     />
                 );
             case "open":
@@ -61,7 +62,7 @@ export function HappyAgentSurfaceChatPanel(props: HappyAgentSurfaceChatPanelProp
     };
     return (
         <section
-            aria-label={`Chat in ${props.surfaceName}`}
+            aria-label={translate("Chat in {0}", props.surfaceName)}
             className={["happy-agent-surface-chat", props.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="happy-agent-surface-chat"
             data-phase={props.state.phase}
@@ -70,13 +71,14 @@ export function HappyAgentSurfaceChatPanel(props: HappyAgentSurfaceChatPanelProp
         >
             <PanelHeader className="happy-agent-surface-chat__header" edgeControl>
                 <div className="happy-agent-surface-chat__lead">
-                    <h2 className="happy-agent-surface-chat__title">Chat</h2>
+                    <h2 className="happy-agent-surface-chat__title">{translate("Chat")}</h2>
                     <span className="happy-agent-surface-chat__scope">
-                        Shared with everyone in {props.surfaceName}
+                        {translate("Shared with everyone in")}
+                        {props.surfaceName}
                     </span>
                 </div>
                 <Button
-                    aria-label="Close the chat"
+                    aria-label={translate("Close the chat")}
                     icon="close"
                     iconOnly
                     onClick={props.onClose}

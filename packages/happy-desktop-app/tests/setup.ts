@@ -1,6 +1,9 @@
 import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
 
+// The existing behavior fixtures assert English copy; the product defaults to Chinese.
+globalThis.localStorage.setItem("happy.desktop.uiLocale", "en");
+
 class TestResizeObserver implements ResizeObserver {
     constructor(_callback: ResizeObserverCallback) {}
 

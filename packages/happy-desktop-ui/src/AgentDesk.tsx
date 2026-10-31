@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties, type HTMLAttributes } from "react";
 import { Avatar, type ToneName } from "./Avatar";
@@ -49,7 +50,7 @@ export function AgentDesk(props: AgentDeskProps) {
         "style",
         "title",
     ]);
-    const runningLabel = () => local.runningLabel ?? `${local.running.length} RUNNING`;
+    const runningLabel = () => local.runningLabel ?? translate("{0} RUNNING", local.running.length);
     return (
         <div
             {...rest}
@@ -60,7 +61,7 @@ export function AgentDesk(props: AgentDeskProps) {
             <header className="happy-agent-desk__header" data-happy-desktop-ui="agent-desk-header">
                 <Icon className="happy-agent-desk__spark" name="spark" size={16} />
                 <span className="happy-agent-desk__title" data-happy-desktop-ui="agent-desk-title">
-                    {local.title ?? "Agent desk"}
+                    {local.title ?? translate("Agent desk")}
                 </span>
                 <Badge
                     className="happy-agent-desk__count"
@@ -143,7 +144,7 @@ export function AgentDesk(props: AgentDeskProps) {
                                 data-happy-desktop-ui="agent-desk-section-label"
                                 data-section="queued"
                             >
-                                Queued
+                                {translate("Queued")}
                             </div>
                             {(local.queued ?? []).map((item) => (
                                 <button
@@ -183,7 +184,7 @@ export function AgentDesk(props: AgentDeskProps) {
                                 data-happy-desktop-ui="agent-desk-section-label"
                                 data-section="done"
                             >
-                                Done today
+                                {translate("Done today")}
                             </div>
                             {(local.done ?? []).map((item) => (
                                 <button

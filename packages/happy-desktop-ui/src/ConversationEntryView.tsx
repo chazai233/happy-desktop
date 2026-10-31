@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useContext, type CSSProperties, type ReactNode } from "react";
 import { MarkdownLayoutCacheContext } from "./MessageMarkdown";
 import { conversationMessageCompactLayout } from "./conversationRowHeight";
@@ -641,7 +642,7 @@ export function ConversationEntryView(props: ConversationEntryViewProps) {
         >
             {linked.map((attachment) => (
                 <FileAttachment
-                    aria-label={`Open ${attachment.name}`}
+                    aria-label={translate("Open {0}", attachment.name)}
                     key={attachment.id}
                     kind={linkedAttachmentFileKind(attachment.attachmentKind)}
                     name={attachment.name}
@@ -678,7 +679,7 @@ function imagesOf(attachments: readonly ConversationAttachment[]): readonly Mess
             images.push({
                 id: attachment.id,
                 url: `data:${attachment.mediaType};base64,${attachment.data}`,
-                alt: "Attached image",
+                alt: translate("Attached image"),
                 ...(attachment.width !== undefined ? { width: attachment.width } : {}),
                 ...(attachment.height !== undefined ? { height: attachment.height } : {}),
             });

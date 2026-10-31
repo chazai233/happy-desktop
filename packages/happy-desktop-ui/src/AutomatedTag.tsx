@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Icon } from "./Icon";
 export type AutomatedTagProps = {
     className?: string;
@@ -20,7 +21,9 @@ export type AutomatedTagProps = {
 export function AutomatedTag(props: AutomatedTagProps) {
     return (
         <span
-            aria-label={props["aria-label"] ?? "Posted automatically on the author’s behalf"}
+            aria-label={
+                props["aria-label"] ?? translate("Posted automatically on the author’s behalf")
+            }
             className={["happy-automated-tag", props.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="automated-tag"
             role="note"
@@ -37,7 +40,7 @@ export function AutomatedTag(props: AutomatedTagProps) {
                 className="happy-automated-tag__label"
                 data-happy-desktop-ui="automated-tag-label"
             >
-                Automated
+                {translate("Automated")}
             </span>
         </span>
     );

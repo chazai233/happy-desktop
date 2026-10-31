@@ -1,3 +1,4 @@
+import { translate } from "happy-desktop-ui";
 import { useSyncExternalStore, type ReactNode } from "react";
 import {
     experimentsStoreNoop,
@@ -144,7 +145,10 @@ export function HappyAgentOnboardingBoundary(props: {
             case "configured":
             case "disabled":
             case "skipped":
-                return { kind: "checking", message: snapshot.error ?? "Finishing setup…" };
+                return {
+                    kind: "checking",
+                    message: snapshot.error ?? translate("Finishing setup…"),
+                };
         }
     })();
     return (

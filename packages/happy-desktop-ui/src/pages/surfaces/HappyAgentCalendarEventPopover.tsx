@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import {
     HAPPY_AGENT_CALENDAR_COUNT_LIMIT,
@@ -49,11 +50,11 @@ export interface HappyAgentCalendarEventPopoverProps extends HappyAgentCalendarE
 }
 
 const FREQUENCIES = [
-    { value: "none", label: "Does not repeat" },
-    { value: "daily", label: "Daily" },
-    { value: "weekly", label: "Weekly" },
-    { value: "monthly", label: "Monthly" },
-    { value: "yearly", label: "Yearly" },
+    { value: "none", label: translate("Does not repeat") },
+    { value: "daily", label: translate("Daily") },
+    { value: "weekly", label: translate("Weekly") },
+    { value: "monthly", label: translate("Monthly") },
+    { value: "yearly", label: translate("Yearly") },
 ] as const;
 
 const INTERVAL_UNITS = {
@@ -226,7 +227,7 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
     const unit = recurrence === null ? undefined : INTERVAL_UNITS[recurrence.frequency];
     return (
         <div
-            aria-label={isNew ? "New event" : "Event"}
+            aria-label={isNew ? translate("New event") : translate("Event")}
             className={["happy-calendar-popover", props.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="calendar-popover"
             data-testid={props["data-testid"]}
@@ -245,7 +246,7 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
         >
             <div className="happy-calendar-popover__head">
                 <TextField
-                    aria-label="Title"
+                    aria-label={translate("Title")}
                     autoFocus
                     className="happy-calendar-popover__title"
                     data-testid="happy-agent-calendar-title"
@@ -254,12 +255,12 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                     onValueChange={(value) =>
                         props.onTitleChange(value.slice(0, HAPPY_AGENT_CALENDAR_TITLE_LIMIT))
                     }
-                    placeholder="(No title)"
+                    placeholder={translate("(No title)")}
                     size="large"
                     value={draft.title}
                 />
                 <Button
-                    aria-label="Close"
+                    aria-label={translate("Close")}
                     icon="close"
                     iconOnly
                     onClick={props.onClose}
@@ -275,42 +276,42 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                     {editor.series ? (
                         <p className="happy-calendar-popover__series">
                             <Icon name="repeat" size={14} />
-                            Changes all events in this series
+                            {translate("Changes all events in this series")}
                         </p>
                     ) : null}
                     <Switch
                         checked={draft.allDay}
                         data-testid="happy-agent-calendar-all-day"
-                        label="All day"
+                        label={translate("All day")}
                         onChange={props.onAllDayChange}
                         size="small"
                     />
                     <div className="happy-calendar-popover__when">
-                        <span className="happy-calendar-popover__label">Starts</span>
+                        <span className="happy-calendar-popover__label">{translate("Starts")}</span>
                         <div className="happy-calendar-popover__row">
                             <CalendarDateInput
-                                aria-label="Start date"
+                                aria-label={translate("Start date")}
                                 onChange={props.onStartDateChange}
                                 value={draft.startDate}
                             />
                             {draft.allDay ? null : (
                                 <CalendarTimeInput
-                                    aria-label="Start time"
+                                    aria-label={translate("Start time")}
                                     minutes={draft.startMinutes}
                                     onChange={props.onStartMinutesChange}
                                 />
                             )}
                         </div>
-                        <span className="happy-calendar-popover__label">Ends</span>
+                        <span className="happy-calendar-popover__label">{translate("Ends")}</span>
                         <div className="happy-calendar-popover__row">
                             <CalendarDateInput
-                                aria-label="End date"
+                                aria-label={translate("End date")}
                                 onChange={props.onEndDateChange}
                                 value={draft.endDate}
                             />
                             {draft.allDay ? null : (
                                 <CalendarTimeInput
-                                    aria-label="End time"
+                                    aria-label={translate("End time")}
                                     minutes={draft.endMinutes}
                                     onChange={props.onEndMinutesChange}
                                 />
@@ -318,9 +319,11 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                         </div>
                         {draft.allDay ? null : (
                             <>
-                                <span className="happy-calendar-popover__label">Time zone</span>
+                                <span className="happy-calendar-popover__label">
+                                    {translate("Time zone")}
+                                </span>
                                 <Select
-                                    aria-label="Time zone"
+                                    aria-label={translate("Time zone")}
                                     fullWidth
                                     onValueChange={props.onTimeZoneChange}
                                     options={(props.timeZones.includes(draft.timeZone)
@@ -335,9 +338,11 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                                 />
                             </>
                         )}
-                        <span className="happy-calendar-popover__label">Repeats</span>
+                        <span className="happy-calendar-popover__label">
+                            {translate("Repeats")}
+                        </span>
                         <Select
-                            aria-label="Repeats"
+                            aria-label={translate("Repeats")}
                             data-testid="happy-agent-calendar-frequency"
                             fullWidth
                             onValueChange={frequencyChange}
@@ -347,10 +352,12 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                         />
                         {recurrence !== null && unit !== undefined ? (
                             <>
-                                <span className="happy-calendar-popover__label">Every</span>
+                                <span className="happy-calendar-popover__label">
+                                    {translate("Every")}
+                                </span>
                                 <div className="happy-calendar-popover__row">
                                     <CalendarNumberInput
-                                        aria-label="Repeat every"
+                                        aria-label={translate("Repeat every")}
                                         max={HAPPY_AGENT_CALENDAR_INTERVAL_LIMIT}
                                         min={1}
                                         onChange={(interval) =>
@@ -364,9 +371,11 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                                 </div>
                                 {recurrence.frequency === "weekly" ? (
                                     <>
-                                        <span className="happy-calendar-popover__label">On</span>
+                                        <span className="happy-calendar-popover__label">
+                                            {translate("On")}
+                                        </span>
                                         <div
-                                            aria-label="Repeat on"
+                                            aria-label={translate("Repeat on")}
                                             className="happy-calendar-popover__weekdays"
                                             role="group"
                                         >
@@ -391,21 +400,23 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                                         </div>
                                     </>
                                 ) : null}
-                                <span className="happy-calendar-popover__label">Ends</span>
+                                <span className="happy-calendar-popover__label">
+                                    {translate("Ends")}
+                                </span>
                                 <div className="happy-calendar-popover__ends">
                                     <SegmentedControl
                                         onChange={endKindChange}
                                         segments={[
-                                            { value: "never", label: "Never" },
-                                            { value: "until", label: "On date" },
-                                            { value: "count", label: "After" },
+                                            { value: "never", label: translate("Never") },
+                                            { value: "until", label: translate("On date") },
+                                            { value: "count", label: translate("After") },
                                         ]}
                                         size="small"
                                         value={recurrence.end.kind}
                                     />
                                     {recurrence.end.kind === "until" ? (
                                         <CalendarDateInput
-                                            aria-label="Repeat until"
+                                            aria-label={translate("Repeat until")}
                                             onChange={(date) =>
                                                 props.onRecurrenceChange({
                                                     ...recurrence,
@@ -418,7 +429,7 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                                     {recurrence.end.kind === "count" ? (
                                         <div className="happy-calendar-popover__row">
                                             <CalendarNumberInput
-                                                aria-label="Number of times"
+                                                aria-label={translate("Number of times")}
                                                 max={HAPPY_AGENT_CALENDAR_COUNT_LIMIT}
                                                 min={1}
                                                 onChange={(count) =>
@@ -439,7 +450,7 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                         ) : null}
                     </div>
                     <TextField
-                        aria-label="Location"
+                        aria-label={translate("Location")}
                         fullWidth
                         leadingIcon="location"
                         onValueChange={(value) =>
@@ -447,18 +458,18 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                                 value.slice(0, HAPPY_AGENT_CALENDAR_LOCATION_LIMIT),
                             )
                         }
-                        placeholder="Add a location"
+                        placeholder={translate("Add a location")}
                         size="small"
                         value={draft.location}
                     />
                     <TextField
-                        aria-label="Notes"
+                        aria-label={translate("Notes")}
                         fullWidth
                         multiline
                         onValueChange={(value) =>
                             props.onNotesChange(value.slice(0, HAPPY_AGENT_CALENDAR_NOTES_LIMIT))
                         }
-                        placeholder="Add notes"
+                        placeholder={translate("Add notes")}
                         rows={3}
                         size="small"
                         value={draft.notes}
@@ -481,7 +492,7 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                         size="small"
                         variant="ghost"
                     >
-                        {editor.series ? "Delete series" : "Delete"}
+                        {editor.series ? translate("Delete series") : translate("Delete")}
                     </Button>
                 )}
                 <Button
@@ -491,7 +502,7 @@ export function HappyAgentCalendarEventPopover(props: HappyAgentCalendarEventPop
                     size="small"
                     variant="primary"
                 >
-                    Save
+                    {translate("Save")}
                 </Button>
             </div>
         </div>

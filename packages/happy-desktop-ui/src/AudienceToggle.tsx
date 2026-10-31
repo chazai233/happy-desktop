@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties } from "react";
 
 export type AudienceValue = "people" | "agents";
@@ -18,7 +19,9 @@ export function AudienceToggle(props: AudienceToggleProps) {
     return (
         <button
             aria-label={
-                props.value === "people" ? "Switch to talk to agents" : "Switch to talk to people"
+                props.value === "people"
+                    ? translate("Switch to talk to agents")
+                    : translate("Switch to talk to people")
             }
             aria-pressed={props.value === "people"}
             className={["happy-audience-toggle", props.className].filter(Boolean).join(" ")}
@@ -28,10 +31,17 @@ export function AudienceToggle(props: AudienceToggleProps) {
             disabled={props.disabled}
             onClick={() => props.onChange?.(props.value === "people" ? "agents" : "people")}
             style={props.style}
-            title={`Shift+Tab switches to talk to ${props.value === "people" ? "agents" : "people"}`}
+            title={translate(
+                "Shift+Tab switches to talk to {0}",
+                props.value === "people" ? "agents" : "people",
+            )}
             type="button"
         >
-            <span>{props.value === "people" ? "Talk to people" : "Talk to agents"}</span>
+            <span>
+                {props.value === "people"
+                    ? translate("Talk to people")
+                    : translate("Talk to agents")}
+            </span>
         </button>
     );
 }

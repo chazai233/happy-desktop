@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Fragment, useState, type CSSProperties, type ReactNode } from "react";
 import { Avatar } from "./Avatar";
 import { ContextMenu } from "./ContextMenu";
@@ -120,7 +121,7 @@ export function ConnectionShell(props: {
             {props.items.length > 1 && !props.collapsed ? (
                 <nav
                     className="happy-connections__rail"
-                    aria-label="Connections"
+                    aria-label={translate("Connections")}
                     data-window-controls={props.windowControls || undefined}
                     data-window-full-screen={props.windowFullScreen || undefined}
                     data-shimmer-paused={props.workingShimmerPhase !== undefined || undefined}
@@ -150,7 +151,9 @@ export function ConnectionShell(props: {
                                         title={`${item.label} · ${item.status}${item.working && item.status === "connected" ? " · Agents working" : ""}${!item.local && reorderable ? " · Drag or use Alt+↑/↓ to reorder" : ""}`}
                                         aria-description={
                                             !item.local && reorderable
-                                                ? "Drag or use Alt+Arrow Up or Alt+Arrow Down to reorder."
+                                                ? translate(
+                                                      "Drag or use Alt+Arrow Up or Alt+Arrow Down to reorder.",
+                                                  )
                                                 : undefined
                                         }
                                         onClick={() => {
@@ -217,7 +220,9 @@ export function ConnectionShell(props: {
                                         ) : null}
                                         {item.voiceFocus ? (
                                             <span
-                                                aria-label="Voice focus on this connection"
+                                                aria-label={translate(
+                                                    "Voice focus on this connection",
+                                                )}
                                                 className="happy-connections__voice"
                                                 data-happy-desktop-ui="connection-voice"
                                                 role="img"
@@ -242,7 +247,7 @@ export function ConnectionShell(props: {
             <div className="happy-connections__body">
                 {props.error ? (
                     <div className="happy-connections__error" role="status">
-                        Connection list unavailable. Keeping known connections.
+                        {translate("Connection list unavailable. Keeping known connections.")}
                     </div>
                 ) : null}
                 {props.reorderError ? (

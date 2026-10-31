@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Fragment } from "react";
 import type { HappyAgentArtifact, HappyAgentArtifactId } from "happy-desktop-state";
 import { happyAgentArtifactTypeLabel } from "happy-desktop-state";
@@ -62,12 +63,12 @@ export function HappyAgentArtifactRow(props: HappyAgentArtifactRowProps) {
             <span className="happy-agent-artifact-row__text">
                 <span className="happy-agent-artifact-row__headline">
                     <span className="happy-agent-artifact-row__title">
-                        {artifact.title || "Untitled"}
+                        {artifact.title || translate("Untitled")}
                     </span>
-                    {deleted ? <Badge label="Deleted" variant="danger" /> : null}
+                    {deleted ? <Badge label={translate("Deleted")} variant="danger" /> : null}
                     <span
                         className="happy-agent-artifact-row__version"
-                        title={`Version ${String(artifact.latestVersion)}`}
+                        title={translate("Version {0}", String(artifact.latestVersion))}
                     >
                         v{artifact.latestVersion}
                     </span>

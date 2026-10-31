@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     useCallback,
@@ -709,7 +710,7 @@ export function ImageViewer(props: ImageViewerProps) {
         >
             <div
                 aria-busy={local.content.type === "url" && live.status === "loading"}
-                aria-label={`${local.name}, image`}
+                aria-label={translate("{0}, image", local.name)}
                 className="happy-image-viewer__frame"
                 data-dragging={dragging ? "" : undefined}
                 data-happy-desktop-ui="image-viewer-frame"
@@ -760,7 +761,7 @@ export function ImageViewer(props: ImageViewerProps) {
             <div className="happy-image-viewer__tools" data-happy-desktop-ui="image-viewer-tools">
                 {local.actions}
                 <Button
-                    aria-label="Zoom out"
+                    aria-label={translate("Zoom out")}
                     disabled={!showing || scale <= zoomFloor + SCALE_EPSILON}
                     iconOnly
                     onClick={() => zoomBy(-1)}
@@ -776,7 +777,7 @@ export function ImageViewer(props: ImageViewerProps) {
                     {displayed.status === "ready" ? `${String(Math.round(scale * 100))}%` : "—"}
                 </span>
                 <Button
-                    aria-label="Zoom in"
+                    aria-label={translate("Zoom in")}
                     disabled={!showing || scale >= ZOOM_MAX - SCALE_EPSILON}
                     iconOnly
                     onClick={() => zoomBy(1)}
@@ -787,7 +788,7 @@ export function ImageViewer(props: ImageViewerProps) {
                 </Button>
                 <span className="happy-image-viewer__divider" />
                 <Button
-                    aria-label="Fit to view"
+                    aria-label={translate("Fit to view")}
                     aria-pressed={live.view.kind === "fit"}
                     disabled={!showing}
                     iconOnly
@@ -798,7 +799,7 @@ export function ImageViewer(props: ImageViewerProps) {
                     <Ionicon name="scan-outline" size={14} />
                 </Button>
                 <Button
-                    aria-label="Actual size"
+                    aria-label={translate("Actual size")}
                     aria-pressed={
                         live.view.kind === "manual" && Math.abs(scale - 1) < SCALE_EPSILON
                     }
@@ -857,16 +858,22 @@ function ImageViewerStage(props: {
             >
                 <Icon name="image" size={20} />
                 <span className="happy-image-viewer__notice-title">
-                    {props.name} has no preview
+                    {props.name}
+                    {translate("has no preview")}
                 </span>
                 <span className="happy-image-viewer__notice-detail">
-                    This file is not a picture Happy can show.
+                    {translate("This file is not a picture Happy can show.")}
                 </span>
             </div>
         );
     const { natural, status } = props.state;
     if (status === "error")
-        return <ImageViewerFailure detail="The picture could not be decoded." name={props.name} />;
+        return (
+            <ImageViewerFailure
+                detail={translate("The picture could not be decoded.")}
+                name={props.name}
+            />
+        );
     if ((props.content.type === "loading" || status === "loading") && props.thumbnail)
         return (
             <ImageViewerThumbnail
@@ -972,7 +979,9 @@ function ImageViewerOpening({
             ref={noticeRef}
         >
             <Spinner size={16} />
-            <span className="happy-image-viewer__notice-title">Opening {name}…</span>
+            <span className="happy-image-viewer__notice-title">
+                {translate("Opening")} {name}…
+            </span>
         </div>
     );
 }
@@ -986,7 +995,8 @@ function ImageViewerFailure(props: { detail: string; name: string }) {
         >
             <Icon name="close" size={20} />
             <span className="happy-image-viewer__notice-title">
-                {props.name} could not be opened
+                {props.name}
+                {translate("could not be opened")}
             </span>
             <span className="happy-image-viewer__notice-detail">{props.detail}</span>
         </div>

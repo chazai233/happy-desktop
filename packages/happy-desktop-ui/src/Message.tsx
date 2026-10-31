@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import type { FileLinkOpenHandler, FileOpenHandler } from "./fileReference";
 import {
@@ -112,7 +113,7 @@ function MessageMediaItem(props: {
         />
     ) : (
         <span
-            aria-label={`Loading ${props.image.alt ?? "image"}`}
+            aria-label={translate("Loading {0}", props.image.alt ?? "image")}
             className="happy-message__media-loading"
             data-happy-desktop-ui="message-media-loading"
             role="status"
@@ -133,7 +134,9 @@ function MessageMediaItem(props: {
     return props.onOpen ? (
         <button
             {...shared}
-            aria-label={props.image.alt ? `Open ${props.image.alt}` : "Open image"}
+            aria-label={
+                props.image.alt ? translate("Open {0}", props.image.alt) : translate("Open image")
+            }
             data-interactive=""
             onClick={() => props.onOpen?.(props.image.id)}
             type="button"
@@ -417,7 +420,7 @@ export function Message(props: MessageProps) {
     /* The leading incoming message owns the author line. Grouped follow-ups keep
        their hover metadata inline after the body instead of repeating identity. */
     const showIncomingMeta = () => !local.own && !grouped();
-    const authorActionLabel = () => `View ${local.author}’s profile`;
+    const authorActionLabel = () => translate("View {0}’s profile", local.author);
     /* The conversation's own agent wears the Happy logo; a bot keeps the picture
        its Happy Agent gives it. */
     const happyAgent = () =>
@@ -620,7 +623,7 @@ export function Message(props: MessageProps) {
                 ) : null}
                 {local.generationStatus === "failed" ? (
                     <span
-                        aria-label="Generation failed"
+                        aria-label={translate("Generation failed")}
                         className="happy-message__generation-marker"
                         data-empty={!local.body ? "" : undefined}
                         data-generation-marker="failed"
@@ -3554,7 +3557,7 @@ export function MessageList(props: MessageListProps) {
                         props.jumpToEnd ? (
                             <div className="happy-message-list__jump" hidden ref={jump}>
                                 <Button
-                                    aria-label="Jump to latest"
+                                    aria-label={translate("Jump to latest")}
                                     iconOnly
                                     onClick={jumpToEnd}
                                     size="small"

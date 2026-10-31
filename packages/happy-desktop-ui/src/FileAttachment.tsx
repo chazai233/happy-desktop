@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { Icon, type IconName } from "./Icon";
@@ -128,7 +129,8 @@ export function FileAttachment(props: FileAttachmentProps) {
                     </span>
                     {local.onOpen ? (
                         <span className="happy-file-attachment__meta-hover">
-                            Download {typeLabel()}
+                            {translate("Download")}
+                            {typeLabel()}
                         </span>
                     ) : null}
                 </span>
@@ -149,7 +151,7 @@ export function FileAttachment(props: FileAttachmentProps) {
     return local.onOpen ? (
         ((onOpen) => (
             <button
-                aria-label={local["aria-label"] ?? `Open ${local.name}`}
+                aria-label={local["aria-label"] ?? translate("Open {0}", local.name)}
                 className={className}
                 data-actions-visible={local.actionsVisible ? "" : undefined}
                 data-kind={kind()}

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import {
     useEffectEvent,
     useLayoutEffect,
@@ -386,7 +387,7 @@ export function TerminalPanel(props: TerminalPanelProps) {
         >
             {collapsed || !resizable ? null : (
                 <div
-                    aria-label="Resize terminal"
+                    aria-label={translate("Resize terminal")}
                     className="happy-terminal-panel__resize"
                     data-happy-desktop-ui="terminal-resize"
                     onPointerDown={dragStart}
@@ -414,7 +415,7 @@ export function TerminalPanel(props: TerminalPanelProps) {
                             size="small"
                             variant="ghost"
                         >
-                            Reconnect
+                            {translate("Reconnect")}
                         </Button>
                     ) : null}
                 </div>
@@ -431,7 +432,9 @@ export function TerminalPanel(props: TerminalPanelProps) {
                     data-happy-desktop-ui="terminal-screen"
                     viewportClassName="happy-terminal-panel__screen-viewport"
                     viewportProps={{
-                        "aria-label": availability ? `Terminal output. ${availability}` : undefined,
+                        "aria-label": availability
+                            ? translate("Terminal output. {0}", availability)
+                            : undefined,
                         onClick: screenClick,
                         onCopy: terminalSelectionCopy,
                         onKeyDown: (event) => {
@@ -480,7 +483,7 @@ export function TerminalPanel(props: TerminalPanelProps) {
                         />
                     ) : null}
                     <textarea
-                        aria-label="Terminal input"
+                        aria-label={translate("Terminal input")}
                         autoCapitalize="off"
                         autoComplete="off"
                         className="happy-terminal-panel__input"
@@ -661,7 +664,9 @@ function noticeLabel(props: TerminalPanelProps): string | undefined {
         return availability ? `${exited} · ${availability}` : exited;
     }
     if (props.status === "disconnected")
-        return availability ? `Disconnected · ${availability}` : "Disconnected";
+        return availability
+            ? translate("Disconnected · {0}", availability)
+            : translate("Disconnected");
     return availability;
 }
 

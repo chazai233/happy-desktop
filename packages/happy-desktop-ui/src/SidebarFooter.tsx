@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties, type ReactNode } from "react";
 import { Avatar } from "./Avatar";
 import { Box } from "./Box";
@@ -72,11 +73,11 @@ export type SidebarThemeMode = "system" | "dark" | "light" | "midnight" | "custo
 
 /** Theme choices, in the order the status bar menu and Settings both show them. */
 export const SIDEBAR_THEME_OPTIONS: readonly { mode: SidebarThemeMode; label: string }[] = [
-    { mode: "system", label: "System" },
-    { mode: "dark", label: "Dark" },
-    { mode: "light", label: "Light" },
-    { mode: "midnight", label: "Midnight" },
-    { mode: "custom", label: "Custom" },
+    { mode: "system", label: translate("System") },
+    { mode: "dark", label: translate("Dark") },
+    { mode: "light", label: translate("Light") },
+    { mode: "midnight", label: translate("Midnight") },
+    { mode: "custom", label: translate("Custom") },
 ];
 
 export type SidebarFooterConnection = {
@@ -110,7 +111,7 @@ export function SidebarFooter(props: SidebarFooterProps) {
         name === undefined ? undefined : (
             <>
                 <Avatar
-                    aria-label={props.online ? `${name} — online` : name}
+                    aria-label={props.online ? translate("{0} — online", name) : name}
                     imageUrl={props.imageUrl}
                     initials={props.initials ?? ""}
                     online={props.online}
@@ -136,7 +137,7 @@ export function SidebarFooter(props: SidebarFooterProps) {
             {identity !== undefined ? (
                 props.onProfileOpen ? (
                     <button
-                        aria-label="Open profile"
+                        aria-label={translate("Open profile")}
                         className="happy-sidebar__profile"
                         data-happy-desktop-ui="sidebar-profile"
                         onClick={props.onProfileOpen}
@@ -206,7 +207,7 @@ export function SidebarFooter(props: SidebarFooterProps) {
                                 ? { icon: "check" as const }
                                 : {}),
                         }))}
-                        label="Theme"
+                        label={translate("Theme")}
                         menuLabel="Theme"
                         menuWidth={160}
                         onSelect={(id) => {
@@ -227,7 +228,7 @@ export function SidebarFooter(props: SidebarFooterProps) {
             ) : null}
             {props.onAdminOpen ? (
                 <Button
-                    aria-label={props.adminLabel ?? "Administration"}
+                    aria-label={props.adminLabel ?? translate("Administration")}
                     icon="settings"
                     iconOnly
                     onClick={props.onAdminOpen}
@@ -237,7 +238,7 @@ export function SidebarFooter(props: SidebarFooterProps) {
             ) : null}
             {props.onSettingsOpen ? (
                 <Button
-                    aria-label={props.settingsLabel ?? "Settings"}
+                    aria-label={props.settingsLabel ?? translate("Settings")}
                     icon="settings"
                     iconOnly
                     onClick={props.onSettingsOpen}

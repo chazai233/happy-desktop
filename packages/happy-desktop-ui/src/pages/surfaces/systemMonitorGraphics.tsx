@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { DitherChart } from "../../dither/DitherChart";
 import { DitherSparkline } from "../../dither/DitherSparkline";
 import type { DitherColor } from "../../dither/ditherTypes";
@@ -101,18 +102,22 @@ export function SystemMonitorProcessSpark(props: {
 
 export function SystemMonitorAsciiCores(props: { values: readonly number[] | null }) {
     return (
-        <div className="system-monitor__cores" role="group" aria-label="Usage per logical core">
+        <div
+            className="system-monitor__cores"
+            role="group"
+            aria-label={translate("Usage per logical core")}
+        >
             {props.values?.map((usage, index) => (
                 <span
                     className="system-monitor__core"
                     data-level={systemMonitorLevel(usage)}
                     key={index}
                     role="meter"
-                    aria-label={`Core ${index + 1}`}
+                    aria-label={translate("Core {0}", index + 1)}
                     aria-valuemin={0}
                     aria-valuemax={100}
                     aria-valuenow={usage}
-                    title={`Core ${index + 1}: ${usage.toFixed(1)}%`}
+                    title={translate("Core {0}: {1}%", index + 1, usage.toFixed(1))}
                 >
                     {BLOCKS[Math.max(0, Math.min(8, Math.ceil((usage / 100) * 8)))]}
                 </span>

@@ -1,3 +1,4 @@
+import { translate } from "happy-desktop-ui";
 import type { GptLiveControlSocket, GptLiveControlSocketHandlers } from "happy-desktop-state";
 
 /** The browser transports text; the state runtime validates the daemon's closed control contract. */
@@ -45,7 +46,7 @@ export function gptLiveBrowserTransport(
     return {
         send(text) {
             if (stopped || socket.readyState !== WebSocket.OPEN)
-                throw new Error("Voice control is not connected.");
+                throw new Error(translate("Voice control is not connected."));
             socket.send(text);
         },
         close,

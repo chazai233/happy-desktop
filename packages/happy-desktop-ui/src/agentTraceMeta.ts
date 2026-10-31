@@ -1,6 +1,7 @@
+import { translate } from "./localization/translate";
 /** Text rendered by the compact trace control attached to message metadata. */
 export function agentTraceMetaTitle(open: boolean | undefined): string {
-    return open ? "Hide traces" : "View traces";
+    return open ? translate("Hide traces") : translate("View traces");
 }
 
 function agentTraceTokenCountFormat(value: number): string {

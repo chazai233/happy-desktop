@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import type { HappyAgentSurfaceReferenceKind } from "happy-desktop-state";
 import { EmptyState } from "../../EmptyState";
@@ -68,14 +69,15 @@ export function HappyAgentSurfaceReferencePage(props: HappyAgentSurfaceReference
                         action={{
                             label:
                                 reference.action === "join"
-                                    ? "Join task"
+                                    ? translate("Join task")
                                     : OPEN_LABELS[reference.kind],
                             onClick: props.onOpen,
                         }}
                         {...(reference.action === "join"
                             ? {
-                                  description:
+                                  description: translate(
                                       "You’re not in this task yet. Joining puts it in your Tasks and opens its chat.",
+                                  ),
                               }
                             : {})}
                         icon={surfaceTypeIcon({ kind: reference.kind })}
@@ -89,7 +91,7 @@ export function HappyAgentSurfaceReferencePage(props: HappyAgentSurfaceReference
                         description={GONE[reference.kind]}
                         icon={surfaceTypeIcon({ kind: reference.kind })}
                         size="panel"
-                        title={`${props.surface.name} isn’t available`}
+                        title={translate("{0} isn’t available", props.surface.name)}
                     />
                 );
         }

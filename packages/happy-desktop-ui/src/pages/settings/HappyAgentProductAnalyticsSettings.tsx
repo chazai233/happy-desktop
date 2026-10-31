@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { DataDisclosure, type DataDisclosureGroup } from "../../DataDisclosure";
 import { FormRow } from "../../FormRow";
 import { Switch } from "../../Switch";
@@ -7,7 +8,7 @@ import { HappyAgentSettingsSection } from "./HappyAgentSettingsShell";
 const PRODUCT_ANALYTICS_DISCLOSURE: readonly DataDisclosureGroup[] = [
     {
         kind: "shared",
-        title: "Examples of what we send",
+        title: translate("Examples of what we send"),
         items: [
             "Happy opened, and how many times",
             "Which setup step you reached, how long setup took, and which step failed if it did (a fixed code such as download failed or timed out, never the error message)",
@@ -21,7 +22,7 @@ const PRODUCT_ANALYTICS_DISCLOSURE: readonly DataDisclosureGroup[] = [
     },
     {
         kind: "withheld",
-        title: "What we never send",
+        title: translate("What we never send"),
         items: [
             "Your messages, prompts, or anything an agent writes",
             "Files, file paths, or folder names",
@@ -44,20 +45,22 @@ export interface HappyAgentProductAnalyticsSettingsProps {
  */
 export function HappyAgentProductAnalyticsSettings(props: HappyAgentProductAnalyticsSettingsProps) {
     return (
-        <HappyAgentSettingsSection title="Privacy">
+        <HappyAgentSettingsSection title={translate("Privacy")}>
             <FormRow
                 control={
                     <Switch
-                        aria-label="Share product analytics"
+                        aria-label={translate("Share product analytics")}
                         checked={props.enabled}
                         id="happy-agent-settings-product-analytics"
                         onChange={props.onChange}
                         size="small"
                     />
                 }
-                description="Helps us see where setup gets stuck and which features people use. Events are tied to a random ID for this installation, not to you. Our analytics provider, PostHog, receives your IP address with each event and may keep it; we turn off its location lookup and don't use your IP."
+                description={translate(
+                    "Helps us see where setup gets stuck and which features people use. Events are tied to a random ID for this installation, not to you. Our analytics provider, PostHog, receives your IP address with each event and may keep it; we turn off its location lookup and don't use your IP.",
+                )}
                 htmlFor="happy-agent-settings-product-analytics"
-                label="Share product analytics"
+                label={translate("Share product analytics")}
             />
             <DataDisclosure
                 data-testid="happy-agent-settings-product-analytics-disclosure"

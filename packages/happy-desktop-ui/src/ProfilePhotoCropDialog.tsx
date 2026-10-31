@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { Banner } from "./Banner";
 import { Box } from "./Box";
@@ -187,7 +188,7 @@ export function ProfilePhotoCropDialog(props: ProfilePhotoCropDialogProps) {
                                 onClick={props.onCancel}
                                 variant="ghost"
                             >
-                                Cancel
+                                {translate("Cancel")}
                             </Button>
                             <Button
                                 data-testid="photo-crop-confirm"
@@ -195,25 +196,27 @@ export function ProfilePhotoCropDialog(props: ProfilePhotoCropDialogProps) {
                                 onClick={confirm}
                                 variant="primary"
                             >
-                                Save photo
+                                {translate("Save photo")}
                             </Button>
                         </>
                     }
                     size="small"
-                    title="Crop photo"
+                    title={translate("Crop photo")}
                 >
                     <Box className="happy-photo-crop">
                         {props.error ? (
                             <Banner
                                 data-testid="photo-crop-error"
                                 tone="danger"
-                                title="Photo not changed"
+                                title={translate("Photo not changed")}
                             >
                                 {props.error}
                             </Banner>
                         ) : null}
                         <div
-                            aria-label="Photo crop. Drag or use the arrow keys to move the photo, and plus or minus to zoom."
+                            aria-label={translate(
+                                "Photo crop. Drag or use the arrow keys to move the photo, and plus or minus to zoom.",
+                            )}
                             aria-roledescription="crop area"
                             className="happy-photo-crop__stage"
                             data-happy-desktop-ui="photo-crop-stage"
@@ -259,7 +262,7 @@ export function ProfilePhotoCropDialog(props: ProfilePhotoCropDialogProps) {
                         <Box className="happy-photo-crop__zoom">
                             <Icon name="image" size={14} />
                             <input
-                                aria-label="Zoom"
+                                aria-label={translate("Zoom")}
                                 className="happy-photo-crop__slider"
                                 data-happy-desktop-ui="photo-crop-zoom"
                                 data-testid="photo-crop-zoom"

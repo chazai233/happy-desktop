@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Banner } from "../../Banner";
 import { Box } from "../../Box";
 import { Button } from "../../Button";
@@ -48,19 +49,22 @@ export function HappyAgentProfilerSettings(props: HappyAgentProfilerSettingsProp
     return (
         <>
             {props.error ? (
-                <Banner tone="danger" title="Profiler unavailable">
+                <Banner tone="danger" title={translate("Profiler unavailable")}>
                     {props.error}
                 </Banner>
             ) : null}
             {unavailable ? (
-                <Banner tone="neutral" title="Electron desktop only">
-                    Native tracing and process metrics are available in Happy’s Electron desktop
-                    window.
+                <Banner tone="neutral" title={translate("Electron desktop only")}>
+                    {translate(
+                        "Native tracing and process metrics are available in Happy’s Electron desktop window.",
+                    )}
                 </Banner>
             ) : null}
             <HappyAgentSettingsSection
-                description="A bounded renderer trace with React commits, hook changes and process metrics"
-                title="React renderer profile"
+                description={translate(
+                    "A bounded renderer trace with React commits, hook changes and process metrics",
+                )}
+                title={translate("React renderer profile")}
             >
                 <FormRow
                     control={
@@ -72,7 +76,7 @@ export function HappyAgentProfilerSettings(props: HappyAgentProfilerSettingsProp
                                 size="small"
                                 variant="secondary"
                             >
-                                Start profile
+                                {translate("Start profile")}
                             </Button>
                             <Button
                                 disabled={unavailable || pending || !running}
@@ -81,65 +85,73 @@ export function HappyAgentProfilerSettings(props: HappyAgentProfilerSettingsProp
                                 size="small"
                                 variant="secondary"
                             >
-                                Stop and save
+                                {translate("Stop and save")}
                             </Button>
                         </Box>
                     }
                     description={statusDescription(props.status, props.partialReason)}
-                    label="Capture"
+                    label={translate("Capture")}
                 />
                 <FormRow
                     control={
                         <HappyAgentSettingsStatus
                             label={
-                                props.capabilities.reactAttribution ? "Available" : "Unavailable"
+                                props.capabilities.reactAttribution
+                                    ? translate("Available")
+                                    : translate("Unavailable")
                             }
                             variant={props.capabilities.reactAttribution ? "success" : "neutral"}
                         />
                     }
-                    description="Needs a profile build; standard builds capture native data only"
-                    label="React attribution"
+                    description={translate(
+                        "Needs a profile build; standard builds capture native data only",
+                    )}
+                    label={translate("React attribution")}
                 />
                 <FormRow
                     control={
                         <HappyAgentSettingsStatus
                             label={
                                 props.capabilities.liveDebuggerAttach
-                                    ? "Available during capture"
-                                    : "Unavailable"
+                                    ? translate("Available during capture")
+                                    : translate("Unavailable")
                             }
                             variant={props.capabilities.liveDebuggerAttach ? "success" : "neutral"}
                         />
                     }
-                    description="An attached renderer debugger stays attached while capturing"
-                    label="Live debugger"
+                    description={translate(
+                        "An attached renderer debugger stays attached while capturing",
+                    )}
+                    label={translate("Live debugger")}
                 />
                 <FormRow
                     control={
                         <HappyAgentSettingsStatus
                             label={
                                 props.capabilities.reactDevtoolsProfiling
-                                    ? "Available"
-                                    : "Unavailable"
+                                    ? translate("Available")
+                                    : translate("Unavailable")
                             }
                             variant={
                                 props.capabilities.reactDevtoolsProfiling ? "success" : "neutral"
                             }
                         />
                     }
-                    description="The React DevTools backend loaded before React started"
-                    label="React DevTools profiling"
+                    description={translate(
+                        "The React DevTools backend loaded before React started",
+                    )}
+                    label={translate("React DevTools profiling")}
                 />
                 {props.artifactPath ? (
                     <FormRow
                         control={
                             <CopyButton
-                                label="Copy profiler artifact path"
+                                label={translate("Copy profiler artifact path")}
                                 text={props.artifactPath}
                             />
                         }
                         description={props.artifactPath}
-                        label="Last artifact"
+                        label={translate("Last artifact")}
                     />
                 ) : null}
             </HappyAgentSettingsSection>
@@ -148,13 +160,14 @@ export function HappyAgentProfilerSettings(props: HappyAgentProfilerSettingsProp
 }
 
 function statusDescription(status: HappyAgentProfilerStatus, partialReason?: string): string {
-    if (status === "starting") return "Starting the native trace…";
-    if (status === "running") return "Capturing until Stop or the one-minute safety limit.";
-    if (status === "stopping") return "Stopping React and writing the artifact…";
+    if (status === "starting") return translate("Starting the native trace…");
+    if (status === "running")
+        return translate("Capturing until Stop or the one-minute safety limit.");
+    if (status === "stopping") return translate("Stopping React and writing the artifact…");
     if (status === "partial")
         return partialReason
-            ? `Saved a partial artifact: ${partialReason}`
-            : "Saved a partial artifact.";
-    if (status === "error") return "The last capture failed.";
-    return "No profile is currently running.";
+            ? translate("Saved a partial artifact: {0}", partialReason)
+            : translate("Saved a partial artifact.");
+    if (status === "error") return translate("The last capture failed.");
+    return translate("No profile is currently running.");
 }
