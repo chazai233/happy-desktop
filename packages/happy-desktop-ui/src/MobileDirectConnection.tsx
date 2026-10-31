@@ -209,8 +209,7 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
             >
                 {props.onErrorAssist ? (
                     <Button onClick={props.onErrorAssist} size="small" variant="ghost">
-                        {translate("Ask")}
-                        {props.chiefOfStaffName ?? translate("Chief of Staff")}
+                        {translate("Ask")} {props.chiefOfStaffName ?? translate("Chief of Staff")}
                     </Button>
                 ) : null}
             </PairingNote>
@@ -310,7 +309,7 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
                         <Ionicon name="checkmark-circle" size={18} />
                         <span>
                             <span className="happy-mobile-direct-pairing__paired-title">
-                                {pairing.device?.name ?? translate("Your phone")}
+                                {pairing.device?.name ?? translate("Your phone")}{" "}
                                 {translate("is paired")}
                             </span>
                             <span className="happy-mobile-direct-pairing__paired-detail">
@@ -481,8 +480,7 @@ function EmojiVerification(
                         label={translate("Phone")}
                     />
                     <span className="happy-mobile-pairing__expiry">
-                        {translate("Expires in")}
-                        {pairingCountdown(pairing.expiresAt, props.now)}
+                        {translate("Expires in")} {pairingCountdown(pairing.expiresAt, props.now)}
                     </span>
                 </Box>
             )}
@@ -619,8 +617,7 @@ function DeviceClaim(props: { readonly device: MobileDirectDeviceClaim }) {
                     “{props.device.name}”
                 </span>
                 <span className="happy-mobile-direct-pairing__device-claim">
-                    {translate("says it is")}
-                    {PLATFORM_NAMES[props.device.platform]}
+                    {translate("says it is")} {PLATFORM_NAMES[props.device.platform]}
                 </span>
             </span>
         </Box>
@@ -639,8 +636,7 @@ function DirectFailure(
             <PairingActions>
                 {props.onErrorAssist ? (
                     <Button onClick={props.onErrorAssist} size="small" variant="ghost">
-                        {translate("Ask")}
-                        {props.chiefOfStaffName ?? translate("Chief of Staff")}
+                        {translate("Ask")} {props.chiefOfStaffName ?? translate("Chief of Staff")}
                     </Button>
                 ) : null}
                 <Button
@@ -782,7 +778,7 @@ export function MobileDirectConnectionSection(props: MobileDirectConnectionSecti
                         <Box className="happy-mobile-direct-section__status-control">
                             {failure && props.onErrorAssist ? (
                                 <Button onClick={props.onErrorAssist} size="small" variant="ghost">
-                                    {translate("Ask")}
+                                    {translate("Ask")}{" "}
                                     {props.chiefOfStaffName ?? translate("Chief of Staff")}
                                 </Button>
                             ) : null}
@@ -815,9 +811,9 @@ export function MobileDirectConnectionSection(props: MobileDirectConnectionSecti
                                         {device.name}
                                     </span>
                                     <span className="happy-mobile-direct-device__detail">
-                                        {translate("Direct ·")}
-                                        {PLATFORM_LABELS[device.platform]} {translate("· Paired")}{" "}
-                                        {pairedDate(device.createdAt)} {translate("· Last seen")}{" "}
+                                        {translate("Direct ·")} {PLATFORM_LABELS[device.platform]}{" "}
+                                        {translate("· Paired")} {pairedDate(device.createdAt)}{" "}
+                                        {translate("· Last seen")}{" "}
                                         {relativeTime(device.lastSeenAt, props.now)}
                                     </span>
                                 </span>

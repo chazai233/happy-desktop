@@ -130,7 +130,7 @@ export function HappyAgentDocumentSurfacePage(props: HappyAgentDocumentSurfacePa
                                 data-testid="happy-agent-document-failure"
                                 role="alert"
                             >
-                                {translate("That change couldn’t be saved, so it was undone:")}
+                                {translate("That change couldn’t be saved, so it was undone:")}{" "}
                                 {content.failure}
                             </div>
                         )}

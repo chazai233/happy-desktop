@@ -346,9 +346,7 @@ function teamRows(props: CloudSignInNoticeDialogProps, teams: readonly CloudSign
                             title={chief.status === "unavailable" ? chief.reason : undefined}
                             variant="primary"
                         >
-                            {translate("Ask")}
-                            {chiefOfStaffName(props)}
-                            {translate("to connect")}
+                            {translate("Ask")} {chiefOfStaffName(props)} {translate("to connect")}
                         </Button>
                     )}
                 </li>

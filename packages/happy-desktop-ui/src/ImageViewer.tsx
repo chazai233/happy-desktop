@@ -858,8 +858,7 @@ function ImageViewerStage(props: {
             >
                 <Icon name="image" size={20} />
                 <span className="happy-image-viewer__notice-title">
-                    {props.name}
-                    {translate("has no preview")}
+                    {props.name} {translate("has no preview")}
                 </span>
                 <span className="happy-image-viewer__notice-detail">
                     {translate("This file is not a picture Happy can show.")}
@@ -995,8 +994,7 @@ function ImageViewerFailure(props: { detail: string; name: string }) {
         >
             <Icon name="close" size={20} />
             <span className="happy-image-viewer__notice-title">
-                {props.name}
-                {translate("could not be opened")}
+                {props.name} {translate("could not be opened")}
             </span>
             <span className="happy-image-viewer__notice-detail">{props.detail}</span>
         </div>

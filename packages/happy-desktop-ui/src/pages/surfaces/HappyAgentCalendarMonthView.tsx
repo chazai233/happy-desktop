@@ -285,8 +285,7 @@ export function HappyAgentCalendarMonthView(props: HappyAgentCalendarMonthViewPr
                                                 }}
                                                 type="button"
                                             >
-                                                +{String(more)}
-                                                {translate("more")}
+                                                +{String(more)} {translate("more")}
                                             </button>
                                         ) : null}
                                     </div>

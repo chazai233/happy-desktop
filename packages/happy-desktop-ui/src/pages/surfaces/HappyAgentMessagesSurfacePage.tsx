@@ -382,8 +382,7 @@ export function HappyAgentMessagesSurfacePage(props: HappyAgentMessagesSurfacePa
                         title={translate("Delete this message?")}
                     >
                         <p className="happy-agent-messages-surface__confirm">
-                            {translate("Everyone in")}
-                            {props.surface.name}
+                            {translate("Everyone in")} {props.surface.name}{" "}
                             {translate("will see that it was deleted. This can’t be undone.")}
                         </p>
                     </Modal>

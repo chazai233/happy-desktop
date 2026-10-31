@@ -8010,8 +8010,7 @@ function happyAgentFileRevalidationBanner(
 ): ReactNode {
     return error ? (
         <Banner tone="warning" title={translate("File may be out of date")}>
-            {translate("Showing the last loaded content.")}
-            {error.message}
+            {translate("Showing the last loaded content.")} {error.message}
         </Banner>
     ) : null;
 }
@@ -8028,7 +8027,7 @@ function happyAgentFileNotices(file: HappyAgentFileTabSnapshot): ReactNode {
     return (
         <>
             <Banner tone="danger" title={translate("Could not save this file")}>
-                {file.saveError.message}
+                {file.saveError.message}{" "}
                 {translate("Your edit is still here and has not been written to the workspace.")}
             </Banner>
             {happyAgentFileRevalidationBanner(file.revalidationError)}
@@ -9897,8 +9896,7 @@ function happyAgentGroupArchiveDialog(
                             }}
                             variant="danger"
                         >
-                            {translate("Archive")}
-                            {subject}
+                            {translate("Archive")} {subject}
                         </Button>
                     </>
                 }

@@ -578,8 +578,8 @@ export function HappyAgentProjectSettingsDialog(props: HappyAgentProjectSettings
                                               {translate(
                                                   "Run in order in every new workspace once its checkout exists. They come from",
                                               )}{" "}
-                                              <code>[workspace] setup_commands</code>
-                                              {translate("in the project&apos;s")}
+                                              <code>[workspace] setup_commands</code>{" "}
+                                              {translate("in the project&apos;s")}{" "}
                                               <code>happy.toml</code>
                                               {translate("; edit the file to change them.")}
                                           </span>

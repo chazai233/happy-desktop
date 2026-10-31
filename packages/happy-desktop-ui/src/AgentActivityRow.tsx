@@ -840,8 +840,7 @@ function PermissionReviewRow(props: { review: ConversationActivityReview }) {
                     data-risk={review.risk}
                     data-happy-desktop-ui="agent-activity-review-risk"
                 >
-                    {translate("Risk:")}
-                    {review.risk}
+                    {translate("Risk:")} {review.risk}
                 </span>
             </span>
         </div>
@@ -1404,7 +1403,7 @@ function AgentToolActivity(props: {
                                               />
                                               {file.omittedLines ? (
                                                   <ChildRow>
-                                                      … {file.omittedLines}
+                                                      … {file.omittedLines}{" "}
                                                       {translate("more lines")}
                                                   </ChildRow>
                                               ) : null}
@@ -1450,8 +1449,7 @@ function AgentToolActivity(props: {
                                               {line || "\u00a0"}
                                               {execOutput.omitted > 0 && index === headCount - 1 ? (
                                                   <div className="happy-agent-activity__output-elide">
-                                                      … +{execOutput.omitted}
-                                                      {translate("lines")}
+                                                      … +{execOutput.omitted} {translate("lines")}
                                                   </div>
                                               ) : null}
                                           </div>

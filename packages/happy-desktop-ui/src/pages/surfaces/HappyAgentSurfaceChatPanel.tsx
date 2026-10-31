@@ -73,8 +73,7 @@ export function HappyAgentSurfaceChatPanel(props: HappyAgentSurfaceChatPanelProp
                 <div className="happy-agent-surface-chat__lead">
                     <h2 className="happy-agent-surface-chat__title">{translate("Chat")}</h2>
                     <span className="happy-agent-surface-chat__scope">
-                        {translate("Shared with everyone in")}
-                        {props.surfaceName}
+                        {translate("Shared with everyone in")} {props.surfaceName}
                     </span>
                 </div>
                 <Button

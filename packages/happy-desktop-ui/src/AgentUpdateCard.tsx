@@ -405,8 +405,7 @@ function DetailLine(props: {
                             onClick={props.onChiefOfStaffAsk}
                             type="button"
                         >
-                            {translate("Ask")}
-                            {props.chiefOfStaffName}
+                            {translate("Ask {0}", props.chiefOfStaffName)}
                         </button>
                     ) : null}
                 </span>

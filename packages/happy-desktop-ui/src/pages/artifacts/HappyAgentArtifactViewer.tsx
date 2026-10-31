@@ -645,8 +645,7 @@ function ArtifactHistory(props: {
                                     >
                                         <span className="happy-agent-artifact-history__version-line">
                                             <span className="happy-agent-artifact-history__version-number">
-                                                {translate("Version")}
-                                                {version.number}
+                                                {translate("Version")} {version.number}
                                             </span>
                                             {version.number === props.artifact.latestVersion ? (
                                                 <Badge
@@ -682,8 +681,7 @@ function ArtifactHistory(props: {
                     {viewer.files.length > 0 ? (
                         <>
                             <h2 className="happy-agent-artifact-history__heading">
-                                {translate("Files in version")}
-                                {shown}
+                                {translate("Files in version")} {shown}
                             </h2>
                             <ArtifactFileList
                                 files={viewer.files}
@@ -742,8 +740,7 @@ function ArtifactDeleteDialog(props: {
                         </Banner>
                     ) : null}
                     <span className="happy-agent-artifact-delete-dialog__message">
-                        {translate("This deletes")}
-                        {title}
+                        {translate("This deletes")} {title}
                         {translate(
                             "for everyone. Its versions stop being served, and it stays listed only as deleted.",
                         )}

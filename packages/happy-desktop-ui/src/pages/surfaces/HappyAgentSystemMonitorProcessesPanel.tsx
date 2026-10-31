@@ -230,7 +230,7 @@ export function HappyAgentSystemMonitorProcessesPanel(
                     ) : null}
                     <div className="system-monitor__process-footer">
                         <span>
-                            {processRows.length} {translate("of")} {processes.items.length}
+                            {processRows.length} {translate("of")} {processes.items.length}{" "}
                             {translate("sampled · Top CPU and memory consumers")}
                         </span>
                         <span>

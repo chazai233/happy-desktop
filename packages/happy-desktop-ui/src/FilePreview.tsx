@@ -524,8 +524,7 @@ function FilePreviewBody(props: {
             >
                 <Icon name="close" size={20} />
                 <span className="happy-file-preview__notice-title">
-                    {props.name}
-                    {translate("could not be opened")}
+                    {props.name} {translate("could not be opened")}
                 </span>
                 <span className="happy-file-preview__notice-detail">{props.content.message}</span>
             </div>

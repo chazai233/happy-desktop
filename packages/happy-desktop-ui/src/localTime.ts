@@ -1,4 +1,4 @@
-import { translate, uiLocale } from "./localization/translate";
+import { translate } from "./localization/translate";
 import { calendarDateDiff, calendarDateOf, calendarTimeZoneLocal } from "happy-desktop-state";
 
 /**
@@ -17,7 +17,7 @@ function format(zone: LocalTimeZone, options: Intl.DateTimeFormatOptions): Intl.
     const key = JSON.stringify([zone.locale ?? null, zone.timeZone ?? null, options]);
     let value = formats.get(key);
     if (value === undefined) {
-        value = new Intl.DateTimeFormat(zone.locale ?? uiLocale, {
+        value = new Intl.DateTimeFormat(zone.locale, {
             ...options,
             ...(zone.timeZone === undefined ? {} : { timeZone: zone.timeZone }),
         });

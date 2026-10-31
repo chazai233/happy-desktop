@@ -861,8 +861,7 @@ function AccountNotice(props: {
                                 size="small"
                                 variant="primary"
                             >
-                                {translate("Ask")}
-                                {props.chiefOfStaffName}
+                                {translate("Ask {0}", props.chiefOfStaffName)}
                             </Button>
                             {ask.error ? (
                                 <span

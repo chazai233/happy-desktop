@@ -129,8 +129,7 @@ export function FileAttachment(props: FileAttachmentProps) {
                     </span>
                     {local.onOpen ? (
                         <span className="happy-file-attachment__meta-hover">
-                            {translate("Download")}
-                            {typeLabel()}
+                            {translate("Download")} {typeLabel()}
                         </span>
                     ) : null}
                 </span>

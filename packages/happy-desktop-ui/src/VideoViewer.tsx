@@ -978,8 +978,7 @@ function VideoViewerStage(props: {
                 >
                     <Icon name="play" size={20} />
                     <span className="happy-video-viewer__notice-title">
-                        {name}
-                        {translate("is ready to play")}
+                        {name} {translate("is ready to play")}
                     </span>
                     <span className="happy-video-viewer__notice-detail">
                         {translate(

@@ -61,8 +61,7 @@ export function PairingExpiry(props: { readonly expiresAt: number; readonly now:
             className="happy-mobile-pairing__expiry"
             data-happy-desktop-ui="mobile-pairing-expiry"
         >
-            {translate("Expires in")}
-            {pairingCountdown(props.expiresAt, props.now)}
+            {translate("Expires in")} {pairingCountdown(props.expiresAt, props.now)}
         </span>
     );
 }

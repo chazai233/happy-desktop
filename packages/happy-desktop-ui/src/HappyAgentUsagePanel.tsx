@@ -125,8 +125,7 @@ function QuotaRow(props: { quota: HappyAgentUsageQuota }) {
                                 {Math.round(percent)}%
                             </span>
                             <span className="happy-agent-usage__quota-reset">
-                                {translate("resets")}
-                                {formatReset(window.resetsAt)}
+                                {translate("resets")} {formatReset(window.resetsAt)}
                             </span>
                         </span>
                     );
@@ -237,8 +236,7 @@ export function HappyAgentUsagePanel(props: HappyAgentUsagePanelProps) {
                             className="happy-agent-usage__context"
                             data-happy-desktop-ui="happy-agent-usage-context"
                         >
-                            {translate("Context:")}
-                            {formatTokens(usage.context.totalTokens)} tokens
+                            {translate("Context:")} {formatTokens(usage.context.totalTokens)} tokens
                             {usage.context.approximate ? translate(" (approximate)") : ""} on{" "}
                             {usage.context.modelId}
                         </p>

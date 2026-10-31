@@ -174,8 +174,7 @@ export function HappyAgentSecretSettings(props: HappyAgentSecretSettingsProps) {
                                             className="happy-agent-secret__updated"
                                             data-happy-desktop-ui="happy-agent-secret-updated"
                                         >
-                                            {translate("Updated")}
-                                            {secret.updatedAt}
+                                            {translate("Updated")} {secret.updatedAt}
                                         </span>
                                     </Box>
                                     <Box className="happy-agent-secret__badges">
