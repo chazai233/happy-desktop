@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     createContext,
@@ -139,7 +140,7 @@ function DiffFold(props: { count: number; first: number }) {
                 size="small"
                 variant="ghost"
             >
-                {`Show ${String(props.count)} unchanged blocks`}
+                {translate("Show {0} unchanged blocks", String(props.count))}
             </Button>
         </div>
     );

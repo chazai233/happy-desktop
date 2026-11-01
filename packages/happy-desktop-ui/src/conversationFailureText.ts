@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type {
     ConversationErrorAssistance,
     ConversationFailure,
@@ -33,7 +34,9 @@ export interface ConversationFailureClock {
 const text = (value: string): ConversationFailureSegment => ({ kind: "text", text: value });
 
 function until(resetsAt: number | null, clock: ConversationFailureClock): string {
-    return resetsAt === null ? "" : ` until ${localMoment(resetsAt, clock.now, clock.zone)}`;
+    return resetsAt === null
+        ? ""
+        : translate(" until {0}", localMoment(resetsAt, clock.now, clock.zone));
 }
 
 /** One sentence for an account a pool set aside, after the sentence before it. */
@@ -45,22 +48,24 @@ function poolMemberMessage(
     switch (member.reason) {
         case "signin_missing":
             return member.command === null
-                ? [text(` ${name} isn't signed in.`)]
+                ? [text(translate(" {0} isn't signed in.", name))]
                 : [
-                      text(` ${name} isn't signed in: run `),
+                      text(translate(" {0} isn't signed in: run ", name)),
                       { kind: "code", text: member.command },
                       text("."),
                   ];
         case "usage_limit":
-            return [text(` ${name} is out of usage${until(member.resetsAt, clock)}.`)];
+            return [
+                text(translate(" {0} is out of usage{1}.", name, until(member.resetsAt, clock))),
+            ];
         case "rate_limited":
-            return [text(` ${name} is rate-limited.`)];
+            return [text(translate(" {0} is rate-limited.", name))];
         case "provider_unavailable":
-            return [text(` ${name} is overloaded.`)];
+            return [text(translate(" {0} is overloaded.", name))];
         case "network":
-            return [text(` ${name} couldn't be reached.`)];
+            return [text(translate(" {0} couldn't be reached.", name))];
         case "other":
-            return [text(` ${name} couldn't be used.`)];
+            return [text(translate(" {0} couldn't be used.", name))];
     }
 }
 
@@ -74,18 +79,25 @@ export function conversationFailureMessage(
             return failure.command === null || failure.product === null
                 ? [
                       text(
-                          `${failure.provider.label} couldn't authenticate. Check its sign-in settings, then retry.`,
+                          translate(
+                              "{0} couldn't authenticate. Check its sign-in settings, then retry.",
+                              failure.provider.label,
+                          ),
                       ),
                   ]
                 : [
-                      text(`${failure.product} isn't signed in. Run `),
+                      text(translate("{0} isn't signed in. Run ", failure.product)),
                       { kind: "code", text: failure.command },
-                      text(", then retry."),
+                      text(translate(", then retry.")),
                   ];
         case "usage_limit":
             return [
                 text(
-                    `${failure.provider.vendorName} usage limit reached${until(failure.resetsAt, clock)}.`,
+                    translate(
+                        "{0} usage limit reached{1}.",
+                        failure.provider.vendorName,
+                        until(failure.resetsAt, clock),
+                    ),
                 ),
             ];
         case "no_account_available":
@@ -94,41 +106,64 @@ export function conversationFailureMessage(
             return failure.members === undefined || failure.members.length === 0
                 ? [
                       text(
-                          `Every account in “${failure.poolName}” is out of usage${until(failure.resetsAt, clock)}.`,
+                          translate(
+                              "Every account in “{0}” is out of usage{1}.",
+                              failure.poolName,
+                              until(failure.resetsAt, clock),
+                          ),
                       ),
                   ]
                 : [
-                      text(`No account in “${failure.poolName}” can take this turn.`),
+                      text(translate("No account in “{0}” can take this turn.", failure.poolName)),
                       ...failure.members.flatMap((member) => poolMemberMessage(member, clock)),
                   ];
         case "rate_limited":
-            return [text(`${failure.provider.vendorName} is rate-limited. Try again in a minute.`)];
+            return [
+                text(
+                    translate(
+                        "{0} is rate-limited. Try again in a minute.",
+                        failure.provider.vendorName,
+                    ),
+                ),
+            ];
         case "provider_unavailable":
             return [
                 text(
-                    `${failure.provider.vendorName} is overloaded right now. Try again in a moment.`,
+                    translate(
+                        "{0} is overloaded right now. Try again in a moment.",
+                        failure.provider.vendorName,
+                    ),
                 ),
             ];
         case "network":
             return [
                 text(
-                    `Couldn't reach ${failure.provider.vendorName}. Check your connection, then retry.`,
+                    translate(
+                        "Couldn't reach {0}. Check your connection, then retry.",
+                        failure.provider.vendorName,
+                    ),
                 ),
             ];
         case "context_too_long":
             return [
                 text(
-                    `This conversation is too long for ${failure.modelName ?? failure.modelId}, even after a reset.`,
+                    translate(
+                        "This conversation is too long for {0}, even after a reset.",
+                        failure.modelName ?? failure.modelId,
+                    ),
                 ),
             ];
         case "provider_disabled":
             return [
                 text(
-                    `${failure.provider.label} is turned off. Turn it on in Settings, then retry.`,
+                    translate(
+                        "{0} is turned off. Turn it on in Settings, then retry.",
+                        failure.provider.label,
+                    ),
                 ),
             ];
         case "internal":
-            return [text(`Something went wrong: ${failure.detail}`)];
+            return [text(translate("Something went wrong: {0}", failure.detail))];
         case "unknown":
             return [text(failure.message)];
     }
@@ -139,7 +174,7 @@ export function conversationFailureLineAction(failure: ConversationFailure): "re
     return failure.kind === "context_too_long" ? "newChat" : "retry";
 }
 
-const LINE_ACTION_LABEL = { retry: "Retry", newChat: "New chat" } as const;
+const LINE_ACTION_LABEL = { retry: translate("Retry"), newChat: translate("New chat") } as const;
 
 /** "account · model", as a switch target names itself. */
 export function conversationFailureTargetLabel(target: {
@@ -152,7 +187,7 @@ export function conversationFailureTargetLabel(target: {
 
 /** The split button's main segment. */
 export function conversationFailureSwitchLabel(target: ConversationSwitchTarget): string {
-    return `Switch to ${conversationFailureTargetLabel(target)} and continue`;
+    return translate("Switch to {0} and continue", conversationFailureTargetLabel(target));
 }
 
 /**
@@ -188,11 +223,11 @@ export function conversationFailureResolutionText(
 ): string {
     switch (resolution.action) {
         case "retried":
-            return "Retried";
+            return translate("Retried");
         case "switched":
-            return `Switched to ${conversationFailureTargetLabel(resolution)}`;
+            return translate("Switched to {0}", conversationFailureTargetLabel(resolution));
         case "handled":
-            return "Handled";
+            return translate("Handled");
     }
 }
 
@@ -254,14 +289,14 @@ export function conversationRetryingLabel(retrying: ConversationRetrying): strin
     const count = `(${String(retrying.attempt)}/${String(retrying.maxAttempts)})`;
     switch (retrying.kind) {
         case "context_too_long":
-            return "Context full — resetting, then retrying…";
+            return translate("Context full — resetting, then retrying…");
         case "provider_unavailable":
-            return `${retrying.vendorName} is overloaded — retrying ${count}…`;
+            return translate("{0} is overloaded — retrying {1}…", retrying.vendorName, count);
         case "rate_limited":
-            return `${retrying.vendorName} is rate-limited — retrying ${count}…`;
+            return translate("{0} is rate-limited — retrying {1}…", retrying.vendorName, count);
         case "network":
-            return `Couldn't reach ${retrying.vendorName} — retrying ${count}…`;
+            return translate("Couldn't reach {0} — retrying {1}…", retrying.vendorName, count);
         default:
-            return `${retrying.vendorName} — retrying ${count}…`;
+            return translate("{0} — retrying {1}…", retrying.vendorName, count);
     }
 }

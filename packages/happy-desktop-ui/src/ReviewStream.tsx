@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { parseDiffFromFile, type SelectedLineRange } from "@pierre/diffs";
 import { CodeView, useStableCallback, type CodeViewHandle } from "@pierre/diffs/react";
 import { useCallback, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -649,7 +650,7 @@ export function ReviewStream(props: ReviewStreamProps) {
 
     return (
         <section
-            aria-label="Changes in this workspace"
+            aria-label={translate("Changes in this workspace")}
             className={["happy-review-stream", props.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="review-stream"
             data-testid={props["data-testid"]}
@@ -668,14 +669,18 @@ export function ReviewStream(props: ReviewStreamProps) {
                         // on its own would read as a stream that lost the rest.
                         return props.singleFile === undefined
                             ? counted
-                            : `File ${String(props.singleFile.index)} of ${String(total)}`;
+                            : translate(
+                                  "File {0} of {1}",
+                                  String(props.singleFile.index),
+                                  String(total),
+                              );
                     })()}
                 </span>
                 <span className="happy-review-stream__bar-end">
                     {props.singleFile === undefined ? null : (
                         <span className="happy-review-stream__steps">
                             <Button
-                                aria-label="Previous file"
+                                aria-label={translate("Previous file")}
                                 // The same chevron as the step forward, painted
                                 // the other way round: one step at both ends of
                                 // the change, the way the panel affordance is
@@ -690,7 +695,7 @@ export function ReviewStream(props: ReviewStreamProps) {
                                 variant="ghost"
                             />
                             <Button
-                                aria-label="Next file"
+                                aria-label={translate("Next file")}
                                 data-testid="review-stream-next-file"
                                 disabled={
                                     props.singleFile.index >=
@@ -706,7 +711,7 @@ export function ReviewStream(props: ReviewStreamProps) {
                     )}
                     <span className="happy-review-stream__steps">
                         <Button
-                            aria-label="Previous change"
+                            aria-label={translate("Previous change")}
                             data-testid="review-stream-previous-change"
                             icon="chevron-up"
                             iconOnly
@@ -715,7 +720,7 @@ export function ReviewStream(props: ReviewStreamProps) {
                             variant="ghost"
                         />
                         <Button
-                            aria-label="Next change"
+                            aria-label={translate("Next change")}
                             data-testid="review-stream-next-change"
                             icon="chevron-down"
                             iconOnly
@@ -726,7 +731,7 @@ export function ReviewStream(props: ReviewStreamProps) {
                     </span>
                     {readingPath === undefined ? null : (
                         <Button
-                            aria-label="Back to the top of this file"
+                            aria-label={translate("Back to the top of this file")}
                             data-testid="review-stream-reading-locate"
                             icon="locate"
                             iconOnly
@@ -744,7 +749,11 @@ export function ReviewStream(props: ReviewStreamProps) {
                     )}
                     {props.onFilesCollapsedSet === undefined ? null : (
                         <Button
-                            aria-label={allCollapsed ? "Open every file" : "Close every file"}
+                            aria-label={
+                                allCollapsed
+                                    ? translate("Open every file")
+                                    : translate("Close every file")
+                            }
                             data-testid="review-stream-collapse-all"
                             icon={allCollapsed ? "unfold" : "fold"}
                             iconOnly
@@ -755,14 +764,14 @@ export function ReviewStream(props: ReviewStreamProps) {
                     )}
                     {props.onViewChange === undefined ? null : (
                         <SegmentedControl
-                            aria-label="How every diff in this review is drawn"
+                            aria-label={translate("How every diff in this review is drawn")}
                             data-testid="review-stream-view"
                             onChange={(value) =>
                                 props.onViewChange?.(value === "split" ? "split" : "unified")
                             }
                             segments={[
-                                { value: "unified", label: "Unified" },
-                                { value: "split", label: "Split" },
+                                { value: "unified", label: translate("Unified") },
+                                { value: "split", label: translate("Split") },
                             ]}
                             size="compact"
                             value={props.view === "split" ? "split" : "unified"}
@@ -775,7 +784,7 @@ export function ReviewStream(props: ReviewStreamProps) {
                             size="small"
                             variant="ghost"
                         >
-                            {props.wrap === true ? "Wrap" : "No wrap"}
+                            {props.wrap === true ? translate("Wrap") : translate("No wrap")}
                         </Button>
                     )}
                 </span>
@@ -788,8 +797,9 @@ export function ReviewStream(props: ReviewStreamProps) {
                     icon="file-diff"
                     tone="info"
                 >
-                    This change is too large to read in one scroll, so its files are shown one at a
-                    time.
+                    {translate(
+                        "This change is too large to read in one scroll, so its files are shown one at a time.",
+                    )}
                 </Banner>
             )}
 
@@ -800,11 +810,19 @@ export function ReviewStream(props: ReviewStreamProps) {
                     icon="alert"
                     {...(props.onFailuresRetry === undefined
                         ? {}
-                        : { action: { label: "Try again", onClick: props.onFailuresRetry } })}
+                        : {
+                              action: {
+                                  label: translate("Try again"),
+                                  onClick: props.onFailuresRetry,
+                              },
+                          })}
                     title={
                         props.failures.length === 1
-                            ? "One file could not be read"
-                            : `${String(props.failures.length)} files could not be read`
+                            ? translate("One file could not be read")
+                            : translate(
+                                  "{0} files could not be read",
+                                  String(props.failures.length),
+                              )
                     }
                     tone="warning"
                 >

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { SegmentedProgress, type SegmentedProgressSegment } from "./SegmentedProgress";
 
 /**
@@ -29,14 +30,14 @@ export type OnboardingStepsProps =
       };
 
 const desktopStages = [
-    { id: "setup", label: "Setup" },
-    { id: "subscriptions", label: "Subscriptions" },
-    { id: "get-app", label: "Get Mobile App" },
-    { id: "connect-phone", label: "Link Mobile App" },
+    { id: "setup", label: translate("Setup") },
+    { id: "subscriptions", label: translate("Subscriptions") },
+    { id: "get-app", label: translate("Get Mobile App") },
+    { id: "connect-phone", label: translate("Link Mobile App") },
 ] as const satisfies readonly { readonly id: OnboardingStage; readonly label: string }[];
 const mobileStages = [
-    { id: "get-app", label: "Get Mobile App" },
-    { id: "connect-phone", label: "Link Mobile App" },
+    { id: "get-app", label: translate("Get Mobile App") },
+    { id: "connect-phone", label: translate("Link Mobile App") },
 ] as const;
 
 function segments(
@@ -96,7 +97,11 @@ export function OnboardingSteps(props: OnboardingStepsProps) {
     return (
         <div className="happy-onboarding-steps" data-happy-desktop-ui="onboarding-steps">
             <SegmentedProgress
-                label={props.scope === "desktop" ? "Onboarding steps" : "Mobile setup steps"}
+                label={
+                    props.scope === "desktop"
+                        ? translate("Onboarding steps")
+                        : translate("Mobile setup steps")
+                }
                 mode="steps"
                 tone="inverse"
                 segments={primary}

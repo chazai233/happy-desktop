@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { agentTraceKindIcon, type AgentTraceRowKind } from "./AgentTraceRow";
@@ -38,10 +39,10 @@ export interface AgentTracePanelProps {
 }
 type StatusBadge = { variant: BadgeVariant; label: string };
 const STATUS_BADGES: Record<AgentTracePanelStatus, StatusBadge> = {
-    pending: { variant: "neutral", label: "PENDING" },
-    running: { variant: "accent", label: "RUNNING" },
-    complete: { variant: "success", label: "COMPLETE" },
-    failed: { variant: "danger", label: "FAILED" },
+    pending: { variant: "neutral", label: translate("PENDING") },
+    running: { variant: "accent", label: translate("RUNNING") },
+    complete: { variant: "success", label: translate("COMPLETE") },
+    failed: { variant: "danger", label: translate("FAILED") },
 };
 /**
  * HH:MM:SS in UTC via plain epoch math (no Intl, no local time zone), so the
@@ -99,7 +100,7 @@ export function AgentTracePanel(props: AgentTracePanelProps) {
                         />
                         {local.onClose ? (
                             <Button
-                                aria-label={local.closeLabel ?? "Close trace"}
+                                aria-label={local.closeLabel ?? translate("Close trace")}
                                 icon="close"
                                 iconOnly
                                 onClick={() => local.onClose?.()}
@@ -121,7 +122,7 @@ export function AgentTracePanel(props: AgentTracePanelProps) {
                         data-happy-desktop-ui="agent-trace-panel-state"
                         data-state="loading"
                     >
-                        Loading activity…
+                        {translate("Loading activity…")}
                     </div>
                 ) : local.error !== undefined ? (
                     <div
@@ -137,7 +138,7 @@ export function AgentTracePanel(props: AgentTracePanelProps) {
                         data-happy-desktop-ui="agent-trace-panel-state"
                         data-state="empty"
                     >
-                        No activity yet
+                        {translate("No activity yet")}
                     </div>
                 ) : (
                     <div

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { Badge, type BadgeVariant } from "./Badge";
 import { Button } from "./Button";
@@ -24,10 +25,10 @@ type StatusBadge = {
     icon?: IconName;
 };
 const statusBadges: Record<BuildProgressStatus, StatusBadge> = {
-    pending: { variant: "neutral", label: "QUEUED" },
-    building: { variant: "info", label: "BUILDING" },
-    ready: { variant: "success", label: "READY", icon: "check-circle" },
-    failed: { variant: "danger", label: "FAILED" },
+    pending: { variant: "neutral", label: translate("QUEUED") },
+    building: { variant: "info", label: translate("BUILDING") },
+    ready: { variant: "success", label: translate("READY"), icon: "check-circle" },
+    failed: { variant: "danger", label: translate("FAILED") },
 };
 /**
  * C-063 BuildProgressPanel — onboarding-sized live view of one durable agent
@@ -143,7 +144,7 @@ export function BuildProgressPanel(props: BuildProgressPanelProps) {
                                   className="happy-build-progress__truncated"
                                   data-happy-desktop-ui="build-progress-truncated"
                               >
-                                  Earlier log truncated
+                                  {translate("Earlier log truncated")}
                               </span>
                           ) : null}
                           <ScrollArea
@@ -189,7 +190,7 @@ export function BuildProgressPanel(props: BuildProgressPanelProps) {
                             size="medium"
                             variant="secondary"
                         >
-                            Retry build
+                            {translate("Retry build")}
                         </Button>
                     </div>
                 </div>

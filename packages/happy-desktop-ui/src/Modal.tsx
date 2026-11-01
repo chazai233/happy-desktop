@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties, type ReactNode } from "react";
 import { Button } from "./Button";
@@ -75,7 +76,7 @@ export function Modal(props: ModalProps) {
                     </h2>
                     {local.onClose ? (
                         <Button
-                            aria-label={local.closeLabel ?? "Close"}
+                            aria-label={local.closeLabel ?? translate("Close")}
                             className="happy-modal__close"
                             icon="close"
                             iconOnly

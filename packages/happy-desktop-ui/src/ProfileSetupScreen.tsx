@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { OnboardingHelp } from "./OnboardingHelp";
 import { SetupPage } from "./SetupPage";
 import { TextField } from "./TextField";
@@ -27,32 +28,32 @@ export function ProfileSetupScreen(props: ProfileSetupScreenProps) {
             action={{
                 busy: props.busy,
                 disabled: !props.name.trim() || !props.email.trim(),
-                label: "Create profile",
+                label: translate("Create profile"),
                 onSelect: props.onCreate,
             }}
             backdrop={{ appearance: props.appearance, kind: "sky" }}
-            copy="Shown on your commits and messages."
+            copy={translate("Shown on your commits and messages.")}
             data-testid="profile-setup-screen"
             help={<OnboardingHelp onExternalOpen={props.onExternalOpen} />}
             scene="disguised-face"
             {...(props.message ? { status: { label: props.message } } : {})}
-            title="Create your profile"
+            title={translate("Create your profile")}
             transitionKey="profile-setup"
         >
             <div className="happy-local-onboarding__profile-form">
                 <TextField
                     autoFocus
                     fullWidth
-                    label="Name"
+                    label={translate("Name")}
                     onSubmit={props.onCreate}
                     onValueChange={props.onNameChange}
-                    placeholder="Your name"
+                    placeholder={translate("Your name")}
                     required
                     value={props.name}
                 />
                 <TextField
                     fullWidth
-                    label="Git email"
+                    label={translate("Git email")}
                     onSubmit={props.onCreate}
                     onValueChange={props.onEmailChange}
                     placeholder="you@example.com"

@@ -24,12 +24,16 @@ import type {
     ComposerModelUsageWindow,
 } from "./ComposerModelControl";
 import { localDayTime } from "./localTime";
+import { thinkingLevelLabel } from "./localization/modelLabels";
 
 function choiceOf(option: HappyAgentModelOption): ComposerModelChoice {
     return {
         id: option.modelId,
         label: option.name,
-        efforts: option.efforts.map((effort) => ({ id: effort.level, label: effort.label })),
+        efforts: option.efforts.map((effort) => ({
+            id: effort.level,
+            label: thinkingLevelLabel(effort.level),
+        })),
         effort: option.rememberedEffort ?? option.defaultEffort,
         disabled: option.disabled,
     };

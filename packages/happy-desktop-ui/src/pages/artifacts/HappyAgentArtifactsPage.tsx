@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import {
     HAPPY_AGENT_ARTIFACT_TYPES,
@@ -44,7 +45,7 @@ export interface HappyAgentArtifactsPageProps {
 const ANY = "";
 
 const TYPE_OPTIONS: SelectOption[] = [
-    { value: ANY, label: "Any type" },
+    { value: ANY, label: translate("Any type") },
     ...HAPPY_AGENT_ARTIFACT_TYPES.map((type) => ({
         value: type,
         label: happyAgentArtifactTypeLabel(type),
@@ -70,7 +71,7 @@ export function HappyAgentArtifactsPage(props: HappyAgentArtifactsPageProps) {
                       choice.kind === catalog.source?.kind && choice.id === catalog.source.id,
               );
     const sourceOptions: SelectOption[] = [
-        { value: ANY, label: "Anywhere" },
+        { value: ANY, label: translate("Anywhere") },
         ...props.sources.map((choice, index) => ({ value: String(index), label: choice.label })),
     ];
     const filtered = catalog.type !== undefined || catalog.source !== undefined;
@@ -86,17 +87,17 @@ export function HappyAgentArtifactsPage(props: HappyAgentArtifactsPageProps) {
                 className="happy-agent-artifacts__header"
                 subtitle={
                     catalog.loading
-                        ? "Loading…"
+                        ? translate("Loading…")
                         : `${String(count)}${catalog.hasMore ? "+" : ""} ${count === 1 && !catalog.hasMore ? "artifact" : "artifacts"}`
                 }
-                title="Artifacts"
+                title={translate("Artifacts")}
             />
             <div
                 className="happy-agent-artifacts__filters"
                 data-happy-desktop-ui="happy-agent-artifacts-filters"
             >
                 <Select
-                    aria-label="Type"
+                    aria-label={translate("Type")}
                     data-testid="happy-agent-artifacts-type"
                     onValueChange={(value) =>
                         props.onTypeChange(value === ANY ? undefined : (value as KnownType))
@@ -106,7 +107,7 @@ export function HappyAgentArtifactsPage(props: HappyAgentArtifactsPageProps) {
                     value={catalog.type ?? ANY}
                 />
                 <Select
-                    aria-label="Made in"
+                    aria-label={translate("Made in")}
                     data-testid="happy-agent-artifacts-source"
                     onValueChange={(value) => {
                         const choice = value === ANY ? undefined : props.sources[Number(value)];
@@ -125,7 +126,7 @@ export function HappyAgentArtifactsPage(props: HappyAgentArtifactsPageProps) {
                 />
                 <Switch
                     checked={catalog.deletedShown}
-                    label="Show deleted"
+                    label={translate("Show deleted")}
                     onChange={props.onDeletedShownChange}
                     size="small"
                 />
@@ -137,7 +138,7 @@ export function HappyAgentArtifactsPage(props: HappyAgentArtifactsPageProps) {
             >
                 <div className="happy-agent-artifacts__content">
                     {catalog.error ? (
-                        <Banner tone="danger" title="Artifacts may be out of date">
+                        <Banner tone="danger" title={translate("Artifacts may be out of date")}>
                             {catalog.error.message}
                         </Banner>
                     ) : null}
@@ -145,19 +146,21 @@ export function HappyAgentArtifactsPage(props: HappyAgentArtifactsPageProps) {
                         <EmptyState
                             description={
                                 catalog.loading
-                                    ? "Reading what this Happy Agent has published."
+                                    ? translate("Reading what this Happy Agent has published.")
                                     : filtered
-                                      ? "Nothing published matches these filters."
-                                      : "When an agent publishes finished work, it is kept here with every version."
+                                      ? translate("Nothing published matches these filters.")
+                                      : translate(
+                                            "When an agent publishes finished work, it is kept here with every version.",
+                                        )
                             }
                             icon={catalog.loading ? "clock" : "package"}
                             size="panel"
                             title={
                                 catalog.loading
-                                    ? "Loading artifacts…"
+                                    ? translate("Loading artifacts…")
                                     : filtered
-                                      ? "No matching artifacts"
-                                      : "No artifacts yet"
+                                      ? translate("No matching artifacts")
+                                      : translate("No artifacts yet")
                             }
                         />
                     ) : (
@@ -190,7 +193,7 @@ export function HappyAgentArtifactsPage(props: HappyAgentArtifactsPageProps) {
                                 size="small"
                                 variant="secondary"
                             >
-                                Show older artifacts
+                                {translate("Show older artifacts")}
                             </Button>
                         </div>
                     ) : null}

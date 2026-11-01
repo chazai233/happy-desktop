@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { MenuButton } from "./MenuButton";
 import type { MenuItem } from "./Menu";
 
@@ -19,9 +20,9 @@ interface KeepAwakeOption {
 
 /** Shared with the Keep awake row in Settings. */
 export const SIDEBAR_KEEP_AWAKE_OPTIONS: readonly KeepAwakeOption[] = [
-    { mode: "on", label: "Always" },
-    { mode: "agent", label: "While an agent is working" },
-    { mode: "off", label: "Never" },
+    { mode: "on", label: translate("Always") },
+    { mode: "agent", label: translate("While an agent is working") },
+    { mode: "off", label: translate("Never") },
 ];
 
 function isMode(value: string): value is SidebarKeepAwakeMode {
@@ -34,13 +35,13 @@ function isMode(value: string): value is SidebarKeepAwakeMode {
  * right now, which for `agent` is the whole question.
  */
 export function sidebarKeepAwakeState(mode: SidebarKeepAwakeMode, active: boolean): string {
-    if (mode === "off") return "Off";
+    if (mode === "off") return translate("Off");
     return `${mode === "on" ? "On" : "Agent"} · ${active ? "Active" : "Idle"}`;
 }
 
 /** The menu's heading: short enough to fit, since the checked row already names the mode. */
 export function sidebarKeepAwakeLabel(mode: SidebarKeepAwakeMode, active: boolean): string {
-    return `Keep awake · ${active ? "Active" : mode === "off" ? "Off" : "Idle"}`;
+    return translate("Keep awake · {0}", active ? "Active" : mode === "off" ? "Off" : "Idle");
 }
 
 /**
@@ -87,7 +88,7 @@ export function SidebarKeepAwakeMenu(props: SidebarKeepAwakeMenuProps) {
                 data-testid="sidebar-keep-awake-menu"
                 icon="coffee"
                 items={sidebarKeepAwakeItems(props.mode)}
-                label={`Keep computer awake: ${state}`}
+                label={translate("Keep computer awake: {0}", state)}
                 menuLabel={sidebarKeepAwakeLabel(props.mode, props.active)}
                 menuWidth={240}
                 onSelect={(id) => {

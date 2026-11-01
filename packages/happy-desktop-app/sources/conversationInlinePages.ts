@@ -1,3 +1,4 @@
+import { translate } from "happy-desktop-ui";
 import type {
     HappyAgentArtifactId,
     HappyAgentInlineArtifactsSnapshot,
@@ -25,23 +26,29 @@ export const inlineArtifactsStoreNoop: HappyAgentInlineArtifactsStore = {
 function previewFailureMessage(failure: HtmlPreviewFailure): string {
     switch (failure.kind) {
         case "address-unavailable":
-            return "This page has nowhere to load from.";
+            return translate("This page has nowhere to load from.");
         case "load-failed":
             return failure.status !== undefined
-                ? `This page could not be loaded (${String(failure.status)}).`
-                : `This page could not be loaded${failure.description ? ` (${failure.description})` : ""}.`;
+                ? translate("This page could not be loaded ({0}).", String(failure.status))
+                : translate(
+                      "This page could not be loaded{0}.",
+                      failure.description ? ` (${failure.description})` : "",
+                  );
         case "renderer-gone":
-            return "This page stopped responding and was closed.";
+            return translate("This page stopped responding and was closed.");
         case "unsupported":
-            return "This window cannot show pages.";
+            return translate("This window cannot show pages.");
     }
 }
 
 function browserFailureMessage(failure: BrowserFailure): string {
     if (failure.message) return failure.message;
     if (failure.status !== undefined)
-        return `This page could not be loaded (${String(failure.status)}).`;
-    return `This page could not be loaded${failure.description ? ` (${failure.description})` : ""}.`;
+        return translate("This page could not be loaded ({0}).", String(failure.status));
+    return translate(
+        "This page could not be loaded{0}.",
+        failure.description ? ` (${failure.description})` : "",
+    );
 }
 
 const ignore = (): void => undefined;

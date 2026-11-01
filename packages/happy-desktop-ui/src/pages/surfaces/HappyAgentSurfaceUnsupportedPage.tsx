@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import { EmptyState } from "../../EmptyState";
 import { HappyAgentSurfaceHeader } from "./HappyAgentSurfaceHeader";
@@ -31,10 +32,13 @@ export function HappyAgentSurfaceUnsupportedPage(props: HappyAgentSurfaceUnsuppo
             <HappyAgentSurfaceHeader surface={props.surface} />
             <div className="happy-agent-surface-unsupported__body">
                 <EmptyState
-                    description={`It is a “${type}”, which this version of Happy can’t show yet. Its members and its place in the sidebar work as usual.`}
+                    description={translate(
+                        "It is a “{0}”, which this version of Happy can’t show yet. Its members and its place in the sidebar work as usual.",
+                        type,
+                    )}
                     icon="package"
                     size="panel"
-                    title="Can’t show this yet"
+                    title={translate("Can’t show this yet")}
                 />
             </div>
         </div>

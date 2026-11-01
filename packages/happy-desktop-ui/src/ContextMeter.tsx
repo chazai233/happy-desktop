@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties } from "react";
 
 export interface ContextMeterProps {
@@ -135,8 +136,18 @@ export function ContextMeter(props: ContextMeterProps) {
         <div
             aria-label={
                 measured
-                    ? `${tokensFormat(used)} of ${tokensFormat(total)} context tokens used${props.approximate ? ", approximate" : ""}${compactNote}`
-                    : `Context measurement pending for a ${tokensFormat(total)} token window${compactNote}`
+                    ? translate(
+                          "{0} of {1} context tokens used{2}{3}",
+                          tokensFormat(used),
+                          tokensFormat(total),
+                          props.approximate ? ", approximate" : "",
+                          compactNote,
+                      )
+                    : translate(
+                          "Context measurement pending for a {0} token window{1}",
+                          tokensFormat(total),
+                          compactNote,
+                      )
             }
             className={["happy-context-meter", props.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="context-meter"
@@ -149,8 +160,23 @@ export function ContextMeter(props: ContextMeterProps) {
             style={props.style}
             title={
                 measured
-                    ? `${tokensFormat(used)} of ${tokensFormat(total)} context tokens used${props.approximate ? " (approximate)" : ""}${compactNote}${tone === "critical" ? " — the next turn compacts the conversation" : tone === "compact" ? " — compaction is close; compact now to choose the moment" : ""}`
-                    : `Waiting for the first context measurement (${tokensFormat(total)} token window${compactNote})`
+                    ? translate(
+                          "{0} of {1} context tokens used{2}{3}{4}",
+                          tokensFormat(used),
+                          tokensFormat(total),
+                          props.approximate ? " (approximate)" : "",
+                          compactNote,
+                          tone === "critical"
+                              ? " — the next turn compacts the conversation"
+                              : tone === "compact"
+                                ? " — compaction is close; compact now to choose the moment"
+                                : "",
+                      )
+                    : translate(
+                          "Waiting for the first context measurement ({0} token window{1})",
+                          tokensFormat(total),
+                          compactNote,
+                      )
             }
         >
             <span aria-hidden="true" className="happy-context-meter__readout">

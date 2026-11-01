@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { HappyAgentArtifactStaticReason } from "happy-desktop-state";
 import { Banner, type BannerTone } from "../../Banner";
 import { artifactHtmlDocument } from "./artifactHtmlDocument";
@@ -79,13 +80,20 @@ function StaticNotice(props: {
         props.reason.type === "app-outdated"
             ? {
                   tone: "warning",
-                  title: "Update Happy to run this page",
-                  text: `This version of the Happy app shows the page without running its scripts. Update the app and restart it to see the page live.${missing}`,
+                  title: translate("Update Happy to run this page"),
+                  text: translate(
+                      "This version of the Happy app shows the page without running its scripts. Update the app and restart it to see the page live.{0}",
+                      missing,
+                  ),
               }
             : {
                   tone: "danger",
-                  title: "The page could not be run",
-                  text: `${props.reason.error.message} This is a static preview of it, without its scripts.${missing}`,
+                  title: translate("The page could not be run"),
+                  text: translate(
+                      "{0} This is a static preview of it, without its scripts.{1}",
+                      props.reason.error.message,
+                      missing,
+                  ),
               };
     return (
         <Banner tone={notice.tone} title={notice.title}>

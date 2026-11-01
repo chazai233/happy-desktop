@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type {
     HappyAgentProviderModelTokenUsage,
     HappyAgentProviderTokenCounts,
@@ -58,7 +59,7 @@ export function HappyAgentUsageSettings(props: HappyAgentUsageSettingsProps) {
     return (
         <>
             {props.error ? (
-                <Banner tone="danger" title="Usage may be out of date">
+                <Banner tone="danger" title={translate("Usage may be out of date")}>
                     {props.error.message}
                 </Banner>
             ) : null}
@@ -67,11 +68,17 @@ export function HappyAgentUsageSettings(props: HappyAgentUsageSettingsProps) {
                     animation={props.loading ? "snail" : undefined}
                     description={
                         props.loading
-                            ? "Reading what this machine's provider accounts have spent."
-                            : "Sign in to a coding assistant on this machine and its plan appears here."
+                            ? translate("Reading what this machine's provider accounts have spent.")
+                            : translate(
+                                  "Sign in to a coding assistant on this machine and its plan appears here.",
+                              )
                     }
                     icon={props.loading ? "clock" : "zap"}
-                    title={props.loading ? "Loading usage…" : "No provider accounts"}
+                    title={
+                        props.loading
+                            ? translate("Loading usage…")
+                            : translate("No provider accounts")
+                    }
                 />
             ) : (
                 serviceGroups(providers).map(([service, accounts]) => (
@@ -118,12 +125,12 @@ export function HappyAgentUsageSettings(props: HappyAgentUsageSettingsProps) {
                                         />
                                     ) : (
                                         <p className="happy-agent-usage-settings__note">
-                                            Not read yet
+                                            {translate("Not read yet")}
                                         </p>
                                     )}
                                     {models.length > 0 ? (
                                         <ul
-                                            aria-label="Tokens by model"
+                                            aria-label={translate("Tokens by model")}
                                             className="happy-agent-usage-settings__models"
                                         >
                                             {models.map((model) => (

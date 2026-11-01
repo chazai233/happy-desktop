@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { SetupPage } from "./SetupPage";
 import { SplashScreen } from "./SplashScreen";
 
@@ -40,12 +41,12 @@ export function DesktopStartupScreen(props: DesktopStartupScreenProps) {
         return (
             <SetupPage
                 {...(props.onRetry
-                    ? { action: { label: "Try again", onSelect: props.onRetry } }
+                    ? { action: { label: translate("Try again"), onSelect: props.onRetry } }
                     : {})}
-                copy={props.error ?? "Happy could not start."}
+                copy={props.error ?? translate("Happy could not start.")}
                 data-testid="desktop-startup-screen"
                 scene="owl"
-                title="Happy couldn't start"
+                title={translate("Happy couldn't start")}
             />
         );
 
@@ -59,11 +60,11 @@ export function DesktopStartupScreen(props: DesktopStartupScreenProps) {
 
     return (
         <SetupPage
-            action={{ label: "Start locally", onSelect: props.onSubmit }}
-            copy="Happy runs on this machine, and can connect to others you own."
+            action={{ label: translate("Start locally"), onSelect: props.onSubmit }}
+            copy={translate("Happy runs on this machine, and can connect to others you own.")}
             data-testid="desktop-startup-screen"
             scene="sparkles"
-            title="Happy runs on this machine"
+            title={translate("Happy runs on this machine")}
         />
     );
 }

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties } from "react";
 import { Button } from "./Button";
 import { partitionComponentProps } from "./componentProps";
@@ -100,7 +101,9 @@ export function DefaultAgentForm(props: DefaultAgentFormProps) {
                 data-happy-desktop-ui="default-agent-description"
             >
                 {local.description ??
-                    "This agent is the built-in identity that runs your workspace and posts every automated update. Pick a name and handle you’ll recognize."}
+                    translate(
+                        "This agent is the built-in identity that runs your workspace and posts every automated update. Pick a name and handle you’ll recognize.",
+                    )}
             </p>
             <TextField
                 autoComplete="name"
@@ -108,7 +111,7 @@ export function DefaultAgentForm(props: DefaultAgentFormProps) {
                 disabled={controlsDisabled()}
                 error={local.nameError}
                 fullWidth
-                label={local.nameLabel ?? "Display name"}
+                label={local.nameLabel ?? translate("Display name")}
                 name="default-agent-name"
                 onValueChange={local.onNameChange}
                 placeholder={local.namePlaceholder ?? "Happy"}
@@ -123,9 +126,11 @@ export function DefaultAgentForm(props: DefaultAgentFormProps) {
                 fullWidth
                 hint={
                     local.usernameHint ??
-                    "3–32 characters: lowercase letters, digits, underscores, or hyphens."
+                    translate(
+                        "3–32 characters: lowercase letters, digits, underscores, or hyphens.",
+                    )
                 }
-                label={local.usernameLabel ?? "Username"}
+                label={local.usernameLabel ?? translate("Username")}
                 leadingIcon="at"
                 name="default-agent-username"
                 onValueChange={local.onUsernameChange}

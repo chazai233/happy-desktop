@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useId } from "react";
 import type { BadgeVariant } from "./Badge";
 import { Banner } from "./Banner";
@@ -175,7 +176,7 @@ export function MobileDirectPairingPanel(props: MobileDirectPairingPanelProps) {
             data-testid={props["data-testid"]}
         >
             {props.actionError ? (
-                <Banner tone="danger" title="That didn't go through">
+                <Banner tone="danger" title={translate("That didn't go through")}>
                     {props.actionError}
                 </Banner>
             ) : null}
@@ -194,16 +195,21 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
     if (connector.kind === "unsupported")
         return (
             <PairingNote
-                detail="Update Happy Agent on this computer to connect a phone directly."
-                title="Needs a newer Happy Agent"
+                detail={translate(
+                    "Update Happy Agent on this computer to connect a phone directly.",
+                )}
+                title={translate("Needs a newer Happy Agent")}
             />
         );
     if (connector.kind === "read-failed")
         return (
-            <PairingNote detail={connector.message} title="Couldn't read direct connection">
+            <PairingNote
+                detail={connector.message}
+                title={translate("Couldn't read direct connection")}
+            >
                 {props.onErrorAssist ? (
                     <Button onClick={props.onErrorAssist} size="small" variant="ghost">
-                        Ask {props.chiefOfStaffName ?? "Chief of Staff"}
+                        {translate("Ask")} {props.chiefOfStaffName ?? translate("Chief of Staff")}
                     </Button>
                 ) : null}
             </PairingNote>
@@ -212,8 +218,8 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
     if (status === "disabled")
         return (
             <PairingNote
-                detail="It is turned off in this Happy Agent's happy.toml."
-                title="Direct connection is off"
+                detail={translate("It is turned off in this Happy Agent's happy.toml.")}
+                title={translate("Direct connection is off")}
             />
         );
     if (pairing === null) {
@@ -228,14 +234,16 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
             return (
                 <DirectFailure
                     {...props}
-                    message={connector.connector.error ?? "The direct connection didn't open."}
-                    title="Couldn't open the direct connection"
+                    message={
+                        connector.connector.error ?? translate("The direct connection didn't open.")
+                    }
+                    title={translate("Couldn't open the direct connection")}
                 />
             );
         return (
             <PairingNote
-                detail="Show a code to scan with Happy on your phone."
-                title="Connect a phone"
+                detail={translate("Show a code to scan with Happy on your phone.")}
+                title={translate("Connect a phone")}
             >
                 <Button
                     disabled={props.blocked}
@@ -245,7 +253,7 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
                     size="small"
                     variant="primary"
                 >
-                    Connect a phone
+                    {translate("Connect a phone")}
                 </Button>
             </PairingNote>
         );
@@ -260,8 +268,8 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
                     >
                         <DeviceClaim device={pairing.device} />
                         <Box className="happy-mobile-direct-pairing__waiting">
-                            <Spinner label="Verifying" size={16} />
-                            <span>Phone connected, verifying…</span>
+                            <Spinner label={translate("Verifying")} size={16} />
+                            <span>{translate("Phone connected, verifying…")}</span>
                         </Box>
                         <PairingCancel {...props} />
                     </Box>
@@ -278,7 +286,7 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
                     countdown={props.codeCountdown}
                     data={pairing.qr}
                     expiresAt={pairing.expiresAt}
-                    label="QR code to connect a phone directly"
+                    label={translate("QR code to connect a phone directly")}
                     now={props.now}
                     size={props.codeSize ?? 200}
                     testId="happy-mobile-direct"
@@ -301,10 +309,11 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
                         <Ionicon name="checkmark-circle" size={18} />
                         <span>
                             <span className="happy-mobile-direct-pairing__paired-title">
-                                {pairing.device?.name ?? "Your phone"} is paired
+                                {pairing.device?.name ?? translate("Your phone")}{" "}
+                                {translate("is paired")}
                             </span>
                             <span className="happy-mobile-direct-pairing__paired-detail">
-                                {" · It reaches this computer directly."}
+                                {translate(" · It reaches this computer directly.")}
                             </span>
                         </span>
                     </Box>
@@ -313,20 +322,25 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
                 <PairingResult
                     detail={
                         pairing.device
-                            ? `“${pairing.device.name}” can now reach this computer directly.`
-                            : "The phone can now reach this computer directly."
+                            ? translate(
+                                  "“{0}” can now reach this computer directly.",
+                                  pairing.device.name,
+                              )
+                            : translate("The phone can now reach this computer directly.")
                     }
                     icon="checkmark-circle"
-                    title="Phone connected"
+                    title={translate("Phone connected")}
                     tone="success"
                 />
             );
         case "rejected":
             return (
                 <PairingResult
-                    detail="The phone said the emoji didn't match. Nothing was paired. If that wasn't you, someone else may have scanned this code."
+                    detail={translate(
+                        "The phone said the emoji didn't match. Nothing was paired. If that wasn't you, someone else may have scanned this code.",
+                    )}
                     icon="close-circle"
-                    title="The phone rejected it"
+                    title={translate("The phone rejected it")}
                     tone="danger"
                 >
                     <StartAgain {...props} />
@@ -335,9 +349,9 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
         case "cancelled":
             return (
                 <PairingResult
-                    detail="Nothing was paired."
+                    detail={translate("Nothing was paired.")}
                     icon="close-circle"
-                    title="Pairing cancelled"
+                    title={translate("Pairing cancelled")}
                     tone="neutral"
                 >
                     <StartAgain {...props} />
@@ -348,11 +362,17 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
                 <PairingResult
                     detail={
                         pairing.device
-                            ? "Both screens have to confirm within five minutes. Nothing was paired."
-                            : "This code is no longer valid."
+                            ? translate(
+                                  "Both screens have to confirm within five minutes. Nothing was paired.",
+                              )
+                            : translate("This code is no longer valid.")
                     }
                     icon="time-outline"
-                    title={pairing.device ? "Verification timed out" : "Code expired"}
+                    title={
+                        pairing.device
+                            ? translate("Verification timed out")
+                            : translate("Code expired")
+                    }
                     tone="neutral"
                 >
                     <StartAgain {...props} />
@@ -362,8 +382,8 @@ function DirectPairingBody(props: MobileDirectPairingPanelProps & { readonly blo
             return (
                 <DirectFailure
                     {...props}
-                    message={pairing.error ?? "The pairing stopped before it finished."}
-                    title="Pairing failed"
+                    message={pairing.error ?? translate("The pairing stopped before it finished.")}
+                    title={translate("Pairing failed")}
                 />
             );
     }
@@ -403,7 +423,7 @@ function EmojiVerification(
         >
             {compact ? null : (
                 <h3 className="happy-mobile-pairing__title" id={titleId}>
-                    Do the emoji match?
+                    {translate("Do the emoji match?")}
                 </h3>
             )}
             {pairing.device ? <DeviceClaim device={pairing.device} /> : null}
@@ -412,12 +432,13 @@ function EmojiVerification(
             ) : null}
             {compact ? (
                 <p className="happy-mobile-direct-pairing__instruction" id={titleId}>
-                    Does your phone show the same four emoji, in this order?
+                    {translate("Does your phone show the same four emoji, in this order?")}
                 </p>
             ) : (
                 <p className="happy-mobile-direct-pairing__instruction">
-                    Check that your phone shows these four emoji in this order. If any differ,
-                    choose Don&apos;t match.
+                    {translate(
+                        "Check that your phone shows these four emoji in this order. If any differ, choose Don&apos;t match.",
+                    )}
                 </p>
             )}
             {props.paired ? (
@@ -428,11 +449,11 @@ function EmojiVerification(
                 >
                     <ConfirmationMark
                         confirmed
-                        label={`${pairing.device?.name ?? "Your phone"} is paired`}
+                        label={translate("{0} is paired", pairing.device?.name ?? "Your phone")}
                         plain
                     />
                     <span className="happy-mobile-pairing__expiry">
-                        It reaches this computer directly.
+                        {translate("It reaches this computer directly.")}
                     </span>
                 </Box>
             ) : answered ? (
@@ -442,7 +463,7 @@ function EmojiVerification(
                 >
                     <span className="happy-mobile-direct-pairing__progress-note">
                         <Spinner size={14} />
-                        Waiting for the phone to confirm…
+                        {translate("Waiting for the phone to confirm…")}
                     </span>
                 </Box>
             ) : (
@@ -450,10 +471,16 @@ function EmojiVerification(
                     className="happy-mobile-direct-pairing__progress"
                     data-happy-desktop-ui="mobile-direct-pairing-progress"
                 >
-                    <ConfirmationMark confirmed={pairing.desktopConfirmed} label="This computer" />
-                    <ConfirmationMark confirmed={pairing.mobileConfirmed} label="Phone" />
+                    <ConfirmationMark
+                        confirmed={pairing.desktopConfirmed}
+                        label={translate("This computer")}
+                    />
+                    <ConfirmationMark
+                        confirmed={pairing.mobileConfirmed}
+                        label={translate("Phone")}
+                    />
                     <span className="happy-mobile-pairing__expiry">
-                        Expires in {pairingCountdown(pairing.expiresAt, props.now)}
+                        {translate("Expires in")} {pairingCountdown(pairing.expiresAt, props.now)}
                     </span>
                 </Box>
             )}
@@ -469,10 +496,10 @@ function EmojiVerification(
                             size="medium"
                             variant="primary"
                         >
-                            Emoji match
+                            {translate("Emoji match")}
                         </Button>
                         <Button disabled size="medium" variant="secondary">
-                            Don&apos;t match
+                            {translate("Don&apos;t match")}
                         </Button>
                     </>
                 ) : pairing.desktopConfirmed ? (
@@ -480,7 +507,7 @@ function EmojiVerification(
                         {waitingForPhone ? (
                             <span className="happy-mobile-direct-pairing__progress-note">
                                 <Spinner size={14} />
-                                Waiting for the phone to confirm…
+                                {translate("Waiting for the phone to confirm…")}
                             </span>
                         ) : null}
                         <Button
@@ -490,7 +517,7 @@ function EmojiVerification(
                             size="medium"
                             variant="ghost"
                         >
-                            Cancel pairing
+                            {translate("Cancel pairing")}
                         </Button>
                     </>
                 ) : (
@@ -506,7 +533,7 @@ function EmojiVerification(
                             size="medium"
                             variant="primary"
                         >
-                            Emoji match
+                            {translate("Emoji match")}
                         </Button>
                         <Button
                             data-testid="happy-mobile-direct-reject"
@@ -516,7 +543,7 @@ function EmojiVerification(
                             size="medium"
                             variant="secondary"
                         >
-                            Don&apos;t match
+                            {translate("Don&apos;t match")}
                         </Button>
                     </>
                 )}
@@ -560,7 +587,7 @@ export interface MobileDirectEmojiProps {
 export function MobileDirectEmoji(props: MobileDirectEmojiProps) {
     return (
         <ol
-            aria-label={`Verification emoji: ${props.emoji.join(" ")}`}
+            aria-label={translate("Verification emoji: {0}", props.emoji.join(" "))}
             className="happy-mobile-direct-emoji"
             data-happy-desktop-ui="mobile-direct-emoji"
             data-size={props.size ?? 64}
@@ -590,7 +617,7 @@ function DeviceClaim(props: { readonly device: MobileDirectDeviceClaim }) {
                     “{props.device.name}”
                 </span>
                 <span className="happy-mobile-direct-pairing__device-claim">
-                    says it is {PLATFORM_NAMES[props.device.platform]}
+                    {translate("says it is")} {PLATFORM_NAMES[props.device.platform]}
                 </span>
             </span>
         </Box>
@@ -609,7 +636,7 @@ function DirectFailure(
             <PairingActions>
                 {props.onErrorAssist ? (
                     <Button onClick={props.onErrorAssist} size="small" variant="ghost">
-                        Ask {props.chiefOfStaffName ?? "Chief of Staff"}
+                        {translate("Ask")} {props.chiefOfStaffName ?? translate("Chief of Staff")}
                     </Button>
                 ) : null}
                 <Button
@@ -619,7 +646,7 @@ function DirectFailure(
                     size="small"
                     variant="primary"
                 >
-                    Try again
+                    {translate("Try again")}
                 </Button>
             </PairingActions>
         </PairingResult>
@@ -635,7 +662,7 @@ function StartAgain(props: MobileDirectPairingPanelProps & { readonly blocked: b
             size="small"
             variant="secondary"
         >
-            Show a new code
+            {translate("Show a new code")}
         </Button>
     );
 }
@@ -649,7 +676,7 @@ function PairingCancel(props: MobileDirectPairingPanelProps & { readonly blocked
             size="small"
             variant="ghost"
         >
-            Cancel pairing
+            {translate("Cancel pairing")}
         </Button>
     );
 }
@@ -659,29 +686,29 @@ const SOCKET_STATES: Record<
     { readonly label: string; readonly variant: BadgeVariant; readonly description: string }
 > = {
     disabled: {
-        label: "Off",
+        label: translate("Off"),
         variant: "neutral",
-        description: "Turned off in this Happy Agent's happy.toml.",
+        description: translate("Turned off in this Happy Agent's happy.toml."),
     },
     closed: {
-        label: "Not in use",
+        label: translate("Not in use"),
         variant: "neutral",
-        description: "Opens only while a phone pairs or is paired.",
+        description: translate("Opens only while a phone pairs or is paired."),
     },
     starting: {
-        label: "Opening…",
+        label: translate("Opening…"),
         variant: "info",
-        description: "Opening the private Tailcat connection for phones.",
+        description: translate("Opening the private Tailcat connection for phones."),
     },
     open: {
-        label: "Open",
+        label: translate("Open"),
         variant: "success",
-        description: "Paired phones can reach this computer.",
+        description: translate("Paired phones can reach this computer."),
     },
     failed: {
-        label: "Failed",
+        label: translate("Failed"),
         variant: "danger",
-        description: "The private Tailcat connection for phones didn't open.",
+        description: translate("The private Tailcat connection for phones didn't open."),
     },
 };
 
@@ -710,16 +737,21 @@ export function MobileDirectConnectionSection(props: MobileDirectConnectionSecti
         connector.kind === "ready"
             ? SOCKET_STATES[connector.connector.status]
             : connector.kind === "loading"
-              ? { label: "Checking…", variant: "neutral" as const, description: undefined }
+              ? {
+                    label: translate("Checking…"),
+                    variant: "neutral" as const,
+                    description: undefined,
+                }
               : connector.kind === "unsupported"
                 ? {
-                      label: "Unavailable",
+                      label: translate("Unavailable"),
                       variant: "neutral" as const,
-                      description:
+                      description: translate(
                           "This Happy Agent is too old for direct connection. Update it to connect phones directly.",
+                      ),
                   }
                 : {
-                      label: "Unavailable",
+                      label: translate("Unavailable"),
                       variant: "warning" as const,
                       description: connector.message,
                   };
@@ -746,7 +778,8 @@ export function MobileDirectConnectionSection(props: MobileDirectConnectionSecti
                         <Box className="happy-mobile-direct-section__status-control">
                             {failure && props.onErrorAssist ? (
                                 <Button onClick={props.onErrorAssist} size="small" variant="ghost">
-                                    Ask {props.chiefOfStaffName ?? "Chief of Staff"}
+                                    {translate("Ask")}{" "}
+                                    {props.chiefOfStaffName ?? translate("Chief of Staff")}
                                 </Button>
                             ) : null}
                             <HappyAgentSettingsStatus label={state.label} variant={state.variant} />
@@ -755,13 +788,13 @@ export function MobileDirectConnectionSection(props: MobileDirectConnectionSecti
                     {...(state.description || failure
                         ? { description: [state.description, failure].filter(Boolean).join(" ") }
                         : {})}
-                    label="Direct connection"
+                    label={translate("Direct connection")}
                 />
             ) : null}
             {connector.kind === "ready" ? (
                 devices.length === 0 ? null : (
                     <ul
-                        aria-label="Phones paired directly"
+                        aria-label={translate("Phones paired directly")}
                         className="happy-mobile-direct-section__devices"
                     >
                         {devices.map((device) => (
@@ -778,19 +811,20 @@ export function MobileDirectConnectionSection(props: MobileDirectConnectionSecti
                                         {device.name}
                                     </span>
                                     <span className="happy-mobile-direct-device__detail">
-                                        Direct · {PLATFORM_LABELS[device.platform]} · Paired{" "}
-                                        {pairedDate(device.createdAt)} · Last seen{" "}
+                                        {translate("Direct ·")} {PLATFORM_LABELS[device.platform]}{" "}
+                                        {translate("· Paired")} {pairedDate(device.createdAt)}{" "}
+                                        {translate("· Last seen")}{" "}
                                         {relativeTime(device.lastSeenAt, props.now)}
                                     </span>
                                 </span>
                                 <Button
-                                    aria-label={`Remove ${device.name}`}
+                                    aria-label={translate("Remove {0}", device.name)}
                                     disabled={props.unavailable !== undefined}
                                     onClick={() => props.onDeviceRemoveRequest(device.id)}
                                     size="small"
                                     variant="ghost"
                                 >
-                                    Remove
+                                    {translate("Remove")}
                                 </Button>
                             </li>
                         ))}
@@ -816,7 +850,7 @@ function pairedDate(at: number): string {
 /** "just now", "5 minutes ago", "yesterday", from the reference time. */
 function relativeTime(at: number, now: number): string {
     const seconds = Math.round((at - now) / 1000);
-    if (Math.abs(seconds) < 60) return "just now";
+    if (Math.abs(seconds) < 60) return translate("just now");
     const format = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
     const minutes = Math.round(seconds / 60);
     if (Math.abs(minutes) < 60) return format.format(minutes, "minute");
@@ -847,32 +881,33 @@ export function MobileDirectRemoveConfirmation(props: MobileDirectRemoveConfirma
                             onClick={props.onCancel}
                             variant="ghost"
                         >
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                         <Button
                             disabled={props.removal.pending}
                             onClick={props.onConfirm}
                             variant="danger"
                         >
-                            {props.removal.pending ? "Removing…" : "Remove"}
+                            {props.removal.pending ? translate("Removing…") : translate("Remove")}
                         </Button>
                     </Box>
                 }
                 icon="unlink"
                 onClose={cancel}
                 size="small"
-                title={`Remove “${props.device.name}”?`}
+                title={translate("Remove “{0}”?", props.device.name)}
                 tone="danger"
             >
                 <Box className="happy-mobile-direct-remove__body">
                     {props.removal.error ? (
-                        <Banner tone="danger" title="Couldn't remove this phone">
+                        <Banner tone="danger" title={translate("Couldn't remove this phone")}>
                             {props.removal.error}
                         </Banner>
                     ) : null}
                     <p className="happy-mobile-direct-remove__lead">
-                        This phone can no longer reach this computer directly. Anything it has open
-                        stops now. To use it again, pair it again.
+                        {translate(
+                            "This phone can no longer reach this computer directly. Anything it has open stops now. To use it again, pair it again.",
+                        )}
                     </p>
                 </Box>
             </Modal>

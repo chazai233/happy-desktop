@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { ContextMenu, type ContextMenuProps } from "./ContextMenu";
 
 export interface LinkContextMenuProps extends Omit<ContextMenuProps, "items" | "onSelect"> {
@@ -23,7 +24,7 @@ export function LinkContextMenu({ href, items = [], onSelect, ...props }: LinkCo
             items={[
                 ...items,
                 ...(items.length > 0 ? [{ kind: "separator" } as const] : []),
-                { kind: "item", id: "copy-link", label: "Copy link", icon: "copy" },
+                { kind: "item", id: "copy-link", label: translate("Copy link"), icon: "copy" },
             ]}
             onSelect={(id) => {
                 if (id === "copy-link") {

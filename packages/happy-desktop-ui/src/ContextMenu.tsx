@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useCallback, useId } from "react";
 import { Menu, type MenuItem } from "./Menu";
 import { WindowOverlay } from "./WindowOverlay";
@@ -61,7 +62,7 @@ export function ContextMenu(props: ContextMenuProps) {
     return (
         <WindowOverlay>
             <button
-                aria-label="Close menu"
+                aria-label={translate("Close menu")}
                 className="happy-context-menu__backdrop"
                 data-happy-desktop-ui="context-menu-backdrop"
                 onClick={(event) => {

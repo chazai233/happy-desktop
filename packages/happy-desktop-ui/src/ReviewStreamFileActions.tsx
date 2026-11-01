@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Button } from "./Button";
 import { CopyButton } from "./CopyButton";
 import { Icon } from "./Icon";
@@ -36,12 +37,16 @@ export function ReviewStreamFileActions(props: ReviewStreamFileActionsProps) {
                 <CopyButton
                     className="happy-review-file-actions__copy"
                     data-testid="review-stream-file-copy"
-                    label="Copy path"
+                    label={translate("Copy path")}
                     text={props.path}
                 />
                 {props.onCollapsedToggle === undefined ? null : (
                     <Button
-                        aria-label={props.collapsed ? "Open this file" : "Close this file"}
+                        aria-label={
+                            props.collapsed
+                                ? translate("Open this file")
+                                : translate("Close this file")
+                        }
                         data-testid="review-stream-file-collapse"
                         icon={props.collapsed ? "chevron-right" : "chevron-down"}
                         iconOnly
@@ -52,7 +57,7 @@ export function ReviewStreamFileActions(props: ReviewStreamFileActionsProps) {
                 )}
                 {props.onOpen === undefined ? null : (
                     <Button
-                        aria-label="Open this file on its own"
+                        aria-label={translate("Open this file on its own")}
                         data-testid="review-stream-file-open"
                         icon="open-external"
                         iconOnly
@@ -72,7 +77,7 @@ export function ReviewStreamFileActions(props: ReviewStreamFileActionsProps) {
                     type="button"
                 >
                     {props.viewed ? <Icon name="check" size={14} /> : null}
-                    {props.viewed ? "Viewed" : "Mark as viewed"}
+                    {props.viewed ? translate("Viewed") : translate("Mark as viewed")}
                 </button>
             )}
         </span>

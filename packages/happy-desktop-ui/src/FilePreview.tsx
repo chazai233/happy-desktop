@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import type { FileLinkOpenHandler, FileOpenHandler } from "./fileReference";
 import type { MessageReferences } from "./messageReferences";
@@ -114,8 +115,8 @@ export type FilePreviewProps = {
 type MarkdownFace = "rendered" | "source";
 
 const MARKDOWN_FACES: readonly { value: MarkdownFace; label: string }[] = [
-    { value: "rendered", label: "Rendered" },
-    { value: "source", label: "Source" },
+    { value: "rendered", label: translate("Rendered") },
+    { value: "source", label: translate("Source") },
 ];
 /** File extensions this surface can actually render, by how it renders them. */
 const EXTENSION_KIND: Record<string, FilePreviewKind> = {
@@ -279,12 +280,12 @@ export function FilePreview(props: FilePreviewProps) {
     const downloadStatus = download?.source === source ? download.status : undefined;
     const downloadLabel =
         downloadStatus === "pending"
-            ? "Downloading…"
+            ? translate("Downloading…")
             : downloadStatus === "started"
-              ? "Download started"
+              ? translate("Download started")
               : downloadStatus === "failed"
-                ? `Download failed: ${download?.message ?? "Please try again."}`
-                : "Download";
+                ? translate("Download failed: {0}", download?.message ?? "Please try again.")
+                : translate("Download");
     const downloadStart = (): void => {
         if (!local.onDownload || pendingDownload.current?.source === source) return;
         const attempt = { source, status: "pending" as const };
@@ -297,7 +298,12 @@ export function FilePreview(props: FilePreviewProps) {
                 source,
                 status,
                 ...(status === "failed"
-                    ? { message: error instanceof Error ? error.message : "Please try again." }
+                    ? {
+                          message:
+                              error instanceof Error
+                                  ? error.message
+                                  : translate("Please try again."),
+                      }
                     : {}),
             });
         };
@@ -350,7 +356,7 @@ export function FilePreview(props: FilePreviewProps) {
                             data-happy-desktop-ui="file-preview-updating"
                         >
                             <Spinner size={12} tone="muted" />
-                            Updating…
+                            {translate("Updating…")}
                         </span>
                     ) : null}
                     {(kind === "markdown" || local.rendered !== undefined) &&
@@ -381,7 +387,7 @@ export function FilePreview(props: FilePreviewProps) {
                             size="small"
                             title={
                                 downloadStatus === "failed"
-                                    ? `${downloadLabel} Click to try again.`
+                                    ? translate("{0} Click to try again.", downloadLabel)
                                     : downloadLabel
                             }
                             variant="ghost"
@@ -394,7 +400,7 @@ export function FilePreview(props: FilePreviewProps) {
                     </span>
                     {local.onClose ? (
                         <Button
-                            aria-label={local.closeLabel ?? "Close preview"}
+                            aria-label={local.closeLabel ?? translate("Close preview")}
                             icon="close"
                             iconOnly
                             onClick={() => local.onClose?.()}
@@ -457,7 +463,7 @@ function FilePreviewBody(props: {
                     props.onMediaWindowOpen ? (
                         <>
                             <Button
-                                aria-label="Open in a new window"
+                                aria-label={translate("Open in a new window")}
                                 iconOnly
                                 onClick={props.onMediaWindowOpen}
                                 size="small"
@@ -482,7 +488,7 @@ function FilePreviewBody(props: {
                 actions={
                     props.onMediaWindowOpen ? (
                         <Button
-                            aria-label="Open in a new window"
+                            aria-label={translate("Open in a new window")}
                             iconOnly
                             onClick={props.onMediaWindowOpen}
                             size="small"
@@ -504,7 +510,9 @@ function FilePreviewBody(props: {
                 data-happy-desktop-ui="file-preview-loading"
             >
                 <Spinner size={16} />
-                <span className="happy-file-preview__notice-title">Opening {props.name}…</span>
+                <span className="happy-file-preview__notice-title">
+                    {translate("Opening")} {props.name}…
+                </span>
             </div>
         );
     if (props.content.type === "error")
@@ -516,7 +524,7 @@ function FilePreviewBody(props: {
             >
                 <Icon name="close" size={20} />
                 <span className="happy-file-preview__notice-title">
-                    {props.name} could not be opened
+                    {props.name} {translate("could not be opened")}
                 </span>
                 <span className="happy-file-preview__notice-detail">{props.content.message}</span>
             </div>
@@ -590,9 +598,11 @@ function FilePreviewBody(props: {
             data-happy-desktop-ui="file-preview-unavailable"
         >
             <Icon name={KIND_ICON[props.kind]} size={20} />
-            <span className="happy-file-preview__notice-title">{props.name} has no preview</span>
+            <span className="happy-file-preview__notice-title">
+                {props.name} {translate("has no preview")}
+            </span>
             <span className="happy-file-preview__notice-detail">
-                This file is not a format Happy can show.
+                {translate("This file is not a format Happy can show.")}
             </span>
         </div>
     );

@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { ReactNode } from "react";
 import { APP_SHELL_SIDEBAR_DEFAULT_WIDTH, AppShell } from "../../AppShell";
 import { Box } from "../../Box";
@@ -71,14 +72,14 @@ export function HappyAgentSettingsShell(props: HappyAgentSettingsShellProps) {
                             })),
                         },
                     ]}
-                    title="Settings"
+                    title={translate("Settings")}
                 />
             }
         >
             <PanelHeader>
                 {props.onBack ? (
                     <button
-                        aria-label={`Back to ${categoryLabel(props)}`}
+                        aria-label={translate("Back to {0}", categoryLabel(props))}
                         className="happy-agent-settings__back"
                         data-happy-desktop-ui="happy-agent-settings-back"
                         onClick={props.onBack}
@@ -119,7 +120,7 @@ export function HappyAgentSettingsShell(props: HappyAgentSettingsShellProps) {
 function categoryLabel(props: HappyAgentSettingsShellProps): string {
     return (
         props.categories.find((category) => category.id === props.activeCategoryId)?.label ??
-        "Settings"
+        translate("Settings")
     );
 }
 

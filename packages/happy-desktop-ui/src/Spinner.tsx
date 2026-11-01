@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties, type ReactNode } from "react";
 import { brailleSpinnerCanvasAttach } from "./spinnerBrailleCanvas";
 
@@ -198,7 +199,7 @@ export function Spinner(props: SpinnerProps) {
     const offset = paused ? (index + 0.75) / frames : 0;
     return (
         <span
-            aria-label={props.label ?? "Loading"}
+            aria-label={props.label ?? translate("Loading")}
             className={["happy-spinner", props.className].filter(Boolean).join(" ")}
             data-frame={paused ? index : undefined}
             data-happy-desktop-ui="spinner"

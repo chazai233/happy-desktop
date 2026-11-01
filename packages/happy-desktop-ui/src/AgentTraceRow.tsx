@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { Icon, type IconName } from "./Icon";
@@ -107,7 +108,7 @@ export function AgentTraceRow(props: AgentTraceRowProps) {
                     ? `${linkLabel()}, ${stats()}`
                     : meta()
                       ? linkLabel()
-                      : "Agent activity")
+                      : translate("Agent activity"))
             }
             className={["happy-agent-trace-row", local.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="agent-trace-row"
@@ -149,7 +150,11 @@ export function AgentTraceRow(props: AgentTraceRowProps) {
                 data-happy-desktop-ui="agent-trace-row-title"
             >
                 <span data-happy-desktop-ui="agent-trace-row-title-label">
-                    {meta() ? linkLabel() : running() ? (local.title ?? "Working") : linkLabel()}
+                    {meta()
+                        ? linkLabel()
+                        : running()
+                          ? (local.title ?? translate("Working"))
+                          : linkLabel()}
                 </span>
             </span>
             {meta() && stats() ? (
@@ -182,7 +187,7 @@ export function AgentTraceRow(props: AgentTraceRowProps) {
                     className="happy-agent-trace-row__count"
                     data-happy-desktop-ui="agent-trace-row-count"
                 >
-                    {`${local.entryCount} steps`}
+                    {translate("{0} steps", local.entryCount)}
                 </span>
             ) : null}
         </button>

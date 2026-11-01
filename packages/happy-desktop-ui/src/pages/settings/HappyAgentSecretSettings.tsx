@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { useState } from "react";
 import { Banner } from "../../Banner";
 import { Box } from "../../Box";
@@ -102,7 +103,7 @@ export function HappyAgentSecretSettings(props: HappyAgentSecretSettingsProps) {
     return (
         <>
             {props.unavailable ? (
-                <Banner tone="neutral" title="Happy Agent reconnecting">
+                <Banner tone="neutral" title={translate("Happy Agent reconnecting")}>
                     {props.unavailable}
                 </Banner>
             ) : null}
@@ -121,27 +122,31 @@ export function HappyAgentSecretSettings(props: HappyAgentSecretSettingsProps) {
                             title={props.unavailable}
                             variant="secondary"
                         >
-                            New secret
+                            {translate("New secret")}
                         </Button>
                     }
-                    description="Environment variables agents can use. Values can’t be read back."
-                    label="Environment bundles"
+                    description={translate(
+                        "Environment variables agents can use. Values can’t be read back.",
+                    )}
+                    label={translate("Environment bundles")}
                 />
                 {props.error ? (
-                    <Banner tone="danger" title="Secrets unavailable">
+                    <Banner tone="danger" title={translate("Secrets unavailable")}>
                         {props.error}
                     </Banner>
                 ) : props.loading ? (
                     <Box className="happy-agent-settings__pending">
                         <Spinner size={16} />
-                        <span>Reading secrets…</span>
+                        <span>{translate("Reading secrets…")}</span>
                     </Box>
                 ) : props.secrets.length === 0 ? (
                     <EmptyState
-                        description="Create a write-only environment bundle for agents on this Happy Agent."
+                        description={translate(
+                            "Create a write-only environment bundle for agents on this Happy Agent.",
+                        )}
                         icon="lock"
                         size="inline"
-                        title="No secrets yet"
+                        title={translate("No secrets yet")}
                     />
                 ) : (
                     <>
@@ -169,7 +174,7 @@ export function HappyAgentSecretSettings(props: HappyAgentSecretSettingsProps) {
                                             className="happy-agent-secret__updated"
                                             data-happy-desktop-ui="happy-agent-secret-updated"
                                         >
-                                            Updated {secret.updatedAt}
+                                            {translate("Updated")} {secret.updatedAt}
                                         </span>
                                     </Box>
                                     <Box className="happy-agent-secret__badges">
@@ -187,7 +192,7 @@ export function HappyAgentSecretSettings(props: HappyAgentSecretSettingsProps) {
                                     </Box>
                                 </header>
                                 <Box
-                                    aria-label="Environment variables"
+                                    aria-label={translate("Environment variables")}
                                     className="happy-agent-secret__variables"
                                 >
                                     {secret.environmentVariables.map((name) => (

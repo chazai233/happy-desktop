@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { mermaidDiagramRender } from "./mermaidDiagramRender";
@@ -91,7 +92,10 @@ export function MermaidDiagram(props: MermaidDiagramProps) {
                 className="happy-mermaid-diagram__fallback"
                 viewportClassName="happy-mermaid-diagram__fallback-viewport"
             >
-                <pre aria-label="Mermaid source" className="happy-mermaid-diagram__source">
+                <pre
+                    aria-label={translate("Mermaid source")}
+                    className="happy-mermaid-diagram__source"
+                >
                     <code>{local.source}</code>
                 </pre>
             </ScrollArea>

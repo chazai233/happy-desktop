@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties, type ReactNode } from "react";
 import { Button } from "./Button";
@@ -23,7 +24,11 @@ export function SetupHandoff(props: {
             {props.error ? (
                 <Banner
                     tone="neutral"
-                    action={props.busy ? undefined : { label: "Try again", onClick: props.onRetry }}
+                    action={
+                        props.busy
+                            ? undefined
+                            : { label: translate("Try again"), onClick: props.onRetry }
+                    }
                 >
                     {props.error}
                 </Banner>
@@ -247,7 +252,7 @@ export function SetupPage(props: SetupPageProps) {
                             </p>
                             {local.statusReserved ? (
                                 <div
-                                    aria-label="Status"
+                                    aria-label={translate("Status")}
                                     className="happy-setup-page__status-slot"
                                     data-happy-desktop-ui="setup-page-status-slot"
                                     role="region"

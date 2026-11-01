@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 /**
  * Where a calendar's occurrences go on screen: which days of a week row a
  * bar spans and in which lane, and where a timed occurrence sits in a day's
@@ -272,5 +273,5 @@ export function calendarDateLabel(
 
 /** How an event's title is shown: as written, or the placeholder for a blank one. */
 export function calendarTitleOf(title: string): string {
-    return title.trim().length === 0 ? "(No title)" : title;
+    return title.trim().length === 0 ? translate("(No title)") : title;
 }

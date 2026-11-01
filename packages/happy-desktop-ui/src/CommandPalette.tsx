@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     useLayoutEffect,
@@ -211,7 +212,7 @@ export function CommandPalette(props: CommandPaletteProps) {
                     value={local.query}
                 />
                 <Button
-                    aria-label={local.closeLabel ?? "Close"}
+                    aria-label={local.closeLabel ?? translate("Close")}
                     className="happy-command-palette__close"
                     icon="close"
                     iconOnly

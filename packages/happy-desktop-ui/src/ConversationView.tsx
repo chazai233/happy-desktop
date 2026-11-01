@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties, type ReactNode, useRef, useState, useSyncExternalStore } from "react";
 import type { FileLinkOpenHandler, FileOpenHandler } from "./fileReference";
 import {
@@ -537,7 +538,7 @@ export function ConversationStatus(props: { elapsedMs?: number; running?: boolea
             data-running={props.running ? "" : undefined}
         >
             <span aria-hidden="true" className="happy-conversation__status-dot" />
-            {props.running ? "Running" : "Idle"}
+            {props.running ? translate("Running") : translate("Idle")}
             {props.running && props.elapsedMs !== undefined ? (
                 <span
                     className="happy-conversation__status-elapsed"
@@ -1064,7 +1065,7 @@ export function ConversationView(props: ConversationViewProps) {
                 >
                     <Spinner
                         className="happy-conversation__loading-spinner"
-                        label="Loading conversation"
+                        label={translate("Loading conversation")}
                         size={20}
                         tone="muted"
                         variant="line"
@@ -1083,10 +1084,12 @@ export function ConversationView(props: ConversationViewProps) {
                             // A conversation with nothing in it is something small
                             // about to come out, so that is what it looks like.
                             animation="hatching-chick"
-                            description="Send a message to start working in this conversation."
+                            description={translate(
+                                "Send a message to start working in this conversation.",
+                            )}
                             icon="chat"
                             size="panel"
-                            title="Nothing here yet"
+                            title={translate("Nothing here yet")}
                         />
                     )}
                     {activityFallback}

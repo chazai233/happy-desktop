@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Button } from "./Button";
 import { LottieScene } from "./LottieScene";
 import { SegmentedProgress, type SegmentedProgressSegment } from "./SegmentedProgress";
@@ -90,10 +91,10 @@ const STAGE_WORDS: Record<AgentUpdateCardAgent["stage"], string> = {
 };
 
 const STEPS: readonly { readonly id: AgentUpdateStep; readonly label: string }[] = [
-    { id: "draining", label: "Finishing work" },
-    { id: "stopping", label: "Shutting down" },
-    { id: "starting", label: "Starting" },
-    { id: "reconnecting", label: "Reconnecting" },
+    { id: "draining", label: translate("Finishing work") },
+    { id: "stopping", label: translate("Shutting down") },
+    { id: "starting", label: translate("Starting") },
+    { id: "reconnecting", label: translate("Reconnecting") },
 ];
 
 /** Every card has exactly this many detail lines, filled or not. */
@@ -109,7 +110,7 @@ const RESTART_COST = "stops tools";
 
 const RESTART_LINE = { kind: "restart" } as const;
 /** The narrow card's cost of "Restart now", on its own line under the action. */
-const RESTART_COST_LINE = { kind: "text", text: "Stops running tools" } as const;
+const RESTART_COST_LINE = { kind: "text", text: translate("Stops running tools") } as const;
 
 type Line =
     | { readonly kind: "empty" }
@@ -223,7 +224,7 @@ export function AgentUpdateCard(props: AgentUpdateCardProps) {
                 </span>
             </div>
             <Button
-                aria-label={settled ? "Dismiss" : "Hide update progress"}
+                aria-label={settled ? translate("Dismiss") : translate("Hide update progress")}
                 className="happy-agent-update-card__collapse"
                 icon="chevron-down"
                 iconOnly
@@ -234,7 +235,7 @@ export function AgentUpdateCard(props: AgentUpdateCardProps) {
             <span className="happy-agent-update-card__footer">
                 <SegmentedProgress
                     className="happy-agent-update-card__bar"
-                    label="Update progress"
+                    label={translate("Update progress")}
                     labels="hidden"
                     segments={segments(view)}
                 />
@@ -270,7 +271,9 @@ function DetailLine(props: {
                 <span
                     className="happy-agent-update-card__line"
                     data-happy-desktop-ui="agent-update-card-line"
-                    title="Restart without waiting. Running commands and file edits are stopped and not run again."
+                    title={translate(
+                        "Restart without waiting. Running commands and file edits are stopped and not run again.",
+                    )}
                 >
                     <button
                         className="happy-agent-update-card__action"
@@ -279,7 +282,9 @@ function DetailLine(props: {
                         onClick={props.onRestartNow}
                         type="button"
                     >
-                        {props.restartNowPending ? "Restarting…" : "Restart now"}
+                        {props.restartNowPending
+                            ? translate("Restarting…")
+                            : translate("Restart now")}
                     </button>
                     <span className="happy-agent-update-card__text happy-agent-update-card__restart-cost">{`· ${RESTART_COST}`}</span>
                 </span>
@@ -319,7 +324,7 @@ function DetailLine(props: {
                 >
                     {line.agent.onSelect ? (
                         <button
-                            aria-label={`Open ${name} — ${status}`}
+                            aria-label={translate("Open {0} — {1}", name, status)}
                             className="happy-agent-update-card__agent"
                             data-happy-desktop-ui="agent-update-card-agent"
                             onClick={line.agent.onSelect}
@@ -353,7 +358,7 @@ function DetailLine(props: {
                         className="happy-agent-update-card__text"
                         data-happy-desktop-ui="agent-update-card-more"
                     >
-                        {`+${String(line.count)} more`}
+                        {translate("+{0} more", String(line.count))}
                     </span>
                 </span>
             );
@@ -370,17 +375,17 @@ function DetailLine(props: {
                             onClick={props.onRetry}
                             type="button"
                         >
-                            Try again
+                            {translate("Try again")}
                         </button>
                     ) : null}
                     {line.previousRunning ? (
                         <span
                             className="happy-agent-update-card__text happy-agent-update-card__note"
-                            title="The previous version is still running."
+                            title={translate("The previous version is still running.")}
                         >
                             {props.onRetry
-                                ? "· old version still running"
-                                : "Old version still running"}
+                                ? translate("· old version still running")
+                                : translate("Old version still running")}
                         </span>
                     ) : null}
                 </span>
@@ -400,7 +405,7 @@ function DetailLine(props: {
                             onClick={props.onChiefOfStaffAsk}
                             type="button"
                         >
-                            Ask {props.chiefOfStaffName}
+                            {translate("Ask {0}", props.chiefOfStaffName)}
                         </button>
                     ) : null}
                 </span>
@@ -411,17 +416,19 @@ function DetailLine(props: {
 function title(view: AgentUpdateCardView): string {
     switch (view.kind) {
         case "draining":
-            return "Finishing work";
+            return translate("Finishing work");
         case "stopping":
-            return "Shutting down";
+            return translate("Shutting down");
         case "starting":
-            return "Starting";
+            return translate("Starting");
         case "reconnecting":
-            return "Reconnecting";
+            return translate("Reconnecting");
         case "done":
-            return view.reason === "restart" ? "Restarted" : "Updated";
+            return view.reason === "restart" ? translate("Restarted") : translate("Updated");
         case "failed":
-            return view.reason === "restart" ? "Restart failed" : "Update failed";
+            return view.reason === "restart"
+                ? translate("Restart failed")
+                : translate("Update failed");
     }
 }
 
@@ -440,10 +447,16 @@ function drainSummaryNarrow(view: Extract<AgentUpdateCardView, { kind: "draining
     if (total === 0)
         return {
             kind: "text",
-            text: view.operationCount === 0 ? "Nothing new starts." : "Background only.",
+            text:
+                view.operationCount === 0
+                    ? translate("Nothing new starts.")
+                    : translate("Background only."),
         };
     if (only) return { agent: only, kind: "agent" };
-    return { kind: "text", text: `${String(total)} ${total === 1 ? "agent" : "agents"} working` };
+    return {
+        kind: "text",
+        text: translate("{0} {1} working", String(total), total === 1 ? "agent" : "agents"),
+    };
 }
 
 /** What a drain is waiting on, in `count` lines; past that the last one counts the rest. */
@@ -459,7 +472,9 @@ function drainLines(
                 // Internal work has no name worth reading, so it is said once
                 // rather than counted.
                 text:
-                    view.operationCount === 0 ? "Nothing new is started." : "Background work only.",
+                    view.operationCount === 0
+                        ? translate("Nothing new is started.")
+                        : translate("Background work only."),
             },
         ];
     // Everything fits only when every waiting agent was listed; past that the
@@ -480,21 +495,21 @@ function linesFilled(view: AgentUpdateCardView): readonly Line[] {
         case "stopping":
             return view.killed
                 ? [
-                      { kind: "text", text: "Tools stopped." },
-                      { kind: "text", text: "Edits, commands not rerun." },
+                      { kind: "text", text: translate("Tools stopped.") },
+                      { kind: "text", text: translate("Edits, commands not rerun.") },
                   ]
                 : [
-                      { kind: "text", text: "All work is done." },
-                      { kind: "text", text: "Nothing was lost." },
+                      { kind: "text", text: translate("All work is done.") },
+                      { kind: "text", text: translate("Nothing was lost.") },
                   ];
         case "starting":
-            return [{ kind: "text", text: "Your work is kept." }];
+            return [{ kind: "text", text: translate("Your work is kept.") }];
         case "reconnecting":
-            return [{ kind: "text", text: "Restoring sessions." }];
+            return [{ kind: "text", text: translate("Restoring sessions.") }];
         case "done":
             return view.tookMs === undefined
                 ? []
-                : [{ kind: "text", text: `Took ${durationText(view.tookMs)}` }];
+                : [{ kind: "text", text: translate("Took {0}", durationText(view.tookMs)) }];
         case "failed":
             return [
                 { kind: "text", text: view.message },

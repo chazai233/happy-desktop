@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useState } from "react";
 import { AssistantMark, type AssistantMarkName } from "./AssistantMark";
 import { CopyButton } from "./CopyButton";
@@ -240,7 +241,7 @@ function SetupAssistantPrompts(props: {
             {open ? (
                 <>
                     <button
-                        aria-label="Close"
+                        aria-label={translate("Close")}
                         className="happy-setup-assistants__prompts-backdrop"
                         onClick={() => setOpen(false)}
                         tabIndex={-1}
@@ -265,7 +266,7 @@ function SetupAssistantPrompts(props: {
                                     </span>
                                 </span>
                                 <CopyButton
-                                    label={`Copy "${prompt.label}"`}
+                                    label={translate('Copy "{0}"', prompt.label)}
                                     {...(action.onCopy ? { onCopy: action.onCopy } : {})}
                                     text={prompt.text}
                                 />

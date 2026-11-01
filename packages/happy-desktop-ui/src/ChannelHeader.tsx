@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     useLayoutEffect,
@@ -121,7 +122,10 @@ export function ChannelHeader(props: ChannelHeaderProps) {
                 {local.onStarToggle
                     ? ((toggle) => (
                           <button
-                              aria-label={local.starLabel ?? (local.starred ? "Unstar" : "Star")}
+                              aria-label={
+                                  local.starLabel ??
+                                  (local.starred ? translate("Unstar") : translate("Star"))
+                              }
                               aria-pressed={local.starred ? "true" : "false"}
                               className="happy-channel-header__star"
                               data-happy-desktop-ui="channel-header-star"
@@ -136,7 +140,9 @@ export function ChannelHeader(props: ChannelHeaderProps) {
                 {local.onTitleClick ? (
                     ((open) => (
                         <button
-                            aria-label={local.titleLabel ?? `Open ${local.title} details`}
+                            aria-label={
+                                local.titleLabel ?? translate("Open {0} details", local.title)
+                            }
                             className="happy-channel-header__lead happy-channel-header__lead--button"
                             data-happy-desktop-ui="channel-header-lead"
                             onClick={() => open()}
@@ -222,7 +228,11 @@ export function ChannelHeader(props: ChannelHeaderProps) {
                     <Badge
                         className="happy-channel-header__agents"
                         icon="spark"
-                        label={local.agentCount === 1 ? "1 agent" : `${local.agentCount} agents`}
+                        label={
+                            local.agentCount === 1
+                                ? translate("1 agent")
+                                : translate("{0} agents", local.agentCount)
+                        }
                         variant="accent"
                     />
                 ) : null}
@@ -242,7 +252,7 @@ export function ChannelHeader(props: ChannelHeaderProps) {
                         <Button
                             aria-expanded={menuOpen}
                             aria-haspopup="menu"
-                            aria-label={local.menuLabel ?? "Channel menu"}
+                            aria-label={local.menuLabel ?? translate("Channel menu")}
                             icon="more"
                             iconOnly
                             onClick={() => setMenuOpen((open) => !open)}

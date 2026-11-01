@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 /** Where a question prompt is shown: the transcript card or a flat list. */
 export type HappyAgentUserInputPromptVariant = "card" | "flat";
 
@@ -25,5 +26,5 @@ export function userInputRuleText(
             : question.multiSelect
               ? "Choose any"
               : "Choose one";
-    return question.required ? count : `${count} · optional`;
+    return question.required ? count : translate("{0} · optional", count);
 }

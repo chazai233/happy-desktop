@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type {
     ConversationActivityPresentation,
     ConversationFileDiff,
@@ -56,25 +57,23 @@ function diffLines(file: ConversationFileDiff): DiffLine[] {
 }
 
 function statusLabel(tool: ConversationToolCall): string {
-    if (tool.status === "awaitingApproval") return "Awaiting approval";
-    if (tool.status === "running") return "Running";
-    if (tool.status === "stopped") return "Stopped";
-    return tool.failed || tool.status === "failed" ? "Failed" : "Completed";
+    if (tool.status === "awaitingApproval") return translate("Awaiting approval");
+    if (tool.status === "running") return translate("Running");
+    if (tool.status === "stopped") return translate("Stopped");
+    return tool.failed || tool.status === "failed" ? translate("Failed") : translate("Completed");
 }
 
-function presentationTitle(
-    presentation: ConversationActivityPresentation | undefined,
-): "File edit" | "Terminal" | "Sub-agent spawn" | "Presented files" | "Artifact" | "Tool call" {
-    if (presentation?.type === "agentSpawn") return "Sub-agent spawn";
-    if (presentation?.type === "media") return "Presented files";
-    if (presentation?.type === "artifact") return "Artifact";
-    if (presentation?.type === "fileDiff") return "File edit";
+function presentationTitle(presentation: ConversationActivityPresentation | undefined): string {
+    if (presentation?.type === "agentSpawn") return translate("Sub-agent spawn");
+    if (presentation?.type === "media") return translate("Presented files");
+    if (presentation?.type === "artifact") return translate("Artifact");
+    if (presentation?.type === "fileDiff") return translate("File edit");
     if (
         presentation?.type === "execCommand" ||
         presentation?.type === "backgroundTerminalInteraction"
     )
-        return "Terminal";
-    return "Tool call";
+        return translate("Terminal");
+    return translate("Tool call");
 }
 
 /**
@@ -129,7 +128,7 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                     <strong>{title}</strong>
                     <span>
                         {presentation?.type === "agentSpawn"
-                            ? (presentation.model?.name ?? "Model unresolved")
+                            ? (presentation.model?.name ?? translate("Model unresolved"))
                             : humanize(tool.toolName)}
                     </span>
                 </span>
@@ -152,7 +151,7 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                                 <>
                                     <section className="happy-tool-call-preview__section">
                                         <span className="happy-tool-call-preview__label">
-                                            Provider ID
+                                            {translate("Provider ID")}
                                         </span>
                                         <pre className="happy-tool-call-preview__arguments">
                                             {presentation.model.providerId}
@@ -160,7 +159,7 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                                     </section>
                                     <section className="happy-tool-call-preview__section">
                                         <span className="happy-tool-call-preview__label">
-                                            Model ID
+                                            {translate("Model ID")}
                                         </span>
                                         <pre className="happy-tool-call-preview__arguments">
                                             {presentation.model.modelId}
@@ -170,7 +169,9 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                             ) : null}
                             {presentation.agentId ? (
                                 <section className="happy-tool-call-preview__section">
-                                    <span className="happy-tool-call-preview__label">Agent ID</span>
+                                    <span className="happy-tool-call-preview__label">
+                                        {translate("Agent ID")}
+                                    </span>
                                     <pre className="happy-tool-call-preview__arguments">
                                         {presentation.agentId}
                                     </pre>
@@ -180,7 +181,9 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                     ) : null}
                     {command !== undefined ? (
                         <section className="happy-tool-call-preview__section">
-                            <span className="happy-tool-call-preview__label">Command</span>
+                            <span className="happy-tool-call-preview__label">
+                                {translate("Command")}
+                            </span>
                             <pre className="happy-tool-call-preview__command">{command}</pre>
                         </section>
                     ) : null}
@@ -190,7 +193,7 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                             viewportClassName="happy-tool-call-preview__terminal-viewport"
                         >
                             <pre className="happy-tool-call-preview__terminal-content">
-                                {terminalBody || "(no output)"}
+                                {terminalBody || translate("(no output)")}
                             </pre>
                         </ScrollArea>
                     ) : null}
@@ -213,7 +216,9 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                         : null}
                     {presentation?.type === "media" ? (
                         <section className="happy-tool-call-preview__section">
-                            <span className="happy-tool-call-preview__label">Files</span>
+                            <span className="happy-tool-call-preview__label">
+                                {translate("Files")}
+                            </span>
                             <ConversationMedia
                                 items={presentation.items}
                                 {...(mediaLayout ? { layout: mediaLayout } : {})}
@@ -222,19 +227,27 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                     ) : null}
                     {presentation?.type === "artifact" ? (
                         <section className="happy-tool-call-preview__section">
-                            <span className="happy-tool-call-preview__label">Published</span>
+                            <span className="happy-tool-call-preview__label">
+                                {translate("Published")}
+                            </span>
                             <ResultCard
-                                detail={`${happyAgentArtifactTypeLabel(presentation.artifactType)} · Version ${String(presentation.version)}`}
+                                detail={translate(
+                                    "{0} · Version {1}",
+                                    happyAgentArtifactTypeLabel(presentation.artifactType),
+                                    String(presentation.version),
+                                )}
                                 glyph={
                                     <ArtifactTypeGlyph size={20} type={presentation.artifactType} />
                                 }
-                                title={presentation.title || "Untitled artifact"}
+                                title={presentation.title || translate("Untitled artifact")}
                             />
                         </section>
                     ) : null}
                     {presentation?.type === "exploration" ? (
                         <section className="happy-tool-call-preview__section">
-                            <span className="happy-tool-call-preview__label">Operations</span>
+                            <span className="happy-tool-call-preview__label">
+                                {translate("Operations")}
+                            </span>
                             <div className="happy-tool-call-preview__operations">
                                 {presentation.operations.map((operation, index) => (
                                     <div
@@ -256,7 +269,9 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                     ) : null}
                     {presentation === undefined || presentation.type === "agentSpawn" ? (
                         <section className="happy-tool-call-preview__section">
-                            <span className="happy-tool-call-preview__label">Arguments</span>
+                            <span className="happy-tool-call-preview__label">
+                                {translate("Arguments")}
+                            </span>
                             <pre className="happy-tool-call-preview__arguments">
                                 {json(tool.arguments)}
                             </pre>
@@ -265,7 +280,7 @@ export function ToolCallPreview(props: ToolCallPreviewProps) {
                     {tool.display || tool.failure?.message ? (
                         <section className="happy-tool-call-preview__section">
                             <span className="happy-tool-call-preview__label">
-                                {tool.failed ? "Failure" : "Result"}
+                                {tool.failed ? translate("Failure") : translate("Result")}
                             </span>
                             <pre
                                 className="happy-tool-call-preview__result"

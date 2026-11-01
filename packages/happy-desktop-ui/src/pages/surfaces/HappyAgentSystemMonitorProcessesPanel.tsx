@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type {
     HappyAgentSystemMonitorSnapshot,
     HappyAgentSystemMonitorProcessColumn,
@@ -19,12 +20,12 @@ export interface HappyAgentSystemMonitorProcessesPanelProps {
 
 const COLUMNS: readonly { column: HappyAgentSystemMonitorProcessColumn; label: string }[] = [
     { column: "pid", label: "PID" },
-    { column: "name", label: "Name" },
-    { column: "user", label: "User" },
-    { column: "cpu", label: "CPU" },
-    { column: "memory", label: "Memory" },
-    { column: "state", label: "State" },
-    { column: "threads", label: "Threads" },
+    { column: "name", label: translate("Name") },
+    { column: "user", label: translate("User") },
+    { column: "cpu", label: translate("CPU") },
+    { column: "memory", label: translate("Memory") },
+    { column: "state", label: translate("State") },
+    { column: "threads", label: translate("Threads") },
 ];
 
 /** A controlled process list: its store owns ordering, filter, and bounded PID histories. */
@@ -40,19 +41,27 @@ export function HappyAgentSystemMonitorProcessesPanel(
         >
             <div className="system-monitor__process-toolbar">
                 <div className="system-monitor__process-heading">
-                    <h2>Processes</h2>
+                    <h2>{translate("Processes")}</h2>
                     <span>
                         {processes
-                            ? `${processes.total.toLocaleString("en-US")} processes${processes.threads === null ? "" : ` · ${processes.threads.toLocaleString("en-US")} threads`}`
-                            : "Live tasks on this machine"}
-                        {processes && props.monitor.status !== "ready" ? " · Last sample" : ""}
+                            ? translate(
+                                  "{0} processes{1}",
+                                  processes.total.toLocaleString("en-US"),
+                                  processes.threads === null
+                                      ? ""
+                                      : ` · ${processes.threads.toLocaleString("en-US")} threads`,
+                              )
+                            : translate("Live tasks on this machine")}
+                        {processes && props.monitor.status !== "ready"
+                            ? translate(" · Last sample")
+                            : ""}
                     </span>
                 </div>
                 <TextField
-                    aria-label="Filter processes"
+                    aria-label={translate("Filter processes")}
                     type="search"
                     leadingIcon="search"
-                    placeholder="Filter processes…"
+                    placeholder={translate("Filter processes…")}
                     value={processFilter}
                     onValueChange={props.onProcessFilterChange}
                     size="small"
@@ -64,12 +73,16 @@ export function HappyAgentSystemMonitorProcessesPanel(
                         [ · · · ]
                     </span>
                     <strong>
-                        {sample ? "Process metrics unavailable" : "Waiting for processes"}
+                        {sample
+                            ? translate("Process metrics unavailable")
+                            : translate("Waiting for processes")}
                     </strong>
                     <p>
                         {sample
-                            ? "This machine is not reporting its process list. Other resource metrics remain live."
-                            : "The live task list will appear with the first sample."}
+                            ? translate(
+                                  "This machine is not reporting its process list. Other resource metrics remain live.",
+                              )
+                            : translate("The live task list will appear with the first sample.")}
                     </p>
                 </div>
             ) : (
@@ -77,7 +90,7 @@ export function HappyAgentSystemMonitorProcessesPanel(
                     <div
                         className="system-monitor__process-table"
                         role="table"
-                        aria-label="Live processes"
+                        aria-label={translate("Live processes")}
                         aria-rowcount={processRows.length + 1}
                     >
                         <div role="rowgroup" className="system-monitor__process-header">
@@ -152,14 +165,14 @@ export function HappyAgentSystemMonitorProcessesPanel(
                                         <div className="system-monitor__process-reading">
                                             <SystemMonitorAsciiMeter
                                                 value={process.cpuPercent}
-                                                label={`${process.name} CPU usage`}
+                                                label={translate("{0} CPU usage", process.name)}
                                                 compact
                                             />
                                             <span>{systemMonitorPercent(process.cpuPercent)}</span>
                                         </div>
                                         <SystemMonitorProcessSpark
                                             values={cpuHistory}
-                                            label={`${process.name} CPU history`}
+                                            label={translate("{0} CPU history", process.name)}
                                         />
                                     </div>
                                     <div
@@ -176,7 +189,10 @@ export function HappyAgentSystemMonitorProcessesPanel(
                                                       )
                                                     : null
                                             }
-                                            label={`${process.name} physical memory share`}
+                                            label={translate(
+                                                "{0} physical memory share",
+                                                process.name,
+                                            )}
                                             compact
                                         />
                                     </div>
@@ -200,22 +216,28 @@ export function HappyAgentSystemMonitorProcessesPanel(
                         <div className="system-monitor__process-empty">
                             <strong>
                                 {processFilter.trim()
-                                    ? "No matching processes"
-                                    : "No processes reported"}
+                                    ? translate("No matching processes")
+                                    : translate("No processes reported")}
                             </strong>
                             <p>
                                 {processFilter.trim()
-                                    ? "Try a different name, user, state, or PID."
-                                    : "New processes appear automatically as the machine reports them."}
+                                    ? translate("Try a different name, user, state, or PID.")
+                                    : translate(
+                                          "New processes appear automatically as the machine reports them.",
+                                      )}
                             </p>
                         </div>
                     ) : null}
                     <div className="system-monitor__process-footer">
                         <span>
-                            {processRows.length} of {processes.items.length} sampled · Top CPU and
-                            memory consumers
+                            {processRows.length} {translate("of")} {processes.items.length}{" "}
+                            {translate("sampled · Top CPU and memory consumers")}
                         </span>
-                        <span>CPU is a share of the whole machine · Order updates every 5s</span>
+                        <span>
+                            {translate(
+                                "CPU is a share of the whole machine · Order updates every 5s",
+                            )}
+                        </span>
                     </div>
                 </>
             )}

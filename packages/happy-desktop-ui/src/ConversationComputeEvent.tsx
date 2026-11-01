@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useState, type CSSProperties } from "react";
 import type { ConversationComputeState } from "happy-desktop-state";
 import { CopyButton } from "./CopyButton";
@@ -45,14 +46,22 @@ const STATES: Record<
         readonly tone: "busy" | "done" | "idle" | "error";
     }
 > = {
-    unprovisioned: { label: "Compute not started", glyph: "cube-outline", tone: "idle" },
-    provisioning: { label: "Preparing compute", glyph: "hourglass-outline", tone: "busy" },
-    ready: { label: "Compute ready", glyph: "checkmark-circle-outline", tone: "done" },
+    unprovisioned: { label: translate("Compute not started"), glyph: "cube-outline", tone: "idle" },
+    provisioning: {
+        label: translate("Preparing compute"),
+        glyph: "hourglass-outline",
+        tone: "busy",
+    },
+    ready: { label: translate("Compute ready"), glyph: "checkmark-circle-outline", tone: "done" },
     /* No machine can be had at all — a different thing from one that broke on
        the way up, and the only one of these a reader cannot wait out. */
-    unavailable: { label: "Compute unavailable", glyph: "cloud-offline-outline", tone: "error" },
-    stopped: { label: "Compute stopped", glyph: "stop-circle-outline", tone: "idle" },
-    failed: { label: "Compute failed", glyph: "alert-circle-outline", tone: "error" },
+    unavailable: {
+        label: translate("Compute unavailable"),
+        glyph: "cloud-offline-outline",
+        tone: "error",
+    },
+    stopped: { label: translate("Compute stopped"), glyph: "stop-circle-outline", tone: "idle" },
+    failed: { label: translate("Compute failed"), glyph: "alert-circle-outline", tone: "error" },
 };
 
 /** A duration a reader can read at a glance, from Happy Agent's millisecond measure. */
@@ -148,11 +157,11 @@ export function ConversationComputeEvent(props: ConversationComputeEventProps) {
                     type="button"
                 >
                     <Icon name={open ? "chevron-down" : "chevron-right"} size={12} />
-                    {open ? "Hide details" : "Details"}
+                    {open ? translate("Hide details") : translate("Details")}
                 </button>
                 <CopyButton
                     data-happy-desktop-ui="conversation-compute-copy"
-                    label="Copy compute event"
+                    label={translate("Copy compute event")}
                     text={props.text}
                 />
             </div>
@@ -161,11 +170,11 @@ export function ConversationComputeEvent(props: ConversationComputeEventProps) {
                     className="happy-conversation-compute__details"
                     data-happy-desktop-ui="conversation-compute-details"
                 >
-                    <ComputeDetail label="Provider" value={props.provider} />
-                    <ComputeDetail label="Phase" value={props.phase} />
-                    <ComputeDetail label="Instance" value={props.instanceId} />
+                    <ComputeDetail label={translate("Provider")} value={props.provider} />
+                    <ComputeDetail label={translate("Phase")} value={props.phase} />
+                    <ComputeDetail label={translate("Instance")} value={props.instanceId} />
                     {elapsed === undefined ? null : (
-                        <ComputeDetail label="Elapsed" value={elapsed} />
+                        <ComputeDetail label={translate("Elapsed")} value={elapsed} />
                     )}
                 </div>
             ) : null}

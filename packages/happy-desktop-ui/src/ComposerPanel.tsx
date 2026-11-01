@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties, ReactNode } from "react";
 import { Button } from "./Button";
 import { ScrollArea } from "./Scrollbar";
@@ -62,7 +63,7 @@ export function ComposerPanel(props: ComposerPanelProps) {
                     )}
                 </div>
                 <Button
-                    aria-label={`Close ${props.title}`}
+                    aria-label={translate("Close {0}", props.title)}
                     icon="close"
                     iconOnly
                     onClick={props.onClose}

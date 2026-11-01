@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { create } from "qrcode";
 import { Ionicon } from "./vectorIcons/VectorIcon";
 
@@ -130,7 +131,7 @@ export function QRCode(props: QRCodeProps) {
     const viewBox = `0 0 ${String(geometry.cells)} ${String(geometry.cells)}`;
     return (
         <div
-            aria-label={props.label ?? "QR code"}
+            aria-label={props.label ?? translate("QR code")}
             className={["happy-qr-code", props.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="qr-code"
             data-testid={props["data-testid"]}
@@ -190,7 +191,7 @@ function QRCodeMarkView(props: { readonly mark: QRCodeMark }) {
             <span className="happy-qr-code__mark-name">
                 {props.mark === "app-store" ? "App Store" : "Google Play"}
             </span>
-            <span className="happy-qr-code__mark-action">Download</span>
+            <span className="happy-qr-code__mark-action">{translate("Download")}</span>
         </span>
     );
 }

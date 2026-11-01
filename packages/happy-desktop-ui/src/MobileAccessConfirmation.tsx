@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { ReactNode } from "react";
 import { Banner } from "./Banner";
 import { Box } from "./Box";
@@ -48,7 +49,7 @@ export function MobileAccessConfirmation(props: MobileAccessConfirmationProps) {
                             onClick={props.onCancel}
                             variant="ghost"
                         >
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                         <Button
                             data-testid="mobile-access-confirm"
@@ -58,16 +59,16 @@ export function MobileAccessConfirmation(props: MobileAccessConfirmationProps) {
                         >
                             {confirmation.pending
                                 ? removes
-                                    ? "Removing…"
-                                    : "Disconnecting…"
-                                : "Disconnect"}
+                                    ? translate("Removing…")
+                                    : translate("Disconnecting…")
+                                : translate("Disconnect")}
                         </Button>
                     </Box>
                 }
                 icon="unlink"
                 onClose={cancel}
                 size="medium"
-                title="Disconnect this computer?"
+                title={translate("Disconnect this computer?")}
                 tone="danger"
             >
                 <Box className="happy-mobile-access-confirmation__body">
@@ -75,7 +76,9 @@ export function MobileAccessConfirmation(props: MobileAccessConfirmationProps) {
                         <Banner
                             tone="danger"
                             title={
-                                removes ? "Couldn't remove this computer" : "Could not disconnect"
+                                removes
+                                    ? translate("Couldn't remove this computer")
+                                    : translate("Could not disconnect")
                             }
                         >
                             {confirmation.error}
@@ -92,19 +95,21 @@ function DisconnectBody() {
     return (
         <>
             <p className="happy-mobile-access-confirmation__lead">
-                This removes this Happy Agent&apos;s saved pairing with Happy Mobile. Phones can no
-                longer start or steer its sessions until you connect again.
+                {translate(
+                    "This removes this Happy Agent&apos;s saved pairing with Happy Mobile. Phones can no longer start or steer its sessions until you connect again.",
+                )}
             </p>
-            <Group title="Stays as it is">
+            <Group title={translate("Stays as it is")}>
                 <ul className="happy-mobile-access-confirmation__list">
-                    <li>Your Happy account and every phone signed in to it</li>
-                    <li>Session history already on your phones</li>
-                    <li>Sessions running on this computer</li>
+                    <li>{translate("Your Happy account and every phone signed in to it")}</li>
+                    <li>{translate("Session history already on your phones")}</li>
+                    <li>{translate("Sessions running on this computer")}</li>
                 </ul>
             </Group>
             <p className="happy-mobile-access-confirmation__note">
-                This does not sign out or remove any phone. To remove one phone, log out of Happy on
-                that phone.
+                {translate(
+                    "This does not sign out or remove any phone. To remove one phone, log out of Happy on that phone.",
+                )}
             </p>
         </>
     );
@@ -114,26 +119,29 @@ function RemoveComputerBody() {
     return (
         <>
             <p className="happy-mobile-access-confirmation__lead">
-                This removes this computer from your Happy account. Your phones stop showing it and
-                the chats it published, and they can no longer start or steer its sessions. To use
-                it from your phone again, connect this computer again.
+                {translate(
+                    "This removes this computer from your Happy account. Your phones stop showing it and the chats it published, and they can no longer start or steer its sessions. To use it from your phone again, connect this computer again.",
+                )}
             </p>
-            <Group title="Removed">
+            <Group title={translate("Removed")}>
                 <ul className="happy-mobile-access-confirmation__list">
-                    <li>This computer, on every phone signed in to your Happy account</li>
-                    <li>Chats this computer published to Happy</li>
+                    <li>
+                        {translate("This computer, on every phone signed in to your Happy account")}
+                    </li>
+                    <li>{translate("Chats this computer published to Happy")}</li>
                 </ul>
             </Group>
-            <Group title="Stays as it is">
+            <Group title={translate("Stays as it is")}>
                 <ul className="happy-mobile-access-confirmation__list">
-                    <li>Your Happy account and every phone signed in to it</li>
-                    <li>Sessions and history on this computer</li>
-                    <li>Other computers on your account</li>
+                    <li>{translate("Your Happy account and every phone signed in to it")}</li>
+                    <li>{translate("Sessions and history on this computer")}</li>
+                    <li>{translate("Other computers on your account")}</li>
                 </ul>
             </Group>
             <p className="happy-mobile-access-confirmation__note">
-                This does not sign out or remove any phone. If this computer can&apos;t reach Happy,
-                it stays linked and you can try again.
+                {translate(
+                    "This does not sign out or remove any phone. If this computer can&apos;t reach Happy, it stays linked and you can try again.",
+                )}
             </p>
         </>
     );

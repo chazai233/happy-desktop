@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import {
     happyAgentArtifactBackground,
@@ -107,11 +108,11 @@ export function HappyAgentArtifactViewer(props: HappyAgentArtifactViewerProps) {
     const background = happyAgentArtifactBackground(viewer.version?.background);
     const back = props.onBack ? (
         <Button
-            aria-label="Back"
+            aria-label={translate("Back")}
             iconOnly
             onClick={props.onBack}
             size="small"
-            title="Back"
+            title={translate("Back")}
             variant="ghost"
         >
             <Ionicon name="arrow-back" size={14} />
@@ -131,7 +132,7 @@ export function HappyAgentArtifactViewer(props: HappyAgentArtifactViewerProps) {
                         {...(props.tab ? { compact: true } : {})}
                         {...(back ? { leading: back } : {})}
                         subtitle={happyAgentArtifactTypeLabel(artifact.type)}
-                        title={artifact.title || "Untitled"}
+                        title={artifact.title || translate("Untitled")}
                         trailing={
                             <>
                                 {artifact.status === "active" ? (
@@ -142,7 +143,7 @@ export function HappyAgentArtifactViewer(props: HappyAgentArtifactViewerProps) {
                                         size="small"
                                         variant="ghost"
                                     >
-                                        History
+                                        {translate("History")}
                                     </Button>
                                 ) : null}
                                 {artifact.status === "active" && props.surface ? (
@@ -153,11 +154,15 @@ export function HappyAgentArtifactViewer(props: HappyAgentArtifactViewerProps) {
                                         onClick={props.surface.onToggle}
                                         size="small"
                                         title={
-                                            props.surface.added ? "Remove from sidebar" : undefined
+                                            props.surface.added
+                                                ? translate("Remove from sidebar")
+                                                : undefined
                                         }
                                         variant="ghost"
                                     >
-                                        {props.surface.added ? "In sidebar" : "Add to sidebar"}
+                                        {props.surface.added
+                                            ? translate("In sidebar")
+                                            : translate("Add to sidebar")}
                                     </Button>
                                 ) : null}
                                 {artifact.status === "active" ? (
@@ -169,7 +174,7 @@ export function HappyAgentArtifactViewer(props: HappyAgentArtifactViewerProps) {
                                         size="small"
                                         variant="ghost"
                                     >
-                                        Delete
+                                        {translate("Delete")}
                                     </Button>
                                 ) : null}
                             </>
@@ -204,7 +209,7 @@ export function HappyAgentArtifactViewer(props: HappyAgentArtifactViewerProps) {
                                     description={deletedSentence(artifact, props.labels)}
                                     icon="trash"
                                     size="panel"
-                                    title="This artifact was deleted"
+                                    title={translate("This artifact was deleted")}
                                 />
                             ) : (
                                 <ArtifactContent
@@ -244,28 +249,30 @@ export function HappyAgentArtifactViewer(props: HappyAgentArtifactViewerProps) {
                         className="happy-agent-artifact-viewer__header"
                         {...(props.tab ? { compact: true } : {})}
                         {...(back ? { leading: back } : {})}
-                        title="Artifact"
+                        title={translate("Artifact")}
                     />
                     {state.type === "missing" ? (
                         <EmptyState
-                            description="Nothing with this name is published on this Happy Agent."
+                            description={translate(
+                                "Nothing with this name is published on this Happy Agent.",
+                            )}
                             icon="package"
                             size="panel"
-                            title="Artifact not found"
+                            title={translate("Artifact not found")}
                         />
                     ) : state.type === "error" ? (
                         <EmptyState
                             description={state.error.message}
                             icon="alert"
                             size="panel"
-                            title="The artifact could not be read"
+                            title={translate("The artifact could not be read")}
                         />
                     ) : (
                         <EmptyState
-                            description="Reading the artifact and its history."
+                            description={translate("Reading the artifact and its history.")}
                             icon="clock"
                             size="panel"
-                            title="Loading artifact…"
+                            title={translate("Loading artifact…")}
                         />
                     )}
                 </>
@@ -278,7 +285,11 @@ function deletedSentence(artifact: HappyAgentArtifact, labels: HappyAgentArtifac
     const by = artifact.deletedBy ? labels.author(artifact.deletedBy) : "Someone";
     const where = labels.source(artifact.deletedSource);
     const when = artifact.deletedAt === null ? "" : ` on ${labels.time(artifact.deletedAt)}`;
-    return `Deleted by ${artifactMadeBy(by, where)}${when}. Its versions are no longer served.`;
+    return translate(
+        "Deleted by {0}{1}. Its versions are no longer served.",
+        artifactMadeBy(by, where),
+        when,
+    );
 }
 
 /**
@@ -300,13 +311,20 @@ function ArtifactOlder(props: {
             data-happy-desktop-ui="happy-agent-artifact-viewer-older"
         >
             <Banner
-                action={{ label: "Show latest", onClick: props.onLatestShow }}
+                action={{ label: translate("Show latest"), onClick: props.onLatestShow }}
                 tone="info"
-                title={`Showing version ${String(shown)}`}
+                title={translate("Showing version {0}", String(shown))}
             >
                 {props.version && props.version.number === shown
-                    ? `Made by ${artifactMadeBy(labels.author(props.version.createdBy), labels.source(props.version.source))} · ${labels.time(props.version.createdAt)}.`
-                    : "An older version of this artifact."}
+                    ? translate(
+                          "Made by {0} · {1}.",
+                          artifactMadeBy(
+                              labels.author(props.version.createdBy),
+                              labels.source(props.version.source),
+                          ),
+                          labels.time(props.version.createdAt),
+                      )
+                    : translate("An older version of this artifact.")}
             </Banner>
         </div>
     );
@@ -326,16 +344,16 @@ function ArtifactContent(props: {
         case "loading":
             return (
                 <EmptyState
-                    description="Reading this version's files."
+                    description={translate("Reading this version's files.")}
                     icon="clock"
                     size="panel"
-                    title="Loading…"
+                    title={translate("Loading…")}
                 />
             );
         case "error":
             return (
                 <div className="happy-agent-artifact-viewer__fallback">
-                    <Banner tone="danger" title="This version could not be shown">
+                    <Banner tone="danger" title={translate("This version could not be shown")}>
                         {content.error.message}
                     </Banner>
                     <ArtifactFileList files={props.files} onFileDownload={props.onFileDownload} />
@@ -383,7 +401,7 @@ function ArtifactContent(props: {
                     omitted={content.page.omitted}
                     reason={content.page.reason}
                     text={content.page.text}
-                    title={props.title || "Web page"}
+                    title={props.title || translate("Web page")}
                 />
             );
         case "image":
@@ -423,9 +441,10 @@ function ArtifactContent(props: {
         case "files":
             return (
                 <div className="happy-agent-artifact-viewer__fallback">
-                    <Banner tone="neutral" title="Shown as its files">
-                        This kind of artifact has no viewer here yet. Its files can still be
-                        downloaded.
+                    <Banner tone="neutral" title={translate("Shown as its files")}>
+                        {translate(
+                            "This kind of artifact has no viewer here yet. Its files can still be downloaded.",
+                        )}
                     </Banner>
                     <ArtifactFileList files={props.files} onFileDownload={props.onFileDownload} />
                 </div>
@@ -442,7 +461,14 @@ function ArtifactGallery(props: { images: readonly HappyAgentArtifactFileLink[] 
     const [selected, setSelected] = useState(0);
     const index = Math.min(selected, props.images.length - 1);
     const shown = props.images[index];
-    if (!shown) return <EmptyState icon="image" size="panel" title="This series has no pictures" />;
+    if (!shown)
+        return (
+            <EmptyState
+                icon="image"
+                size="panel"
+                title={translate("This series has no pictures")}
+            />
+        );
     return (
         <div
             className="happy-agent-artifact-gallery"
@@ -468,7 +494,7 @@ function ArtifactGallery(props: { images: readonly HappyAgentArtifactFileLink[] 
                 viewportClassName="happy-agent-artifact-gallery__strip-viewport"
             >
                 <div
-                    aria-label="Pictures in this series"
+                    aria-label={translate("Pictures in this series")}
                     className="happy-agent-artifact-gallery__thumbs"
                     role="group"
                 >
@@ -480,7 +506,12 @@ function ArtifactGallery(props: { images: readonly HappyAgentArtifactFileLink[] 
                             data-happy-desktop-ui="happy-agent-artifact-gallery-thumb"
                             key={image.file.path}
                             onClick={() => setSelected(index)}
-                            title={`${String(index + 1)} of ${String(props.images.length)} · ${artifactFileName(image.file.path)}`}
+                            title={translate(
+                                "{0} of {1} · {2}",
+                                String(index + 1),
+                                String(props.images.length),
+                                artifactFileName(image.file.path),
+                            )}
                             type="button"
                         >
                             <img
@@ -521,7 +552,7 @@ function ArtifactFileCard(props: {
                 </span>
             </span>
             <Button onClick={() => props.onFileDownload(props.link)} size="small">
-                Download
+                {translate("Download")}
             </Button>
         </div>
     );
@@ -548,11 +579,11 @@ function ArtifactFileList(props: {
                         </span>
                     </span>
                     <Button
-                        aria-label={`Download ${artifactFileName(link.file.path)}`}
+                        aria-label={translate("Download {0}", artifactFileName(link.file.path))}
                         iconOnly
                         onClick={() => props.onFileDownload(link)}
                         size="small"
-                        title="Download"
+                        title={translate("Download")}
                         variant="ghost"
                     >
                         <Ionicon name="download-outline" size={14} />
@@ -579,7 +610,7 @@ function ArtifactHistory(props: {
     const shown = viewer.versionSelected ?? props.artifact.latestVersion;
     return (
         <aside
-            aria-label="Versions and files"
+            aria-label={translate("Versions and files")}
             className="happy-agent-artifact-history"
             data-happy-desktop-ui="happy-agent-artifact-history"
         >
@@ -588,12 +619,14 @@ function ArtifactHistory(props: {
                 viewportClassName="happy-agent-artifact-history__scroll-viewport"
             >
                 <div className="happy-agent-artifact-history__content">
-                    <h2 className="happy-agent-artifact-history__heading">Versions</h2>
+                    <h2 className="happy-agent-artifact-history__heading">
+                        {translate("Versions")}
+                    </h2>
                     {viewer.versions.length === 0 ? (
                         <p className="happy-agent-artifact-history__note">
                             {viewer.versionsLoading
-                                ? "Reading the history…"
-                                : "No history to show."}
+                                ? translate("Reading the history…")
+                                : translate("No history to show.")}
                         </p>
                     ) : (
                         <ol
@@ -612,10 +645,13 @@ function ArtifactHistory(props: {
                                     >
                                         <span className="happy-agent-artifact-history__version-line">
                                             <span className="happy-agent-artifact-history__version-number">
-                                                Version {version.number}
+                                                {translate("Version")} {version.number}
                                             </span>
                                             {version.number === props.artifact.latestVersion ? (
-                                                <Badge label="Latest" variant="outline" />
+                                                <Badge
+                                                    label={translate("Latest")}
+                                                    variant="outline"
+                                                />
                                             ) : null}
                                         </span>
                                         <span className="happy-agent-artifact-history__version-meta">
@@ -639,13 +675,13 @@ function ArtifactHistory(props: {
                             size="small"
                             variant="ghost"
                         >
-                            Show older versions
+                            {translate("Show older versions")}
                         </Button>
                     ) : null}
                     {viewer.files.length > 0 ? (
                         <>
                             <h2 className="happy-agent-artifact-history__heading">
-                                Files in version {shown}
+                                {translate("Files in version")} {shown}
                             </h2>
                             <ArtifactFileList
                                 files={viewer.files}
@@ -679,7 +715,7 @@ function ArtifactDeleteDialog(props: {
                 footer={
                     <Box className="happy-agent-artifact-delete-dialog__actions">
                         <Button disabled={pending} onClick={props.onCancel} variant="ghost">
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                         <Button
                             data-testid="happy-agent-artifact-delete-confirm"
@@ -687,25 +723,27 @@ function ArtifactDeleteDialog(props: {
                             onClick={props.onConfirm}
                             variant="danger"
                         >
-                            {pending ? "Deleting…" : "Delete artifact"}
+                            {pending ? translate("Deleting…") : translate("Delete artifact")}
                         </Button>
                     </Box>
                 }
                 icon="trash"
                 onClose={pending ? undefined : props.onCancel}
                 size="small"
-                title={`Delete “${title}”?`}
+                title={translate("Delete “{0}”?", title)}
                 tone="danger"
             >
                 <Box className="happy-agent-artifact-delete-dialog__body">
                     {props.deletion.phase === "failed" ? (
-                        <Banner tone="danger" title="Not deleted">
+                        <Banner tone="danger" title={translate("Not deleted")}>
                             {props.deletion.error.message}
                         </Banner>
                     ) : null}
                     <span className="happy-agent-artifact-delete-dialog__message">
-                        This deletes {title} for everyone. Its versions stop being served, and it
-                        stays listed only as deleted.
+                        {translate("This deletes")} {title}
+                        {translate(
+                            "for everyone. Its versions stop being served, and it stays listed only as deleted.",
+                        )}
                     </span>
                 </Box>
             </Modal>

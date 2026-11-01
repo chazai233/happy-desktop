@@ -1,4 +1,6 @@
+import { translate } from "happy-desktop-ui";
 import { useSyncExternalStore } from "react";
+import { languagePreferenceStore } from "../languagePreference";
 import type {
     AppearanceStore,
     HappyAgentAttentionStore,
@@ -32,7 +34,6 @@ import {
     happyAgentMenusDerive,
     happyAgentModelKey,
     happyAgentServiceName,
-    happyAgentThinkingLabel,
     experimentsStoreNoop,
     projectsVisibilityStoreNoop,
     projectsVisibilityConnection,
@@ -59,6 +60,7 @@ import {
 } from "happy-desktop-state";
 import {
     happyAgentComposerModelControlProps,
+    thinkingLevelLabel,
     GptLiveVoiceSettings,
     HappyAgentAccountSettings,
     HappyAgentGeneralSettings,
@@ -104,24 +106,24 @@ import {
 
 /** The categories the local settings window offers, in the order they are listed. */
 export const HAPPY_AGENT_SETTINGS_CATEGORIES: readonly HappyAgentSettingsCategory[] = [
-    { icon: "settings", id: "general", label: "General" },
+    { icon: "settings", id: "general", label: translate("General") },
     // Joining other people's tasks and their shared docs, lists and calendars.
-    { icon: "files", id: "sharing", label: "Sharing" },
+    { icon: "files", id: "sharing", label: translate("Sharing") },
     // Local author identity and the optional WorkOS account share one category.
-    { icon: "users", id: "account", label: "Account" },
+    { icon: "users", id: "account", label: translate("Account") },
     // How each project's changes are split into tiers in the Changes listing.
-    { icon: "file-diff", id: "file-tiers", label: "File tiers" },
-    { icon: "doc", id: "instructions", label: "Instructions" },
-    { icon: "lock", id: "secrets", label: "Secrets" },
-    { icon: "lock", id: "passwords", label: "Passwords" },
-    { icon: "globe", id: "providers", label: "Providers" },
+    { icon: "file-diff", id: "file-tiers", label: translate("File tiers") },
+    { icon: "doc", id: "instructions", label: translate("Instructions") },
+    { icon: "lock", id: "secrets", label: translate("Secrets") },
+    { icon: "lock", id: "passwords", label: translate("Passwords") },
+    { icon: "globe", id: "providers", label: translate("Providers") },
     // Usage sits after Providers because it is the same accounts read the other
     // way round: which of them exist, then what each has spent.
-    { icon: "zap", id: "usage", label: "Usage" },
-    { icon: "call", id: "voice", label: "Voice" },
-    { icon: "mobile", id: "mobile-access", label: "Mobile access" },
-    { icon: "zap", id: "experimental", label: "Experimental" },
-    { icon: "code", id: "debug", label: "Dev tools" },
+    { icon: "zap", id: "usage", label: translate("Usage") },
+    { icon: "call", id: "voice", label: translate("Voice") },
+    { icon: "mobile", id: "mobile-access", label: translate("Mobile access") },
+    { icon: "zap", id: "experimental", label: translate("Experimental") },
+    { icon: "code", id: "debug", label: translate("Dev tools") },
 ];
 
 export const HAPPY_AGENT_SETTINGS_DEFAULT_CATEGORY = "general";
@@ -407,6 +409,11 @@ export interface AppHappyAgentSettingsViewProps {
  * visual decision lives there.
  */
 export function AppHappyAgentSettingsView(props: AppHappyAgentSettingsViewProps) {
+    const language = useSyncExternalStore(
+        languagePreferenceStore.subscribe,
+        languagePreferenceStore.get,
+        languagePreferenceStore.get,
+    );
     // Dev Tools prints every store snapshot verbatim, so the stores an ordinary
     // category would materialize only while it is open are materialized there
     // too. Reading raw state means reading the live thing, not a stale copy.
@@ -711,7 +718,7 @@ export function AppHappyAgentSettingsView(props: AppHappyAgentSettingsViewProps)
             title={
                 mobileLinkHeading?.title ??
                 categories.find((category) => category.id === section)?.label ??
-                "Settings"
+                translate("Settings")
             }
             windowControls={props.platform === "desktop"}
             windowFullScreen={windowState.fullScreen}
@@ -1086,8 +1093,9 @@ export function AppHappyAgentSettingsView(props: AppHappyAgentSettingsViewProps)
                     documents={[
                         {
                             bytes: instructions.bytes,
-                            description:
+                            description: translate(
                                 "Given to every agent this machine starts, on top of the project's own AGENTS.md.",
+                            ),
                             dirty: instructions.dirty,
                             error: documentError(instructionsStore, instructions),
                             id: "agents",
@@ -1100,7 +1108,9 @@ export function AppHappyAgentSettingsView(props: AppHappyAgentSettingsViewProps)
                             },
                             onValueChange: (value) => instructionsStore?.draftUpdate(value),
                             path: INSTRUCTIONS_PATH,
-                            placeholder: "Anything every agent on this machine should know…",
+                            placeholder: translate(
+                                "Anything every agent on this machine should know…",
+                            ),
                             saveError: instructions.saveError?.message,
                             saving: instructions.saving,
                             value: instructions.draft,
@@ -1113,8 +1123,9 @@ export function AppHappyAgentSettingsView(props: AppHappyAgentSettingsViewProps)
                         },
                         {
                             bytes: securityPolicy.bytes,
-                            description:
+                            description: translate(
                                 "Applied when this machine reviews whether an agent action is allowed.",
+                            ),
                             dirty: securityPolicy.dirty,
                             error: documentError(securityPolicyStore, securityPolicy),
                             id: "security",
@@ -1127,7 +1138,9 @@ export function AppHappyAgentSettingsView(props: AppHappyAgentSettingsViewProps)
                             },
                             onValueChange: (value) => securityPolicyStore?.draftUpdate(value),
                             path: SECURITY_POLICY_PATH,
-                            placeholder: "Rules for deciding which agent actions are allowed…",
+                            placeholder: translate(
+                                "Rules for deciding which agent actions are allowed…",
+                            ),
                             saveError: securityPolicy.saveError?.message,
                             saving: securityPolicy.saving,
                             value: securityPolicy.draft,
@@ -1192,6 +1205,8 @@ export function AppHappyAgentSettingsView(props: AppHappyAgentSettingsViewProps)
                 />
             ) : (
                 <HappyAgentGeneralSettings
+                    language={language}
+                    onLanguageChange={languagePreferenceStore.languageSelect}
                     appearanceModes={props.appearance.supportedModes}
                     desktopUpdate={props.update}
                     onDesktopUpdateApply={props.onUpdateApply}
@@ -1317,87 +1332,87 @@ function stateDocuments(snapshots: {
 }): readonly HappyAgentStateDocument[] {
     return [
         {
-            description: "WorkOS account authentication",
+            description: translate("WorkOS account authentication"),
             id: "cloud",
-            label: "Cloud",
+            label: translate("Cloud"),
             value: stateText(snapshots.cloud),
         },
         {
-            description: "The identity this machine authors work as",
+            description: translate("The identity this machine authors work as"),
             id: "profile",
-            label: "Profile",
+            label: translate("Profile"),
             value: stateText(snapshots.profile),
         },
         {
-            description: "This Happy Agent's connection to Happy Mobile",
+            description: translate("This Happy Agent's connection to Happy Mobile"),
             id: "happy-integration",
-            label: "Mobile integration",
+            label: translate("Mobile integration"),
             value: stateText(snapshots.happyIntegration),
         },
         {
-            description: "Model providers and their saved configuration",
+            description: translate("Model providers and their saved configuration"),
             id: "providers",
-            label: "Providers",
+            label: translate("Providers"),
             value: stateText(snapshots.providers),
         },
         {
-            description: "Safe secret metadata; stored values never enter this snapshot",
+            description: translate("Safe secret metadata; stored values never enter this snapshot"),
             id: "secrets",
-            label: "Secrets",
+            label: translate("Secrets"),
             value: stateText(snapshots.secrets),
         },
         {
-            description: "The model catalog and what a new session starts on",
+            description: translate("The model catalog and what a new session starts on"),
             id: "models",
-            label: "Models",
+            label: translate("Models"),
             value: stateText(snapshots.models),
         },
         {
-            description: "What each provider account's plan has spent",
+            description: translate("What each provider account's plan has spent"),
             id: "usage",
-            label: "Provider usage",
+            label: translate("Provider usage"),
             value: stateText(snapshots.usage),
         },
         {
-            description: "Defaults a new session starts with",
+            description: translate("Defaults a new session starts with"),
             id: "settings",
-            label: "Settings",
+            label: translate("Settings"),
             value: stateText(snapshots.settings),
         },
         {
-            description: "Machine-wide AGENTS.md, as stored and as drafted",
+            description: translate("Machine-wide AGENTS.md, as stored and as drafted"),
             id: "instructions",
-            label: "Instructions",
+            label: translate("Instructions"),
             value: stateText(snapshots.instructions),
         },
         {
-            description: "Machine-wide SECURITY.md, as stored and as drafted",
+            description: translate("Machine-wide SECURITY.md, as stored and as drafted"),
             id: "security-policy",
-            label: "Security policy",
+            label: translate("Security policy"),
             value: stateText(snapshots.securityPolicy),
         },
         {
-            description: "Theme and scrollbar preferences for this window",
+            description: translate("Theme and scrollbar preferences for this window"),
             id: "appearance",
-            label: "Appearance",
+            label: translate("Appearance"),
             value: stateText(snapshots.appearance),
         },
         {
-            description: "Whether unfinished features are offered",
+            description: translate("Whether unfinished features are offered"),
             id: "experiments",
-            label: "Experiments",
+            label: translate("Experiments"),
             value: stateText(snapshots.experiments),
         },
         {
-            description: "Whether activity titles animate",
+            description: translate("Whether activity titles animate"),
             id: "title-shimmer",
-            label: "Title shimmer",
+            label: translate("Title shimmer"),
             value: stateText(snapshots.titleShimmer),
         },
         {
-            description: "Full-screen and window chrome state",
+            description: translate("Full-screen and window chrome state"),
             id: "window",
-            label: "Window",
+            label: translate("Window"),
             value: stateText(snapshots.windowState),
         },
     ];
@@ -1641,7 +1656,7 @@ function documentError(
     snapshot: HappyAgentInstructionsSnapshot,
 ): string | undefined {
     return store === undefined
-        ? "This window is not connected to a Happy Agent on this machine."
+        ? translate("This window is not connected to a Happy Agent on this machine.")
         : snapshot.stored.type === "error"
           ? snapshot.stored.error.message
           : undefined;
@@ -1666,7 +1681,7 @@ function providerRows(
         id: provider.id,
         models: provider.models.map((model) => ({
             contextWindow: model.contextWindow,
-            efforts: model.thinkingLevels.map(happyAgentThinkingLabel),
+            efforts: model.thinkingLevels.map(thinkingLevelLabel),
             enabled: !settings.disabledModels.has(happyAgentModelKey(provider.id, model.id)),
             id: happyAgentModelKey(provider.id, model.id),
             isDefault: provider.id === selection?.providerId && model.id === selection.modelId,

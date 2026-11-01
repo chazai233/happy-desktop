@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useRef, type CSSProperties } from "react";
 import { ComposerAttachmentRemoveButton } from "./ComposerAttachmentRemoveButton";
 import { FilePathLabel } from "./FilePathLabel";
@@ -132,7 +133,9 @@ export function ComposerAttachmentPreviews(props: ComposerAttachmentPreviewsProp
                                                 path={note.path}
                                             />
                                             <span className="happy-composer-attachments__note-place">
-                                                {note.stale ? `${note.place} · moved` : note.place}
+                                                {note.stale
+                                                    ? translate("{0} · moved", note.place)
+                                                    : note.place}
                                             </span>
                                         </div>
                                         <div className="happy-composer-attachments__note-text">
@@ -156,7 +159,7 @@ export function ComposerAttachmentPreviews(props: ComposerAttachmentPreviewsProp
                     item.url &&
                     props.onOpen ? (
                         <button
-                            aria-label={`Preview ${item.name}`}
+                            aria-label={translate("Preview {0}", item.name)}
                             className="happy-composer-attachments__open"
                             data-happy-desktop-ui="composer-attachment-open"
                             onClick={() => {

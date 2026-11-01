@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import type { ComposerMentionSubject, ComposerSnapshot } from "happy-desktop-state";
 import { Banner } from "./Banner";
@@ -132,9 +133,9 @@ function mentionSubjectOf(subject: ComposerMentionSubject): {
         case "agent":
             switch (subject.owner) {
                 case "bot":
-                    return { icon: "agents", description: "Bot" };
+                    return { icon: "agents", description: translate("Bot") };
                 case "task":
-                    return { icon: "tasks", description: "Task" };
+                    return { icon: "tasks", description: translate("Task") };
                 case "conversation":
                     return { icon: "chat" };
             }
@@ -247,7 +248,7 @@ export function ConversationDock(props: ConversationDockProps) {
                 actions={
                     attachmentRemoveEnabled ? (
                         <Button
-                            aria-label={`Remove ${previewAttachment.name} from draft`}
+                            aria-label={translate("Remove {0} from draft", previewAttachment.name)}
                             icon="trash"
                             iconOnly
                             onClick={() => attachmentRemove(previewAttachment.id)}
@@ -293,11 +294,11 @@ export function ConversationDock(props: ConversationDockProps) {
                     action={
                         props.disabled || props.submitDisabled
                             ? undefined
-                            : { label: "Retry", onClick: composerSend }
+                            : { label: translate("Retry"), onClick: composerSend }
                     }
                     data-testid="conversation-submission-error"
                     tone="danger"
-                    title="Message not sent"
+                    title={translate("Message not sent")}
                 >
                     {composer.submission.error.message}
                 </Banner>
@@ -344,7 +345,7 @@ export function ConversationDock(props: ConversationDockProps) {
                     {...(props.composerFocusKey === undefined
                         ? {}
                         : { focusKey: props.composerFocusKey })}
-                    hint="Enter to send"
+                    hint={translate("Enter to send")}
                     {...(composer.capabilities.mentions
                         ? {
                               mentions: mentionsOf(composer),
@@ -365,7 +366,7 @@ export function ConversationDock(props: ConversationDockProps) {
                     onSubagentsStop={props.onSubagentsAbort}
                     onValueChange={props.onComposerValueChange}
                     pending={composer.submission.status === "pending"}
-                    placeholder={props.composerPlaceholder ?? "Message the agent…"}
+                    placeholder={props.composerPlaceholder ?? translate("Message the agent…")}
                     running={props.running}
                     subagentsRunning={props.subagentsRunning}
                     sendEnabled={sendEnabled}

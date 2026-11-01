@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Banner } from "../../Banner";
 import { Button } from "../../Button";
 import { FormRow } from "../../FormRow";
@@ -21,17 +22,17 @@ export function HappyAgentAccountSettings(props: HappyAgentAccountSettingsProps)
     return (
         <HappyAgentSettingsSection>
             {props.unavailable ? (
-                <Banner tone="warning" title="Happy Agent unavailable">
+                <Banner tone="warning" title={translate("Happy Agent unavailable")}>
                     {props.unavailable}
                 </Banner>
             ) : null}
             {props.error ? (
-                <Banner tone="danger" title="Account connection failed">
+                <Banner tone="danger" title={translate("Account connection failed")}>
                     {props.error}
                 </Banner>
             ) : null}
             <FormRow
-                label="Happy account"
+                label={translate("Happy account")}
                 description={accountDescription(props)}
                 control={
                     <Button
@@ -47,7 +48,7 @@ export function HappyAgentAccountSettings(props: HappyAgentAccountSettingsProps)
                         size="small"
                         variant={connected ? "secondary" : "primary"}
                     >
-                        {connected ? "Disconnect" : "Connect account"}
+                        {connected ? translate("Disconnect") : translate("Connect account")}
                     </Button>
                 }
             />
@@ -58,16 +59,16 @@ export function HappyAgentAccountSettings(props: HappyAgentAccountSettingsProps)
 function accountDescription(props: HappyAgentAccountSettingsProps): string {
     switch (props.status) {
         case "loading":
-            return "Checking account connection…";
+            return translate("Checking account connection…");
         case "disconnected":
-            return "Sign in through WorkOS in your browser";
+            return translate("Sign in through WorkOS in your browser");
         case "authorizing":
             return props.authorizationCompleting
-                ? "Completing sign-in…"
-                : "Finish signing in through your browser";
+                ? translate("Completing sign-in…")
+                : translate("Finish signing in through your browser");
         case "connected":
-            return props.email ?? "Account connected";
+            return props.email ?? translate("Account connected");
         case "unavailable":
-            return "Account authentication is unavailable on this Happy Agent";
+            return translate("Account authentication is unavailable on this Happy Agent");
     }
 }

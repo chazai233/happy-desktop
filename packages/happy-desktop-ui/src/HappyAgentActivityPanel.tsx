@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties } from "react";
 import type {
     HappyAgentBackgroundProcess,
@@ -105,7 +106,7 @@ function GoalSection(props: { goal: HappyAgentGoal }) {
             className="happy-agent-activity__section"
             data-happy-desktop-ui="happy-agent-activity-goal"
         >
-            <SectionHeading label="Goal" />
+            <SectionHeading label={translate("Goal")} />
             <div
                 className="happy-agent-activity__list"
                 data-happy-desktop-ui="happy-agent-activity-list"
@@ -205,7 +206,7 @@ function BackgroundProcessRow(props: {
                                 size="small"
                                 variant="ghost"
                             >
-                                Stop
+                                {translate("Stop")}
                             </Button>
                         </span>
                     ) : undefined
@@ -227,7 +228,7 @@ function AgentSection(props: {
             className="happy-agent-activity__section"
             data-happy-desktop-ui="happy-agent-activity-subagents"
         >
-            <SectionHeading count={props.agents.length} label="Agents" />
+            <SectionHeading count={props.agents.length} label={translate("Agents")} />
             <ul
                 className="happy-agent-activity__list"
                 data-happy-desktop-ui="happy-agent-activity-list"
@@ -255,7 +256,7 @@ function TerminalSection(props: {
             className="happy-agent-activity__section"
             data-happy-desktop-ui="happy-agent-activity-processes"
         >
-            <SectionHeading count={props.processes.length} label="Terminals" />
+            <SectionHeading count={props.processes.length} label={translate("Terminals")} />
             <ul
                 className="happy-agent-activity__list"
                 data-happy-desktop-ui="happy-agent-activity-list"
@@ -318,7 +319,9 @@ export function HappyAgentActivityPanel(props: HappyAgentActivityPanelProps) {
                     className="happy-agent-activity__empty"
                     data-happy-desktop-ui="happy-agent-activity-empty"
                 >
-                    No goal, tasks, agents, or background terminals for this session yet.
+                    {translate(
+                        "No goal, tasks, agents, or background terminals for this session yet.",
+                    )}
                 </p>
             ) : (
                 <>
@@ -327,7 +330,9 @@ export function HappyAgentActivityPanel(props: HappyAgentActivityPanelProps) {
                             className="happy-agent-activity__group"
                             data-happy-desktop-ui="happy-agent-activity-running"
                         >
-                            <h2 className="happy-agent-activity__group-heading">Running</h2>
+                            <h2 className="happy-agent-activity__group-heading">
+                                {translate("Running")}
+                            </h2>
                             <div className="happy-agent-activity__group-content">
                                 <AgentSection
                                     agents={runningSubagents}
@@ -349,7 +354,7 @@ export function HappyAgentActivityPanel(props: HappyAgentActivityPanelProps) {
                             className="happy-agent-activity__section"
                             data-happy-desktop-ui="happy-agent-activity-tasks"
                         >
-                            <SectionHeading count={tasks.length} label="Tasks" />
+                            <SectionHeading count={tasks.length} label={translate("Tasks")} />
                             <ul
                                 className="happy-agent-activity__list"
                                 data-happy-desktop-ui="happy-agent-activity-list"
@@ -374,7 +379,7 @@ export function HappyAgentActivityPanel(props: HappyAgentActivityPanelProps) {
                                     size={12}
                                 />
                                 <h2 className="happy-agent-activity__completed-heading">
-                                    Completed
+                                    {translate("Completed")}
                                 </h2>
                                 <span className="happy-agent-activity__count">
                                     {completedSubagents.length}

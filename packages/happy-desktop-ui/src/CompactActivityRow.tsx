@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Fragment, type CSSProperties, type ReactNode } from "react";
 import { Icon, type IconName } from "./Icon";
 import { Spinner } from "./Spinner";
@@ -36,7 +37,7 @@ export function CompactActivityRow(props: CompactActivityRowProps) {
                 {props.preparing ? (
                     <Spinner
                         frame={props.spinnerFrame}
-                        label={props.preparingLabel ?? `${props.verb} is preparing`}
+                        label={props.preparingLabel ?? translate("{0} is preparing", props.verb)}
                         size={12}
                         tone="muted"
                         variant="circle"

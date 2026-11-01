@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { useRef, useState, type CSSProperties } from "react";
 import { Button } from "../../Button";
 import { Icon, type IconName } from "../../Icon";
@@ -40,11 +41,23 @@ export interface HappyAgentSurfaceCreateInput {
 
 /** Each kind's title, glyph, and the example its name field suggests. */
 const KINDS = {
-    todo: { title: "New todo list", icon: "tasks", placeholder: "Groceries" },
-    document: { title: "New document", icon: "doc", placeholder: "House rules" },
-    calendar: { title: "New calendar", icon: "calendar", placeholder: "Team" },
-    system_monitor: { title: "New system monitor", icon: "pulse", placeholder: "System Monitor" },
-    chat: { title: "New chat", icon: "users", placeholder: "Family" },
+    todo: { title: translate("New todo list"), icon: "tasks", placeholder: translate("Groceries") },
+    document: {
+        title: translate("New document"),
+        icon: "doc",
+        placeholder: translate("House rules"),
+    },
+    calendar: {
+        title: translate("New calendar"),
+        icon: "calendar",
+        placeholder: translate("Team"),
+    },
+    system_monitor: {
+        title: translate("New system monitor"),
+        icon: "pulse",
+        placeholder: translate("System Monitor"),
+    },
+    chat: { title: translate("New chat"), icon: "users", placeholder: translate("Family") },
 } as const satisfies Record<
     HappyAgentSurfaceCreateKind,
     { title: string; icon: IconName; placeholder: string }
@@ -142,7 +155,7 @@ export function HappyAgentSurfaceCreateDialog(props: HappyAgentSurfaceCreateDial
                 footer={
                     <>
                         <Button onClick={props.onClose} variant="ghost">
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                         <Button
                             data-testid="happy-agent-surface-create-submit"
@@ -150,7 +163,7 @@ export function HappyAgentSurfaceCreateDialog(props: HappyAgentSurfaceCreateDial
                             onClick={submit}
                             variant="primary"
                         >
-                            Create
+                            {translate("Create")}
                         </Button>
                     </>
                 }
@@ -168,7 +181,7 @@ export function HappyAgentSurfaceCreateDialog(props: HappyAgentSurfaceCreateDial
                         autoFocus
                         data-testid="happy-agent-surface-create-name"
                         fullWidth
-                        label="Name"
+                        label={translate("Name")}
                         onSubmit={submit}
                         onValueChange={setName}
                         placeholder={KINDS[props.kind].placeholder}
@@ -187,13 +200,13 @@ export function HappyAgentSurfaceCreateDialog(props: HappyAgentSurfaceCreateDial
                         </span>
                         <span className="happy-agent-surface-create-dialog__picture-text">
                             <span className="happy-agent-surface-create-dialog__picture-label">
-                                Picture
+                                {translate("Picture")}
                             </span>
                             <span
                                 className="happy-agent-surface-create-dialog__picture-hint"
                                 data-invalid={pictureError ? "" : undefined}
                             >
-                                {pictureError ?? "Optional, up to 8 MB."}
+                                {pictureError ?? translate("Optional, up to 8 MB.")}
                             </span>
                         </span>
                         {picture ? (
@@ -202,7 +215,7 @@ export function HappyAgentSurfaceCreateDialog(props: HappyAgentSurfaceCreateDial
                                 size="small"
                                 variant="ghost"
                             >
-                                Remove
+                                {translate("Remove")}
                             </Button>
                         ) : null}
                         <Button
@@ -210,7 +223,7 @@ export function HappyAgentSurfaceCreateDialog(props: HappyAgentSurfaceCreateDial
                             size="small"
                             variant="secondary"
                         >
-                            {picture ? "Change…" : "Choose…"}
+                            {picture ? translate("Change…") : translate("Choose…")}
                         </Button>
                         <input
                             accept={IMAGE_TYPES.join(",")}

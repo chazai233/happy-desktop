@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     type CSSProperties,
@@ -163,13 +164,13 @@ export function Lightbox(props: LightboxProps) {
                   {
                       kind: "item" as const,
                       id: "copy",
-                      label: "Copy image",
+                      label: translate("Copy image"),
                       shortcut: COPY_SHORTCUT.caps,
                   },
               ]
             : []),
         ...(local.onDownload && local.imageUrl !== undefined
-            ? [{ kind: "item" as const, id: "download", label: "Download image" }]
+            ? [{ kind: "item" as const, id: "download", label: translate("Download image") }]
             : []),
     ];
     const menuClose = (): void => {
@@ -262,7 +263,7 @@ export function Lightbox(props: LightboxProps) {
             style={local.style}
         >
             <div
-                aria-label={local.caption ?? local.alt ?? `${mediaName} preview`}
+                aria-label={local.caption ?? local.alt ?? translate("{0} preview", mediaName)}
                 aria-modal="true"
                 className="happy-lightbox__dialog"
                 data-happy-desktop-ui="lightbox-dialog"
@@ -302,7 +303,7 @@ export function Lightbox(props: LightboxProps) {
                         >
                             {stepping ? (
                                 <Button
-                                    aria-label={`Previous ${navigationLabel}`}
+                                    aria-label={translate("Previous {0}", navigationLabel)}
                                     iconOnly
                                     onClick={() => local.onPrevious?.()}
                                     size="small"
@@ -316,12 +317,16 @@ export function Lightbox(props: LightboxProps) {
                                     className="happy-lightbox__position"
                                     data-happy-desktop-ui="lightbox-position"
                                 >
-                                    {`${String(local.position.index + 1)} of ${String(local.position.total)}`}
+                                    {translate(
+                                        "{0} of {1}",
+                                        String(local.position.index + 1),
+                                        String(local.position.total),
+                                    )}
                                 </span>
                             ) : null}
                             {stepping ? (
                                 <Button
-                                    aria-label={`Next ${navigationLabel}`}
+                                    aria-label={translate("Next {0}", navigationLabel)}
                                     iconOnly
                                     onClick={() => local.onNext?.()}
                                     size="small"
@@ -334,10 +339,10 @@ export function Lightbox(props: LightboxProps) {
                                 <Button
                                     aria-label={
                                         copyStatus === "done"
-                                            ? "Copied"
+                                            ? translate("Copied")
                                             : copyStatus === "failed"
-                                              ? "Couldn't copy image"
-                                              : "Copy image"
+                                              ? translate("Couldn't copy image")
+                                              : translate("Copy image")
                                     }
                                     data-testid="lightbox-copy"
                                     icon={
@@ -359,15 +364,15 @@ export function Lightbox(props: LightboxProps) {
                                 <Button
                                     aria-label={
                                         downloadStatus === "failed"
-                                            ? `Couldn't download ${mediaNoun}`
-                                            : `Download ${mediaNoun}`
+                                            ? translate("Couldn't download {0}", mediaNoun)
+                                            : translate("Download {0}", mediaNoun)
                                     }
                                     data-testid="lightbox-download"
                                     iconOnly
                                     loading={downloadStatus === "pending"}
                                     onClick={() => run("download", local.onDownload)}
                                     size="small"
-                                    title={`Download ${mediaNoun}`}
+                                    title={translate("Download {0}", mediaNoun)}
                                     variant="ghost"
                                 >
                                     {downloadStatus === "failed" ? (
@@ -380,7 +385,7 @@ export function Lightbox(props: LightboxProps) {
                             {local.actions}
                             {local.onClose ? (
                                 <Button
-                                    aria-label={local.closeLabel ?? "Close"}
+                                    aria-label={local.closeLabel ?? translate("Close")}
                                     icon="close"
                                     iconOnly
                                     onClick={() => local.onClose?.()}

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useCallback, useId, type CSSProperties, type KeyboardEvent } from "react";
 import { Button } from "./Button";
 
@@ -112,7 +113,7 @@ export function ConfirmPopover(props: ConfirmPopoverProps) {
                     size="small"
                     variant="ghost"
                 >
-                    {props.cancelLabel ?? "Cancel"}
+                    {props.cancelLabel ?? translate("Cancel")}
                 </Button>
                 <Button
                     data-action="confirm"

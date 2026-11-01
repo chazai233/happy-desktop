@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { partitionComponentProps } from "./componentProps";
 import { EmptyState } from "./EmptyState";
@@ -85,10 +86,12 @@ export function HtmlPreviewFrame(props: HtmlPreviewFrameProps) {
                 <HtmlPreviewError failure={{ kind: "unsupported" }} />
             ) : local.source === undefined ? (
                 <EmptyState
-                    description="Happy is resolving where this document is served from."
+                    description={translate(
+                        "Happy is resolving where this document is served from.",
+                    )}
                     icon="globe"
                     size="panel"
-                    title="Preparing the page…"
+                    title={translate("Preparing the page…")}
                 />
             ) : (
                 /* A new address is a new page: its guest, and any failure the

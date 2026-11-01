@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import {
     happyAgentTodoHeading,
@@ -122,11 +123,12 @@ export function HappyAgentTodoSurfacePage(props: HappyAgentTodoSurfacePageProps)
                     type="button"
                 >
                     <Icon name={list.completedShown ? "chevron-down" : "chevron-right"} size={14} />
-                    {list.completedShown ? "Hide" : "Show"} {String(completedCount)} completed
+                    {list.completedShown ? translate("Hide") : translate("Show")}{" "}
+                    {String(completedCount)} completed
                 </button>
                 {list.completedShown ? (
                     <ReorderingList
-                        aria-label="Completed todos"
+                        aria-label={translate("Completed todos")}
                         data-testid="happy-agent-todo-completed-list"
                         gap={ROW_GAP}
                         itemHeight={ROW_HEIGHT}
@@ -155,7 +157,7 @@ export function HappyAgentTodoSurfacePage(props: HappyAgentTodoSurfacePageProps)
             >
                 <div className="happy-agent-todo-surface__content">
                     <TextField
-                        aria-label="Add a todo"
+                        aria-label={translate("Add a todo")}
                         className="happy-agent-todo-surface__add"
                         data-testid="happy-agent-todo-add"
                         {...(props.focusOnType
@@ -165,17 +167,17 @@ export function HappyAgentTodoSurfacePage(props: HappyAgentTodoSurfacePageProps)
                         leadingIcon="plus"
                         onSubmit={props.onDraftSubmit}
                         onValueChange={props.onDraftChange}
-                        placeholder="Add a todo"
+                        placeholder={translate("Add a todo")}
                         size="large"
                         value={list.draft}
                     />
                     {list.status === "ready" && list.active.length === 0 && completedCount === 0 ? (
                         <p className="happy-agent-todo-surface__empty">
-                            Nothing here yet. What needs doing?
+                            {translate("Nothing here yet. What needs doing?")}
                         </p>
                     ) : null}
                     <ReorderingList
-                        aria-label="Todos"
+                        aria-label={translate("Todos")}
                         className="happy-agent-todo-surface__list"
                         data-testid="happy-agent-todo-list"
                         footer={completed}

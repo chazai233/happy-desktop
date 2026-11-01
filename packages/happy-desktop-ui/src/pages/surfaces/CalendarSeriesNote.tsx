@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Icon } from "../../Icon";
 
 /**
@@ -25,7 +26,7 @@ export function CalendarSeriesNote(props: {
             }}
         >
             <Icon name="repeat" size={12} />
-            Changes all events in this series
+            {translate("Changes all events in this series")}
         </span>
     );
 }

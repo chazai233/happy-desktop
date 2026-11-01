@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import type { HappyAgentSurfaceType } from "happy-desktop-state";
 import { EmptyState } from "../../EmptyState";
@@ -37,7 +38,7 @@ export function HappyAgentSurfaceNotMadePage(props: HappyAgentSurfaceNotMadePage
                     description={props.reason}
                     icon={surfaceTypeIcon(props.type)}
                     size="panel"
-                    title={`“${props.name}” wasn’t made`}
+                    title={translate("“{0}” wasn’t made", props.name)}
                 />
             </div>
         </div>

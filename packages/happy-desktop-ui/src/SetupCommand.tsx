@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { CopyButton } from "./CopyButton";
 
 export interface SetupCommandProps {
@@ -53,7 +54,7 @@ export function SetupCommand(props: SetupCommandProps) {
             <CopyButton
                 className="happy-setup-command__copy"
                 data-happy-desktop-ui="setup-command-copy"
-                label={`Copy ${props.label}`}
+                label={translate("Copy {0}", props.label)}
                 {...(props.onCopy ? { onCopy: props.onCopy } : {})}
                 text={props.command}
             />

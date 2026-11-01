@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Avatar } from "../../Avatar";
 import { Button } from "../../Button";
 import { Checkbox } from "../../Checkbox";
@@ -56,8 +57,8 @@ export function HappyAgentTodoRow(props: HappyAgentTodoRowProps) {
                     <Checkbox
                         aria-label={
                             props.completed
-                                ? `Mark “${props.text}” not done`
-                                : `Mark “${props.text}” done`
+                                ? translate("Mark “{0}” not done", props.text)
+                                : translate("Mark “{0}” done", props.text)
                         }
                         checked={props.completed}
                         onChange={props.onCompletedChange}
@@ -67,7 +68,7 @@ export function HappyAgentTodoRow(props: HappyAgentTodoRowProps) {
             {props.editing !== undefined ? (
                 <input
                     {...REORDERING_LIST_STATIC}
-                    aria-label="Todo text"
+                    aria-label={translate("Todo text")}
                     autoFocus
                     className="happy-agent-todo-row__field"
                     maxLength={TEXT_LIMIT}
@@ -113,11 +114,11 @@ export function HappyAgentTodoRow(props: HappyAgentTodoRowProps) {
                 // a press anywhere else on it.
                 <Tooltip
                     className="happy-agent-todo-row__author"
-                    label={`Added by ${props.author.name}`}
+                    label={translate("Added by {0}", props.author.name)}
                     placement="top"
                 >
                     <Avatar
-                        aria-label={`Added by ${props.author.name}`}
+                        aria-label={translate("Added by {0}", props.author.name)}
                         imageUrl={props.author.photo?.url}
                         initials={initialsOf(props.author.name)}
                         size="xs"
@@ -127,7 +128,9 @@ export function HappyAgentTodoRow(props: HappyAgentTodoRowProps) {
             <Button
                 {...REORDERING_LIST_STATIC}
                 aria-label={
-                    heading === undefined ? `Delete “${props.text}”` : `Delete heading “${heading}”`
+                    heading === undefined
+                        ? translate("Delete “{0}”", props.text)
+                        : translate("Delete heading “{0}”", heading)
                 }
                 className="happy-agent-todo-row__delete"
                 icon="trash"

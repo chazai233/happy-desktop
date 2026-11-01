@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties, MouseEvent } from "react";
 import { Banner } from "./Banner";
 import { BotFace, botFaceCredit } from "./BotFace";
@@ -96,15 +97,15 @@ export function HappyAgentCreateBotPage(props: HappyAgentCreateBotPageProps) {
                         className="happy-agent-create-bot__title"
                         data-happy-desktop-ui="happy-agent-create-bot-title"
                     >
-                        Create a new bot
+                        {translate("Create a new bot")}
                     </h1>
                     <p
                         className="happy-agent-create-bot__lede"
                         data-happy-desktop-ui="happy-agent-create-bot-lede"
                     >
-                        A bot is a colleague that does not end: one permanent conversation with a
-                        folder of its own. Give it a standing job, come back to it whenever you
-                        like, and let it delegate work into your projects.
+                        {translate(
+                            "A bot is a colleague that does not end: one permanent conversation with a folder of its own. Give it a standing job, come back to it whenever you like, and let it delegate work into your projects.",
+                        )}
                     </p>
                 </header>
                 <p
@@ -128,7 +129,7 @@ export function HappyAgentCreateBotPage(props: HappyAgentCreateBotPageProps) {
                 ring stays where it was put through a roll, wearing whatever
                 face lands there. */}
             <div
-                aria-label="Face"
+                aria-label={translate("Face")}
                 className="happy-agent-create-bot__face-row"
                 data-happy-desktop-ui="happy-agent-create-bot-face-row"
                 role="radiogroup"
@@ -156,13 +157,13 @@ export function HappyAgentCreateBotPage(props: HappyAgentCreateBotPageProps) {
             {/* The die acts on all four and is not a fifth choice: it stands
                 beside the faces, in the margin, outside what is centred. */}
             <Button
-                aria-label="Roll four new faces"
+                aria-label={translate("Roll four new faces")}
                 className="happy-agent-create-bot__die"
                 disabled={submitting}
                 icon="dice"
                 iconOnly
                 onClick={() => props.onFacesRoll()}
-                title="Roll four new faces"
+                title={translate("Roll four new faces")}
                 variant="secondary"
             />
 
@@ -173,14 +174,14 @@ export function HappyAgentCreateBotPage(props: HappyAgentCreateBotPageProps) {
                 data-happy-desktop-ui="happy-agent-create-bot-below"
             >
                 <TextField
-                    aria-label="Name"
+                    aria-label={translate("Name")}
                     className="happy-agent-create-bot__name"
                     data-testid="happy-agent-create-bot-name"
                     disabled={submitting}
                     fullWidth
                     onSubmit={submit}
                     onValueChange={props.onNameChange}
-                    placeholder="Name, generated if left blank"
+                    placeholder={translate("Name, generated if left blank")}
                     value={props.name}
                 />
                 {props.submitDisabledReason ? (
@@ -204,7 +205,7 @@ export function HappyAgentCreateBotPage(props: HappyAgentCreateBotPageProps) {
                 title={props.submitDisabledReason}
                 variant="secondary"
             >
-                {submitting ? "Creating…" : "Create"}
+                {submitting ? translate("Creating…") : translate("Create")}
             </Button>
         </div>
     );

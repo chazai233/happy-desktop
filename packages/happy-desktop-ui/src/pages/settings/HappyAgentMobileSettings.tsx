@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { ReactNode } from "react";
 import type { BadgeVariant } from "../../Badge";
 import { Banner } from "../../Banner";
@@ -88,7 +89,7 @@ export function HappyAgentMobileSettings(props: HappyAgentMobileSettingsProps) {
         <>
             <HappyAgentSettingsSection>
                 {props.unavailable && props.pairingOptions === undefined ? (
-                    <Banner tone="warning" title="Happy Agent unavailable">
+                    <Banner tone="warning" title={translate("Happy Agent unavailable")}>
                         {props.unavailable}
                     </Banner>
                 ) : null}
@@ -103,15 +104,17 @@ export function HappyAgentMobileSettings(props: HappyAgentMobileSettingsProps) {
                                 size="small"
                                 variant="primary"
                             >
-                                Connect phone
+                                {translate("Connect phone")}
                             </Button>
                         }
-                        description="Shows the relay code, or the direct one as an experiment"
-                        label="Connect a phone"
+                        description={translate(
+                            "Shows the relay code, or the direct one as an experiment",
+                        )}
+                        label={translate("Connect a phone")}
                     />
                 )}
                 {props.error ? (
-                    <Banner tone="danger" title="Happy Mobile status unavailable">
+                    <Banner tone="danger" title={translate("Happy Mobile status unavailable")}>
                         {props.error}
                     </Banner>
                 ) : null}
@@ -120,7 +123,10 @@ export function HappyAgentMobileSettings(props: HappyAgentMobileSettingsProps) {
                         className="happy-agent-mobile-settings__removal"
                         data-testid="happy-mobile-settings-removal-incomplete"
                     >
-                        <Banner tone="danger" title="Couldn't remove this computer from your phone">
+                        <Banner
+                            tone="danger"
+                            title={translate("Couldn't remove this computer from your phone")}
+                        >
                             {props.message ?? props.disconnectError}
                         </Banner>
                         <Box className="happy-agent-mobile-settings__removal-actions">
@@ -130,7 +136,7 @@ export function HappyAgentMobileSettings(props: HappyAgentMobileSettingsProps) {
                                 size="small"
                                 variant="ghost"
                             >
-                                Keep linked
+                                {translate("Keep linked")}
                             </Button>
                             <Button
                                 disabled={blocked || props.pairingStarting === true}
@@ -139,12 +145,12 @@ export function HappyAgentMobileSettings(props: HappyAgentMobileSettingsProps) {
                                 size="small"
                                 variant="primary"
                             >
-                                Try again
+                                {translate("Try again")}
                             </Button>
                         </Box>
                     </Box>
                 ) : props.disconnectError ? (
-                    <Banner tone="danger" title="Pairing could not be removed">
+                    <Banner tone="danger" title={translate("Pairing could not be removed")}>
                         {props.disconnectError}
                     </Banner>
                 ) : null}
@@ -158,10 +164,12 @@ export function HappyAgentMobileSettings(props: HappyAgentMobileSettingsProps) {
                         }
                         description={
                             props.status === "connected"
-                                ? "Phones on your Happy account reach this computer from anywhere"
+                                ? translate(
+                                      "Phones on your Happy account reach this computer from anywhere",
+                                  )
                                 : statusDetail(mobile.description, props)
                         }
-                        label="Happy relay"
+                        label={translate("Happy relay")}
                     />
                 ) : null}
                 {props.direct}
@@ -179,15 +187,19 @@ export function HappyAgentMobileSettings(props: HappyAgentMobileSettingsProps) {
                                 size="small"
                                 variant="danger"
                             >
-                                Disconnect
+                                {translate("Disconnect")}
                             </Button>
                         }
                         description={
                             props.removesComputer
-                                ? "Remove this computer and the chats it published from your Happy account. Local history stays."
-                                : "Forget this computer's pairing. Your account, phones and history stay."
+                                ? translate(
+                                      "Remove this computer and the chats it published from your Happy account. Local history stays.",
+                                  )
+                                : translate(
+                                      "Forget this computer's pairing. Your account, phones and history stay.",
+                                  )
                         }
-                        label="Disconnect this computer"
+                        label={translate("Disconnect this computer")}
                     />
                 </HappyAgentSettingsSection>
             ) : null}
@@ -208,78 +220,85 @@ function mobileState(props: HappyAgentMobileSettingsProps): MobileState {
     switch (props.status) {
         case "loading":
             return {
-                label: "Checking…",
+                label: translate("Checking…"),
                 variant: "neutral",
-                description: "Reading the Happy Mobile connection from Happy Agent.",
+                description: translate("Reading the Happy Mobile connection from Happy Agent."),
             };
         case "unavailable":
             return {
-                label: "Unavailable",
+                label: translate("Unavailable"),
                 variant: "neutral",
-                description: "This Happy Agent does not report Happy Mobile integration state.",
+                description: translate(
+                    "This Happy Agent does not report Happy Mobile integration state.",
+                ),
             };
         case "disabled":
             return {
-                label: "Disabled",
+                label: translate("Disabled"),
                 variant: "neutral",
-                description:
+                description: translate(
                     "Happy Mobile integration is disabled in this Happy Agent installation.",
+                ),
             };
         case "pairing":
             return {
-                label: "Waiting for phone",
+                label: translate("Waiting for phone"),
                 variant: "info",
-                description: "Waiting for a phone to scan the code.",
+                description: translate("Waiting for a phone to scan the code."),
             };
         case "connected":
             return {
-                label: "Connected",
+                label: translate("Connected"),
                 variant: "success",
-                description: "Live with Happy Mobile.",
+                description: translate("Live with Happy Mobile."),
             };
         case "connecting":
             return {
-                label: "Reconnecting",
+                label: translate("Reconnecting"),
                 variant: "info",
-                description: "Connecting the saved pairing.",
+                description: translate("Connecting the saved pairing."),
             };
         case "disconnected":
             return props.configured === true
                 ? {
-                      label: "Offline — pairing saved",
+                      label: translate("Offline — pairing saved"),
                       variant: "warning",
-                      description: "Paired, but not connected right now.",
+                      description: translate("Paired, but not connected right now."),
                   }
                 : props.configured === false
                   ? {
-                        label: "Not set up",
+                        label: translate("Not set up"),
                         variant: "neutral",
-                        description: "No phone is paired yet.",
+                        description: translate("No phone is paired yet."),
                     }
                   : {
-                        label: "Checking…",
+                        label: translate("Checking…"),
                         variant: "neutral",
-                        description: "Reading whether this Happy Agent has a saved pairing.",
+                        description: translate(
+                            "Reading whether this Happy Agent has a saved pairing.",
+                        ),
                     };
         case "failed":
             if (props.configured === true && props.removalIncomplete)
                 return {
-                    label: "Removal incomplete",
+                    label: translate("Removal incomplete"),
                     variant: "warning",
-                    description:
+                    description: translate(
                         "This computer is still linked but not connected while the removal is unfinished.",
+                    ),
                 };
             return props.configured === true
                 ? {
-                      label: "Can't connect",
+                      label: translate("Can't connect"),
                       variant: "danger",
-                      description:
+                      description: translate(
                           "The pairing is saved, but Happy Agent could not connect to Happy Mobile.",
+                      ),
                   }
                 : {
-                      label: "Not set up",
+                      label: translate("Not set up"),
                       variant: "neutral",
-                      description: "The last pairing attempt did not finish.",
+                      description: translate("The last pairing attempt did not finish."),
                   };
     }
 }

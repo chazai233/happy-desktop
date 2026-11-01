@@ -1,3 +1,4 @@
+import { translate } from "happy-desktop-ui";
 import {
     happyAgentBotSubtasks,
     happyReferencePlaceholder,
@@ -185,7 +186,7 @@ function artifactView(
     if (artifact.status === "deleted")
         return { type: "text", label: title || happyReferencePlaceholder(reference) };
     // Artifacts have no busy state.
-    return { type: "link", label: title || "Untitled artifact", busy: false };
+    return { type: "link", label: title || translate("Untitled artifact"), busy: false };
 }
 
 function entityOf(
@@ -242,7 +243,7 @@ export function messageReferencesCreate(input: {
             if (reference.kind === "surface") {
                 const name = input.surfaces?.names.get(reference.id);
                 if (name === undefined) return inert(reference);
-                return { type: "link", label: name.trim() || "Untitled", busy: false };
+                return { type: "link", label: name.trim() || translate("Untitled"), busy: false };
             }
             if (reference.kind === "artifact")
                 return input.onArtifactOpen === undefined
@@ -257,7 +258,7 @@ export function messageReferencesCreate(input: {
             if (entity === undefined || input.onGroupOpen === undefined) return inert(reference);
             return {
                 type: "link",
-                label: entity.label.trim() || `Untitled ${reference.kind}`,
+                label: entity.label.trim() || translate("Untitled {0}", reference.kind),
                 busy: entity.busy,
             };
         },

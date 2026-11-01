@@ -1,4 +1,11 @@
 import "./styles.css";
+export {
+    translate,
+    uiLocale,
+    UI_LOCALE_STORAGE_KEY,
+    type UiLocale,
+} from "./localization/translate";
+export { thinkingLevelLabel } from "./localization/modelLabels";
 export { DitherChart, type DitherChartProps } from "./dither/DitherChart";
 export { DitherSparkline } from "./dither/DitherSparkline";
 export type { DitherSeries, DitherPoint, DitherColor } from "./dither/ditherTypes";

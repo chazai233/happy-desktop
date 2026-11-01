@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { happyLogoBlackUrl } from "./assets";
@@ -77,7 +78,7 @@ export function SplashScreen(props: SplashScreenProps) {
                         {local.steps !== undefined ? (
                             <SegmentedProgress
                                 data-testid="splash-screen-progress"
-                                label={local.stepsLabel ?? "Startup progress"}
+                                label={local.stepsLabel ?? translate("Startup progress")}
                                 segments={local.steps}
                             />
                         ) : null}

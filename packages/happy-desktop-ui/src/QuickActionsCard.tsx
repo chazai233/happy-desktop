@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties } from "react";
 import { KeyCap } from "./Badge";
 import type { CommandPaletteRowEmphasis } from "./CommandPaletteResults";
@@ -92,7 +93,7 @@ export function QuickActionsCard(props: QuickActionsCardProps) {
                     className="happy-quick-actions__footer-label"
                     data-happy-desktop-ui="quick-actions-footer-label"
                 >
-                    {props.footerLabel ?? "Command palette"}
+                    {props.footerLabel ?? translate("Command palette")}
                 </span>
             </div>
         </div>

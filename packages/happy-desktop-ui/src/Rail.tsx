@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import {
     useLayoutEffect,
     useRef,
@@ -126,7 +127,9 @@ export function Rail(props: RailProps) {
                 {items.map((item) => (
                     <button
                         aria-current={item.id === activeItemId ? "page" : undefined}
-                        aria-label={item.unread ? `${item.label}, unread activity` : undefined}
+                        aria-label={
+                            item.unread ? translate("{0}, unread activity", item.label) : undefined
+                        }
                         className="happy-rail__item"
                         data-active={item.id === activeItemId ? "" : undefined}
                         data-item-id={item.id}
@@ -170,14 +173,18 @@ export function Rail(props: RailProps) {
                 <div className="happy-rail__appearance" data-happy-desktop-ui="rail-appearance">
                     <button
                         aria-label={
-                            appearance === "dark" ? "Use light appearance" : "Use dark appearance"
+                            appearance === "dark"
+                                ? translate("Use light appearance")
+                                : translate("Use dark appearance")
                         }
                         aria-pressed={appearance === "dark"}
                         className="happy-rail__appearance-toggle"
                         data-happy-desktop-ui="rail-appearance-toggle"
                         onClick={onAppearanceToggle}
                         title={
-                            appearance === "dark" ? "Use light appearance" : "Use dark appearance"
+                            appearance === "dark"
+                                ? translate("Use light appearance")
+                                : translate("Use dark appearance")
                         }
                         type="button"
                     >

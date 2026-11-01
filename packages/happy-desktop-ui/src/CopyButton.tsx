@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useRef, useState, type CSSProperties } from "react";
 import { Icon } from "./Icon";
 
@@ -56,7 +57,7 @@ export function CopyButton(props: CopyButtonProps) {
     };
     return (
         <button
-            aria-label={copied ? "Copied" : props.label}
+            aria-label={copied ? translate("Copied") : props.label}
             className={["happy-copy-button", props.className].filter(Boolean).join(" ")}
             data-captioned={props.caption === undefined ? undefined : ""}
             data-copied={copied ? "" : undefined}
@@ -68,7 +69,7 @@ export function CopyButton(props: CopyButtonProps) {
                 void copy();
             }}
             style={props.style}
-            title={copied ? "Copied" : props.label}
+            title={copied ? translate("Copied") : props.label}
             type="button"
         >
             <Icon name={copied ? "check" : "copy"} size={14} />

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { type CSSProperties, type ReactNode } from "react";
 import { Icon } from "./Icon";
 
@@ -63,7 +64,7 @@ export function ResultCard(props: ResultCardProps) {
     );
     return props.onOpen ? (
         <button
-            aria-label={props["aria-label"] ?? `Open ${props.title}`}
+            aria-label={props["aria-label"] ?? translate("Open {0}", props.title)}
             className={className}
             data-happy-desktop-ui="result-card"
             data-testid={props["data-testid"]}

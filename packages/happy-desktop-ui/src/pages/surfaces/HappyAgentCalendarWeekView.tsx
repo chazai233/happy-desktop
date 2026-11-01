@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { useState, type PointerEvent as ReactPointerEvent } from "react";
 import {
     calendarDateAdd,
@@ -424,7 +425,7 @@ export function HappyAgentCalendarWeekView(props: HappyAgentCalendarWeekViewProp
             </div>
             <div className="happy-calendar-week__all-day">
                 <span className="happy-calendar-week__gutter happy-calendar-week__gutter-label">
-                    All day
+                    {translate("All day")}
                 </span>
                 <div
                     className="happy-calendar-week__all-day-lanes"

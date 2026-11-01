@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { Fragment, useState, useSyncExternalStore, type CSSProperties } from "react";
 import type { ConversationMediaItem, ConversationMediaLayout } from "happy-desktop-state";
 import { artifactSizeText } from "./pages/artifacts/artifactPresentation";
@@ -118,7 +119,12 @@ export function MediaImageTile(props: MediaImageTileProps) {
                 : { ...props.style, width: `${props.width}px`, height: `${props.height}px` },
     } as const;
     return props.onOpen ? (
-        <button {...shared} aria-label={`Open ${props.alt}`} onClick={props.onOpen} type="button">
+        <button
+            {...shared}
+            aria-label={translate("Open {0}", props.alt)}
+            onClick={props.onOpen}
+            type="button"
+        >
             {content}
         </button>
     ) : (
@@ -173,13 +179,14 @@ export type ConversationMediaProps = {
 /** What kind of file a presented item is, in a word, from its declared media type. */
 function mediaTypeLabel(item: ConversationMediaItem): string {
     if (item.mimeType === "application/pdf") return "PDF";
-    if (item.kind === "document") return "Document";
+    if (item.kind === "document") return translate("Document");
     const [family, subtype] = item.mimeType.split("/");
-    if (family === "image") return "Image";
-    if (family === "video") return "Video";
-    if (family === "audio") return "Audio";
-    if (family === "text" && subtype) return subtype === "plain" ? "Text" : subtype.toUpperCase();
-    return "File";
+    if (family === "image") return translate("Image");
+    if (family === "video") return translate("Video");
+    if (family === "audio") return translate("Audio");
+    if (family === "text" && subtype)
+        return subtype === "plain" ? translate("Text") : subtype.toUpperCase();
+    return translate("File");
 }
 
 /**

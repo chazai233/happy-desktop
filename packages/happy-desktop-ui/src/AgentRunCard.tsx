@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties, type HTMLAttributes, type ReactNode } from "react";
 import { Avatar, type ToneName } from "./Avatar";
@@ -50,10 +51,10 @@ const statusBadges: Record<
         variant: BadgeVariant;
     }
 > = {
-    complete: { label: "COMPLETED", variant: "success" },
-    queued: { label: "QUEUED", variant: "neutral" },
-    review: { label: "NEEDS REVIEW", variant: "success" },
-    working: { label: "RUNNING", variant: "warning" },
+    complete: { label: translate("COMPLETED"), variant: "success" },
+    queued: { label: translate("QUEUED"), variant: "neutral" },
+    review: { label: translate("NEEDS REVIEW"), variant: "success" },
+    working: { label: translate("RUNNING"), variant: "warning" },
 };
 function clampProgress(progress: number | undefined) {
     return Math.min(100, Math.max(0, progress ?? 0));
@@ -131,7 +132,7 @@ export function AgentRunCard(props: AgentRunCardProps) {
                         className="happy-agent-run-card__kind"
                         data-happy-desktop-ui="agent-run-card-kind"
                     >
-                        · run
+                        {translate("· run")}
                     </span>
                 </span>
                 {local.run.status === "complete" ? (
@@ -146,7 +147,11 @@ export function AgentRunCard(props: AgentRunCardProps) {
                 <Badge label={badge().label} variant={badge().variant} />
                 <button
                     aria-expanded={local.expanded ? "true" : "false"}
-                    aria-label={local.expanded ? "Collapse run details" : "Expand run details"}
+                    aria-label={
+                        local.expanded
+                            ? translate("Collapse run details")
+                            : translate("Expand run details")
+                    }
                     className="happy-agent-run-card__toggle"
                     data-happy-desktop-ui="agent-run-card-toggle"
                     onClick={() => local.onExpandedChange(!local.expanded)}

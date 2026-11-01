@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 /**
  * Square crops of a picture, as geometry and as pixels.
  *
@@ -144,12 +145,12 @@ export async function imageCropOpen(file: Blob): Promise<ImageCropSource> {
         width: bitmap.width,
         height: bitmap.height,
         async crop(region, size) {
-            if (closed) throw new Error("The picture was already closed.");
+            if (closed) throw new Error(translate("The picture was already closed."));
             const canvas = document.createElement("canvas");
             canvas.width = size;
             canvas.height = size;
             const context = canvas.getContext("2d");
-            if (!context) throw new Error("The picture could not be drawn.");
+            if (!context) throw new Error(translate("The picture could not be drawn."));
             context.imageSmoothingEnabled = true;
             context.imageSmoothingQuality = "high";
             context.drawImage(
@@ -168,7 +169,7 @@ export async function imageCropOpen(file: Blob): Promise<ImageCropSource> {
             const blob = await new Promise<Blob | null>((resolve) =>
                 canvas.toBlob(resolve, "image/webp", 0.9),
             );
-            if (!blob) throw new Error("The picture could not be encoded.");
+            if (!blob) throw new Error(translate("The picture could not be encoded."));
             return blob;
         },
         close() {

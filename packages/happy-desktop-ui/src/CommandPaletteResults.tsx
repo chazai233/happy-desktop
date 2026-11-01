@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useCallback, type CSSProperties, type ReactNode } from "react";
 import { Avatar, type ToneName } from "./Avatar";
 import { KeyCap } from "./Badge";
@@ -124,7 +125,7 @@ export function commandPaletteResultsRows(
  */
 function rowAnnouncement(row: CommandPaletteResultsRow, index: number, total: number) {
     const words = row.kind === "control" ? [row.label, row.description] : [row.title, row.meta];
-    return `${words.filter(Boolean).join(" — ")}, ${index + 1} of ${total}`;
+    return translate("{0}, {1} of {2}", words.filter(Boolean).join(" — "), index + 1, total);
 }
 /** The inside of a command row: leading lane, its one line, then its cap. */
 function commandRowContent(row: CommandPaletteCommandRow) {
@@ -243,11 +244,11 @@ export function CommandPaletteResults(props: CommandPaletteResultsProps) {
                     description={props.emptyDescription}
                     icon="search"
                     size="inline"
-                    title={props.emptyLabel ?? "No results"}
+                    title={props.emptyLabel ?? translate("No results")}
                 />
             ) : (
                 <div
-                    aria-label={props.label ?? "Results"}
+                    aria-label={props.label ?? translate("Results")}
                     className="happy-command-palette-results__list"
                     data-happy-desktop-ui="command-palette-results-list"
                     role="group"

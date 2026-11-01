@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { ReactNode } from "react";
 import { Banner } from "./Banner";
 import { Box } from "./Box";
@@ -73,8 +74,8 @@ const DIRECT_TITLE = "Direct connection";
 const DIRECT_DETAIL = "Straight to this computer over Tailcat. Needs a newer app; you check emoji.";
 
 const METHOD_SEGMENTS: SegmentedControlSegment[] = [
-    { value: "relay", label: "Relay", title: RELAY_DETAIL },
-    { value: "direct", label: "Direct", badge: "Experimental", title: DIRECT_DETAIL },
+    { value: "relay", label: translate("Relay"), title: RELAY_DETAIL },
+    { value: "direct", label: translate("Direct"), badge: "Experimental", title: DIRECT_DETAIL },
 ];
 
 /**
@@ -134,24 +135,26 @@ export function MobilePairingOptions(props: MobilePairingOptionsProps) {
         >
             {props.layout === "settings" && props.onClose ? (
                 <Box className="happy-mobile-pairing-options__header">
-                    <span className="happy-mobile-pairing-options__heading">Connect a phone</span>
+                    <span className="happy-mobile-pairing-options__heading">
+                        {translate("Connect a phone")}
+                    </span>
                     <Button
                         onClick={props.onClose}
                         size="small"
                         variant={completed ? "primary" : "ghost"}
                     >
-                        {completed ? "Done" : "Close"}
+                        {completed ? translate("Done") : translate("Close")}
                     </Button>
                 </Box>
             ) : null}
             {props.layout === "settings" && props.unavailable ? (
-                <Banner tone="warning" title="Happy Agent unavailable">
+                <Banner tone="warning" title={translate("Happy Agent unavailable")}>
                     {props.unavailable}
                 </Banner>
             ) : null}
             {method === undefined ? null : (
                 <SegmentedControl
-                    aria-label="Pairing method"
+                    aria-label={translate("Pairing method")}
                     className="happy-mobile-pairing-options__method"
                     data-testid="mobile-pairing-method"
                     onChange={(value) => {
@@ -239,7 +242,7 @@ function RelaySlot(
                     countdown={props.countdown}
                     data={relay.data}
                     expiresAt={relay.expiresAt}
-                    label="QR code to pair through Happy relay"
+                    label={translate("QR code to pair through Happy relay")}
                     mark="link"
                     now={props.now}
                     size={props.codeSize}
@@ -249,24 +252,28 @@ function RelaySlot(
         case "connected":
             return (
                 <PairingResult
-                    detail="Every phone signed in to your Happy account already sees this computer."
+                    detail={translate(
+                        "Every phone signed in to your Happy account already sees this computer.",
+                    )}
                     icon="link-outline"
-                    title="Already connected"
+                    title={translate("Already connected")}
                     tone="neutral"
                 />
             );
         case "disabled":
             return (
                 <PairingNote
-                    detail="Happy Mobile integration is turned off for this Happy Agent."
-                    title="Happy relay is off"
+                    detail={translate(
+                        "Happy Mobile integration is turned off for this Happy Agent.",
+                    )}
+                    title={translate("Happy relay is off")}
                 />
             );
         case "unavailable":
             return (
                 <PairingNote
-                    detail="This Happy Agent doesn't report a Happy relay connection."
-                    title="Not available"
+                    detail={translate("This Happy Agent doesn't report a Happy relay connection.")}
+                    title={translate("Not available")}
                 />
             );
         case "failed":
@@ -274,7 +281,7 @@ function RelaySlot(
                 <PairingResult
                     detail={relay.message}
                     icon="close-circle"
-                    title="Couldn't get a code"
+                    title={translate("Couldn't get a code")}
                     tone="danger"
                 >
                     {props.onRelayRetry ? (
@@ -286,7 +293,7 @@ function RelaySlot(
                                 size="small"
                                 variant="primary"
                             >
-                                Try again
+                                {translate("Try again")}
                             </Button>
                         </PairingActions>
                     ) : null}

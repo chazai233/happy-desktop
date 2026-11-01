@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { Button } from "./Button";
@@ -25,10 +26,10 @@ const AVAILABILITY: {
     value: Availability;
     label: string;
 }[] = [
-    { value: "automatic", label: "Auto" },
-    { value: "online", label: "Online" },
-    { value: "away", label: "Away" },
-    { value: "dnd", label: "Busy" },
+    { value: "automatic", label: translate("Auto") },
+    { value: "online", label: translate("Online") },
+    { value: "away", label: translate("Away") },
+    { value: "dnd", label: translate("Busy") },
 ];
 /**
  * C-034 StatusPicker — availability chooser + custom status editor on the Happy
@@ -73,7 +74,7 @@ export function StatusPicker(props: StatusPickerProps) {
                     className="happy-status-picker__section-label"
                     data-happy-desktop-ui="status-picker-availability-label"
                 >
-                    Availability
+                    {translate("Availability")}
                 </span>
                 <div
                     className="happy-status-picker__segmented"
@@ -125,7 +126,7 @@ export function StatusPicker(props: StatusPickerProps) {
                     className="happy-status-picker__section-label"
                     data-happy-desktop-ui="status-picker-status-label"
                 >
-                    Status
+                    {translate("Status")}
                 </span>
                 <div
                     className="happy-status-picker__field"
@@ -146,13 +147,13 @@ export function StatusPicker(props: StatusPickerProps) {
                         className="happy-status-picker__input"
                         data-happy-desktop-ui="status-picker-input"
                         onInput={(event) => local.onStatusTextChange?.(event.currentTarget.value)}
-                        placeholder="What's your status?"
+                        placeholder={translate("What's your status?")}
                         type="text"
                         value={local.statusText ?? ""}
                     />
                     {hasStatus() && local.onClearStatus ? (
                         <Button
-                            aria-label="Clear status"
+                            aria-label={translate("Clear status")}
                             className="happy-status-picker__clear"
                             icon="close"
                             iconOnly

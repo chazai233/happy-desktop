@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useCallback, type CSSProperties } from "react";
 import type { ComposerCommand } from "happy-desktop-state";
 import { Icon, type IconName } from "./Icon";
@@ -43,7 +44,7 @@ export function CommandPicker(props: CommandPickerProps) {
     }, []);
     return (
         <div
-            aria-label={props.label ?? "Commands"}
+            aria-label={props.label ?? translate("Commands")}
             className={["happy-command-picker", props.className].filter(Boolean).join(" ")}
             data-happy-desktop-ui="command-picker"
             data-testid={props["data-testid"]}
@@ -65,7 +66,7 @@ export function CommandPicker(props: CommandPickerProps) {
                         className="happy-command-picker__header"
                         data-happy-desktop-ui="command-picker-header"
                     >
-                        {props.label ?? "Commands"}
+                        {props.label ?? translate("Commands")}
                     </div>
                     {props.items.map((item) => {
                         const active = item.id === props.activeId;
@@ -117,17 +118,17 @@ type CommandMeta = { description: string; icon: IconName };
  * but this table does not know still appears, wearing its own label.
  */
 const COMMAND_META: Record<string, CommandMeta> = {
-    model: { description: "Choose the model and provider", icon: "spark" },
-    effort: { description: "Change the reasoning level", icon: "zap" },
-    permissions: { description: "Choose filesystem and shell access", icon: "shield" },
-    fast: { description: "Toggle fastest inference", icon: "zap" },
-    usage: { description: "Token usage for the session", icon: "clock" },
-    tasks: { description: "Show the session task list", icon: "tasks" },
-    agents: { description: "Monitor delegated subagents", icon: "users" },
-    goal: { description: "Show the persistent goal", icon: "star" },
-    ps: { description: "List running background terminals", icon: "terminal" },
-    compact: { description: "Summarize older messages to free context", icon: "filter" },
-    abort: { description: "Stop the current response", icon: "close" },
+    model: { description: translate("Choose the model and provider"), icon: "spark" },
+    effort: { description: translate("Change the reasoning level"), icon: "zap" },
+    permissions: { description: translate("Choose filesystem and shell access"), icon: "shield" },
+    fast: { description: translate("Toggle fastest inference"), icon: "zap" },
+    usage: { description: translate("Token usage for the session"), icon: "clock" },
+    tasks: { description: translate("Show the session task list"), icon: "tasks" },
+    agents: { description: translate("Monitor delegated subagents"), icon: "users" },
+    goal: { description: translate("Show the persistent goal"), icon: "star" },
+    ps: { description: translate("List running background terminals"), icon: "terminal" },
+    compact: { description: translate("Summarize older messages to free context"), icon: "filter" },
+    abort: { description: translate("Stop the current response"), icon: "close" },
 };
 
 /** Presents the composer's supported commands as picker rows, in the order given. */

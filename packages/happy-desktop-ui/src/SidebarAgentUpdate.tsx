@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { AgentUpdateCard, type AgentUpdateCardProps } from "./AgentUpdateCard";
 import { Button } from "./Button";
 import { Ionicon } from "./vectorIcons/VectorIcon";
@@ -47,7 +48,7 @@ export function SidebarAgentUpdate(props: SidebarAgentUpdateProps) {
                 iconOnly
                 onClick={onToggle}
                 size="small"
-                title={running ? "Updating Happy Agent" : label}
+                title={running ? translate("Updating Happy Agent") : label}
                 variant="ghost"
             >
                 <Ionicon

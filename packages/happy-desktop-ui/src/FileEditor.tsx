@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     useState,
@@ -178,12 +179,12 @@ export function FileEditor(props: FileEditorProps) {
                         coming and going never moves that control. */}
                     {local.onWrapChange !== undefined && !reading ? (
                         <SegmentedControl
-                            aria-label="Whether long lines wrap"
+                            aria-label={translate("Whether long lines wrap")}
                             data-testid="file-editor-wrap"
                             onChange={(value) => local.onWrapChange?.(value === "wrap")}
                             segments={[
-                                { value: "wrap", label: "Wrap" },
-                                { value: "scroll", label: "No wrap" },
+                                { value: "wrap", label: translate("Wrap") },
+                                { value: "scroll", label: translate("No wrap") },
                             ]}
                             size="compact"
                             value={local.wrap === true ? "wrap" : "scroll"}
@@ -193,8 +194,8 @@ export function FileEditor(props: FileEditorProps) {
                         <SegmentedControl
                             onChange={(value) => setFace(value as "rendered" | "source")}
                             segments={[
-                                { value: "rendered", label: "Rendered" },
-                                { value: "source", label: "Source" },
+                                { value: "rendered", label: translate("Rendered") },
+                                { value: "source", label: translate("Source") },
                             ]}
                             size="compact"
                             value={face}
@@ -207,17 +208,17 @@ export function FileEditor(props: FileEditorProps) {
                             size="small"
                             variant="ghost"
                         >
-                            {local.revertLabel ?? "Revert"}
+                            {local.revertLabel ?? translate("Revert")}
                         </Button>
                     ) : null}
                     {local.onDownload ? (
                         <Button
-                            aria-label="Download"
+                            aria-label={translate("Download")}
                             data-testid="file-editor-download"
                             iconOnly
                             onClick={() => local.onDownload?.()}
                             size="small"
-                            title="Download"
+                            title={translate("Download")}
                             variant="ghost"
                         >
                             <Ionicon name="download-outline" size={14} />
@@ -225,7 +226,7 @@ export function FileEditor(props: FileEditorProps) {
                     ) : null}
                     {local.onClose ? (
                         <Button
-                            aria-label={local.closeLabel ?? "Close file"}
+                            aria-label={local.closeLabel ?? translate("Close file")}
                             icon="close"
                             iconOnly
                             onClick={() => local.onClose?.()}

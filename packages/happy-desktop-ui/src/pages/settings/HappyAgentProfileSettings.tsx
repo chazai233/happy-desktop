@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { useRef } from "react";
 import { Avatar } from "../../Avatar";
 import { Banner } from "../../Banner";
@@ -112,14 +113,14 @@ export function HappyAgentProfileSettings(props: HappyAgentProfileSettingsProps)
         <HappyAgentSettingsSection>
             {props.unavailable ? <Banner tone="warning">{props.unavailable}</Banner> : null}
             {props.error ? (
-                <Banner tone="danger" title="Profile unavailable">
+                <Banner tone="danger" title={translate("Profile unavailable")}>
                     {props.error}
                 </Banner>
             ) : null}
             {props.loading ? (
                 <Box className="happy-agent-settings__pending">
                     <Spinner size={16} />
-                    <span>Reading the profile…</span>
+                    <span>{translate("Reading the profile…")}</span>
                 </Box>
             ) : (
                 <form
@@ -131,12 +132,12 @@ export function HappyAgentProfileSettings(props: HappyAgentProfileSettingsProps)
                     }}
                 >
                     {props.photoError ? (
-                        <Banner tone="danger" title="Photo not changed">
+                        <Banner tone="danger" title={translate("Photo not changed")}>
                             {props.photoError}
                         </Banner>
                     ) : null}
                     {props.saveError ? (
-                        <Banner tone="danger" title="Not saved">
+                        <Banner tone="danger" title={translate("Not saved")}>
                             {props.saveError}
                         </Banner>
                     ) : null}
@@ -158,7 +159,7 @@ export function HappyAgentProfileSettings(props: HappyAgentProfileSettingsProps)
                                         size="small"
                                         variant="ghost"
                                     >
-                                        Remove
+                                        {translate("Remove")}
                                     </Button>
                                 ) : null}
                                 <Button
@@ -175,7 +176,9 @@ export function HappyAgentProfileSettings(props: HappyAgentProfileSettingsProps)
                                     size="small"
                                     variant="secondary"
                                 >
-                                    {props.photo ? "Replace photo" : "Upload photo"}
+                                    {props.photo
+                                        ? translate("Replace photo")
+                                        : translate("Upload photo")}
                                 </Button>
                                 <input
                                     accept={PHOTO_ACCEPT}
@@ -193,7 +196,7 @@ export function HappyAgentProfileSettings(props: HappyAgentProfileSettingsProps)
                             </Box>
                         }
                         description={props.photoUnavailable ?? "PNG, JPEG, or WebP, up to 8 MiB"}
-                        label="Photo"
+                        label={translate("Photo")}
                     />
                     <FormRow
                         control={
@@ -201,13 +204,13 @@ export function HappyAgentProfileSettings(props: HappyAgentProfileSettingsProps)
                                 className="happy-agent-profile__field"
                                 disabled={blocked}
                                 onValueChange={props.onNameChange}
-                                placeholder="Your name"
+                                placeholder={translate("Your name")}
                                 size="medium"
                                 value={props.name}
                             />
                         }
-                        description="Shown on work this machine authors"
-                        label="Name"
+                        description={translate("Shown on work this machine authors")}
+                        label={translate("Name")}
                     />
                     <FormRow
                         control={
@@ -221,8 +224,8 @@ export function HappyAgentProfileSettings(props: HappyAgentProfileSettingsProps)
                                 value={props.email}
                             />
                         }
-                        description="The Git author address on every commit made here"
-                        label="Git email"
+                        description={translate("The Git author address on every commit made here")}
+                        label={translate("Git email")}
                     />
                     {/* No saved-state line: both controls are disabled until
                         the fields differ from what is stored, so the pair
@@ -235,7 +238,7 @@ export function HappyAgentProfileSettings(props: HappyAgentProfileSettingsProps)
                             size="small"
                             variant="ghost"
                         >
-                            Revert
+                            {translate("Revert")}
                         </Button>
                         <Button
                             disabled={blocked || !props.dirty}
@@ -244,7 +247,7 @@ export function HappyAgentProfileSettings(props: HappyAgentProfileSettingsProps)
                             type="submit"
                             variant="primary"
                         >
-                            Save
+                            {translate("Save")}
                         </Button>
                     </Box>
                 </form>

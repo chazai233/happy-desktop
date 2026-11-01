@@ -1,3 +1,4 @@
+import { translate } from "../localization/translate";
 import { useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { reducedMotionGet, reducedMotionSubscribe } from "../lottie/dotLottieRuntime";
 
@@ -76,7 +77,7 @@ export function EmptyStateVideo(props: {
 
     return (
         <button
-            aria-label="Play the illustration again"
+            aria-label={translate("Play the illustration again")}
             className="happy-empty-state-video"
             data-happy-desktop-ui="empty-state-video"
             data-motion={reducedMotion ? "reduced" : "full"}

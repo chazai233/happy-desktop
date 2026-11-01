@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties } from "react";
 import { Banner } from "./Banner";
 import { Button } from "./Button";
@@ -53,7 +54,7 @@ export function HappyAgentProjectCloneDialog(props: HappyAgentProjectCloneDialog
                 footer={
                     <>
                         <Button disabled={submitting} onClick={props.onClose} variant="ghost">
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                         <Button
                             disabled={!submittable}
@@ -61,7 +62,7 @@ export function HappyAgentProjectCloneDialog(props: HappyAgentProjectCloneDialog
                             title={props.submitDisabledReason}
                             variant="primary"
                         >
-                            {submitting ? "Cloning…" : "Clone project"}
+                            {submitting ? translate("Cloning…") : translate("Clone project")}
                         </Button>
                     </>
                 }
@@ -69,19 +70,19 @@ export function HappyAgentProjectCloneDialog(props: HappyAgentProjectCloneDialog
                 onClose={submitting ? undefined : props.onClose}
                 size="medium"
                 style={props.style}
-                title="Clone GitHub project"
+                title={translate("Clone GitHub project")}
             >
                 <div
                     className="happy-agent-project-clone-dialog"
                     data-happy-desktop-ui="happy-agent-project-clone-dialog"
                 >
                     {props.submitDisabledReason ? (
-                        <Banner tone="neutral" title="Happy Agent unavailable">
+                        <Banner tone="neutral" title={translate("Happy Agent unavailable")}>
                             {props.submitDisabledReason}
                         </Banner>
                     ) : null}
                     {props.error ? (
-                        <Banner tone="danger" title="Couldn’t clone project">
+                        <Banner tone="danger" title={translate("Couldn’t clone project")}>
                             {props.error}
                         </Banner>
                     ) : null}
@@ -89,7 +90,7 @@ export function HappyAgentProjectCloneDialog(props: HappyAgentProjectCloneDialog
                         autoFocus
                         disabled={submitting}
                         fullWidth
-                        label="GitHub repository"
+                        label={translate("GitHub repository")}
                         onSubmit={() => {
                             if (submittable) props.onSubmit();
                         }}
@@ -101,7 +102,7 @@ export function HappyAgentProjectCloneDialog(props: HappyAgentProjectCloneDialog
                         className="happy-agent-project-clone-dialog__hint"
                         data-happy-desktop-ui="happy-agent-project-clone-dialog-hint"
                     >
-                        Clone a repository this HappyAgent can access.
+                        {translate("Clone a repository this HappyAgent can access.")}
                     </p>
                 </div>
             </Modal>

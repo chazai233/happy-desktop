@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Banner } from "../../Banner";
 import { Box } from "../../Box";
 import { Button } from "../../Button";
@@ -69,37 +70,38 @@ export function HappyAgentSecretCreateDialog(props: HappyAgentSecretCreateDialog
                 footer={
                     <>
                         <Button disabled={props.submitting} onClick={props.onClose} variant="ghost">
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                         <Button
                             disabled={props.unavailable !== undefined}
                             loading={props.submitting}
                             onClick={props.onSubmit}
                         >
-                            Create secret
+                            {translate("Create secret")}
                         </Button>
                     </>
                 }
                 icon="lock"
                 onClose={props.submitting ? undefined : props.onClose}
                 size="medium"
-                title="Create secret"
+                title={translate("Create secret")}
             >
                 <Box
                     className="happy-agent-secret-create"
                     data-happy-desktop-ui="happy-agent-secret-create"
                 >
-                    <Banner icon="lock" tone="neutral" title="Values stay hidden">
-                        Secret values are sent once and are never returned by Happy Agent or shown
-                        in this list.
+                    <Banner icon="lock" tone="neutral" title={translate("Values stay hidden")}>
+                        {translate(
+                            "Secret values are sent once and are never returned by Happy Agent or shown in this list.",
+                        )}
                     </Banner>
                     {props.unavailable ? (
-                        <Banner tone="neutral" title="Happy Agent unavailable">
+                        <Banner tone="neutral" title={translate("Happy Agent unavailable")}>
                             {props.unavailable}
                         </Banner>
                     ) : null}
                     {props.error ? (
-                        <Banner tone="danger" title="Secret not created">
+                        <Banner tone="danger" title={translate("Secret not created")}>
                             {props.error}
                         </Banner>
                     ) : null}
@@ -110,17 +112,18 @@ export function HappyAgentSecretCreateDialog(props: HappyAgentSecretCreateDialog
                             props.attempted ? descriptionError(props.draft.description) : undefined
                         }
                         fullWidth
-                        label="Description"
+                        label={translate("Description")}
                         onSubmit={props.onSubmit}
                         onValueChange={props.onDescriptionChange}
-                        placeholder="Production deploy credentials"
+                        placeholder={translate("Production deploy credentials")}
                         value={props.draft.description}
                     />
                     <fieldset className="happy-agent-secret-create__environment">
-                        <legend>Environment variables</legend>
+                        <legend>{translate("Environment variables")}</legend>
                         <p>
-                            Add the variable names agents receive and the write-only values to store
-                            under them.
+                            {translate(
+                                "Add the variable names agents receive and the write-only values to store under them.",
+                            )}
                         </p>
                         <Box className="happy-agent-secret-create__variables">
                             {props.draft.variables.map((variable) => (
@@ -141,7 +144,7 @@ export function HappyAgentSecretCreateDialog(props: HappyAgentSecretCreateDialog
                                                 : undefined
                                         }
                                         fullWidth
-                                        label="Variable name"
+                                        label={translate("Variable name")}
                                         onSubmit={props.onSubmit}
                                         onValueChange={(value) =>
                                             props.onVariableNameChange(variable.id, value)
@@ -158,18 +161,21 @@ export function HappyAgentSecretCreateDialog(props: HappyAgentSecretCreateDialog
                                                 : undefined
                                         }
                                         fullWidth
-                                        label="Secret value"
+                                        label={translate("Secret value")}
                                         onSubmit={props.onSubmit}
                                         onValueChange={(value) =>
                                             props.onVariableValueChange(variable.id, value)
                                         }
-                                        placeholder="Enter value"
+                                        placeholder={translate("Enter value")}
                                         type="password"
                                         value={variable.value}
                                     />
                                     <Box className="happy-agent-secret-create__remove">
                                         <Button
-                                            aria-label={`Remove ${variable.name || "environment variable"}`}
+                                            aria-label={translate(
+                                                "Remove {0}",
+                                                variable.name || "environment variable",
+                                            )}
                                             disabled={
                                                 disabled || props.draft.variables.length === 1
                                             }
@@ -194,22 +200,24 @@ export function HappyAgentSecretCreateDialog(props: HappyAgentSecretCreateDialog
                             size="small"
                             variant="ghost"
                         >
-                            Add variable
+                            {translate("Add variable")}
                         </Button>
                     </fieldset>
                     <FormRow
                         control={
                             <Switch
-                                aria-label="Available to every agent"
+                                aria-label={translate("Available to every agent")}
                                 checked={props.draft.availableToAgents}
                                 disabled={disabled}
                                 id="happy-agent-secret-create-available"
                                 onChange={props.onAvailableToAgentsChange}
                             />
                         }
-                        description="When off, the secret stays stored until scoped access is granted to a project, workspace, or agent."
+                        description={translate(
+                            "When off, the secret stays stored until scoped access is granted to a project, workspace, or agent.",
+                        )}
                         htmlFor="happy-agent-secret-create-available"
-                        label="Available to every agent"
+                        label={translate("Available to every agent")}
                     />
                 </Box>
             </Modal>
@@ -218,9 +226,9 @@ export function HappyAgentSecretCreateDialog(props: HappyAgentSecretCreateDialog
 }
 
 function descriptionError(description: string): string | undefined {
-    if (description.trim().length === 0) return "Enter a description.";
+    if (description.trim().length === 0) return translate("Enter a description.");
     if (description.length > DESCRIPTION_MAX_LENGTH)
-        return `Use ${String(DESCRIPTION_MAX_LENGTH)} characters or fewer.`;
+        return translate("Use {0} characters or fewer.", String(DESCRIPTION_MAX_LENGTH));
     return undefined;
 }
 
@@ -228,19 +236,21 @@ function variableNameError(
     name: string,
     variables: readonly HappyAgentSecretVariableDraft[],
 ): string | undefined {
-    if (name.length === 0) return "Enter a variable name.";
+    if (name.length === 0) return translate("Enter a variable name.");
     if (name.length > ENVIRONMENT_NAME_MAX_LENGTH)
-        return `Use ${String(ENVIRONMENT_NAME_MAX_LENGTH)} characters or fewer.`;
+        return translate("Use {0} characters or fewer.", String(ENVIRONMENT_NAME_MAX_LENGTH));
     if (!ENVIRONMENT_NAME.test(name))
-        return "Use letters, numbers, and underscores, starting with a letter or underscore.";
+        return translate(
+            "Use letters, numbers, and underscores, starting with a letter or underscore.",
+        );
     if (variables.filter((variable) => variable.name === name).length > 1)
-        return "Each variable name must be unique.";
+        return translate("Each variable name must be unique.");
     return undefined;
 }
 
 function variableValueError(value: string): string | undefined {
-    if (value.includes("\0")) return "Secret values cannot contain a null character.";
+    if (value.includes("\0")) return translate("Secret values cannot contain a null character.");
     if (value.length > ENVIRONMENT_VALUE_MAX_LENGTH)
-        return `Use ${String(ENVIRONMENT_VALUE_MAX_LENGTH)} characters or fewer.`;
+        return translate("Use {0} characters or fewer.", String(ENVIRONMENT_VALUE_MAX_LENGTH));
     return undefined;
 }

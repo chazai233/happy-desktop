@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { useState, type PointerEvent as ReactPointerEvent } from "react";
 import {
     calendarDateAdd,
@@ -284,7 +285,7 @@ export function HappyAgentCalendarMonthView(props: HappyAgentCalendarMonthViewPr
                                                 }}
                                                 type="button"
                                             >
-                                                +{String(more)} more
+                                                +{String(more)} {translate("more")}
                                             </button>
                                         ) : null}
                                     </div>

@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import type {
     HappyAgentDeviceBridgeCapability,
@@ -61,7 +62,7 @@ function Capability(props: { label: string; capability: HappyAgentDeviceBridgeCa
                 )}
             </span>
             <span className="happy-visually-hidden">
-                {available ? "Available" : "Not available"}
+                {available ? translate("Available") : translate("Not available")}
             </span>
         </li>
     );
@@ -131,7 +132,7 @@ function bridgeRow(
             size="small"
             variant="ghost"
         >
-            Close
+            {translate("Close")}
         </Button>
     );
     const elsewhere = bridge.heldHere ? [] : ["From another device"];
@@ -168,7 +169,7 @@ function bridgeRow(
                 error={bridge.error}
                 icon="arrow-back-outline"
                 key={bridge.id}
-                title={`Workspace :${workspacePort}${local}`}
+                title={translate("Workspace :{0}{1}", workspacePort, local)}
                 tone={bridge.status === "failed" ? "failed" : undefined}
                 trailing={close}
             />
@@ -180,7 +181,11 @@ function bridgeRow(
             error={bridge.error}
             icon="arrow-forward-outline"
             key={bridge.id}
-            title={`Mac :${String(bridge.localPort)} → Workspace :${String(bridge.workspacePort)}`}
+            title={translate(
+                "Mac :{0} → Workspace :{1}",
+                String(bridge.localPort),
+                String(bridge.workspacePort),
+            )}
             tone={bridge.status === "failed" ? "failed" : undefined}
             trailing={close}
         />
@@ -227,7 +232,7 @@ function PortForm(props: {
                     label={props.secondLabel}
                     onSubmit={submit}
                     onValueChange={setSecond}
-                    placeholder="Same"
+                    placeholder={translate("Same")}
                     size="small"
                     value={second}
                 />
@@ -238,7 +243,7 @@ function PortForm(props: {
                     size="small"
                     variant="secondary"
                 >
-                    Forward
+                    {translate("Forward")}
                 </Button>
             </div>
             {props.error ? (
@@ -287,7 +292,7 @@ export function HappyAgentDevicesPanel(props: HappyAgentDevicesPanelProps) {
                 title={device.name}
                 trailing={
                     attached ? (
-                        <span className="happy-agent-devices__detail">Attached</span>
+                        <span className="happy-agent-devices__detail">{translate("Attached")}</span>
                     ) : (
                         <Button
                             disabled={!actionable || capability?.available !== true}
@@ -296,7 +301,7 @@ export function HappyAgentDevicesPanel(props: HappyAgentDevicesPanelProps) {
                             size="small"
                             variant="secondary"
                         >
-                            Attach
+                            {translate("Attach")}
                         </Button>
                     )
                 }
@@ -305,7 +310,11 @@ export function HappyAgentDevicesPanel(props: HappyAgentDevicesPanelProps) {
     };
     const usbList = (bluetooth: boolean, empty: string): ReactNode => {
         if (!usb)
-            return <p className="happy-agent-devices__note">Looking for devices on this Mac…</p>;
+            return (
+                <p className="happy-agent-devices__note">
+                    {translate("Looking for devices on this Mac…")}
+                </p>
+            );
         if (!usb.available) return <p className="happy-agent-devices__note">{usb.reason}</p>;
         const listed = usb.devices.filter((device) => device.bluetooth === bluetooth);
         if (listed.length === 0) return <p className="happy-agent-devices__note">{empty}</p>;
@@ -316,14 +325,15 @@ export function HappyAgentDevicesPanel(props: HappyAgentDevicesPanelProps) {
         <div className="happy-agent-devices" data-happy-desktop-ui="happy-agent-devices-panel">
             {devices.support === "unsupported" ? (
                 <p className="happy-agent-devices__note">
-                    The Happy Agent this workspace runs on cannot bridge devices or ports. Updating
-                    it adds them.
+                    {translate(
+                        "The Happy Agent this workspace runs on cannot bridge devices or ports. Updating it adds them.",
+                    )}
                 </p>
             ) : (
                 <>
                     {devices.host.status === "appOutdated" ? (
                         <p className="happy-agent-devices__banner" role="status">
-                            Update Happy to attach devices and forward ports.
+                            {translate("Update Happy to attach devices and forward ports.")}
                         </p>
                     ) : devices.host.status === "error" ? (
                         <p className="happy-agent-devices__error" role="status">
@@ -335,26 +345,29 @@ export function HappyAgentDevicesPanel(props: HappyAgentDevicesPanelProps) {
                             {devices.error}
                         </p>
                     ) : null}
-                    <Section title="What the workspace can use">
+                    <Section title={translate("What the workspace can use")}>
                         {capabilities ? (
                             <ul className="happy-agent-devices__list">
-                                <Capability capability={capabilities.usb} label="USB devices" />
+                                <Capability
+                                    capability={capabilities.usb}
+                                    label={translate("USB devices")}
+                                />
                                 <Capability
                                     capability={capabilities.bluetooth}
-                                    label="Bluetooth adapters"
+                                    label={translate("Bluetooth adapters")}
                                 />
                                 <Capability
                                     capability={capabilities.workspaceToLocal}
-                                    label="The workspace can reach this Mac"
+                                    label={translate("The workspace can reach this Mac")}
                                 />
                                 <Capability
                                     capability={capabilities.localToWorkspace}
-                                    label="This Mac can reach the workspace"
+                                    label={translate("This Mac can reach the workspace")}
                                 />
                             </ul>
                         ) : (
                             <p className="happy-agent-devices__note">
-                                Checking the workspace’s machine…
+                                {translate("Checking the workspace’s machine…")}
                             </p>
                         )}
                     </Section>
@@ -362,22 +375,26 @@ export function HappyAgentDevicesPanel(props: HappyAgentDevicesPanelProps) {
                     this Mac, so only what Happy Agent itself knows is shown. */}
                     {devices.host.status === "appOutdated" ? null : (
                         <>
-                            <Section title="USB devices">
+                            <Section title={translate("USB devices")}>
                                 {usbList(false, "No USB devices are plugged into this Mac.")}
                             </Section>
                             <Section
                                 note="An attached adapter becomes the workspace’s own Bluetooth controller. A spare USB adapter works best: macOS keeps the one it is using."
-                                title="Bluetooth adapters"
+                                title={translate("Bluetooth adapters")}
                             >
                                 {usbList(
                                     true,
                                     "No USB Bluetooth adapters are plugged into this Mac.",
                                 )}
                             </Section>
-                            <Section title="Workspace to this Mac">
+                            <Section title={translate("Workspace to this Mac")}>
                                 <PortForm
                                     description={(local, workspace) =>
-                                        `Programs in the workspace connect to 127.0.0.1:${workspace} and reach localhost:${local} on this Mac.`
+                                        translate(
+                                            "Programs in the workspace connect to 127.0.0.1:{0} and reach localhost:{1} on this Mac.",
+                                            workspace,
+                                            local,
+                                        )
                                     }
                                     disabled={
                                         !actionable ||
@@ -391,10 +408,14 @@ export function HappyAgentDevicesPanel(props: HappyAgentDevicesPanelProps) {
                                     secondLabel="Workspace"
                                 />
                             </Section>
-                            <Section title="This Mac to the workspace">
+                            <Section title={translate("This Mac to the workspace")}>
                                 <PortForm
                                     description={(workspace, local) =>
-                                        `Open localhost:${local} on this Mac to reach port ${workspace} in the workspace.`
+                                        translate(
+                                            "Open localhost:{0} on this Mac to reach port {1} in the workspace.",
+                                            local,
+                                            workspace,
+                                        )
                                     }
                                     disabled={
                                         !actionable ||
@@ -410,9 +431,11 @@ export function HappyAgentDevicesPanel(props: HappyAgentDevicesPanelProps) {
                             </Section>
                         </>
                     )}
-                    <Section title="Open">
+                    <Section title={translate("Open")}>
                         {devices.bridges.length === 0 ? (
-                            <p className="happy-agent-devices__note">Nothing is bridged yet.</p>
+                            <p className="happy-agent-devices__note">
+                                {translate("Nothing is bridged yet.")}
+                            </p>
                         ) : (
                             <ul className="happy-agent-devices__list">
                                 {devices.bridges.map((bridge) =>

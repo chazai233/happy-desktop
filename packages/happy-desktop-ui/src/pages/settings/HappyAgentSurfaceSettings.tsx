@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import {
     HappyAgentAutoJoinSettings,
     type HappyAgentAutoJoinSettingsProps,
@@ -11,8 +12,10 @@ export function HappyAgentSurfaceSettings(props: HappyAgentSurfaceSettingsProps)
         <HappyAgentAutoJoinSettings
             {...props}
             entity="Surface"
-            label="Join other people’s docs, lists and calendars"
-            description="Except ones you left. Turning this off keeps the ones you joined."
+            label={translate("Join other people’s docs, lists and calendars")}
+            description={translate(
+                "Except ones you left. Turning this off keeps the ones you joined.",
+            )}
             unsupportedMessage="Update this connection’s Happy Agent to change this preference."
         />
     );

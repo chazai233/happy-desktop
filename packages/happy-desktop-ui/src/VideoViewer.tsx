@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     useLayoutEffect,
@@ -170,7 +171,7 @@ function timeFormat(seconds: number): string {
  * reads 2:45 has been given two different answers to one question.
  */
 function timeSpoken(seconds: number): string {
-    if (!Number.isFinite(seconds) || seconds < 0) return "0 seconds";
+    if (!Number.isFinite(seconds) || seconds < 0) return translate("0 seconds");
     const whole = Math.floor(seconds);
     const minutes = Math.floor(whole / 60);
     const rest = whole % 60;
@@ -200,15 +201,17 @@ function rateFormat(rate: number): string {
 function failureMessage(error: MediaError | null): string {
     switch (error?.code) {
         case 1:
-            return "Playback was stopped before the video could be read.";
+            return translate("Playback was stopped before the video could be read.");
         case 2:
-            return "The video could not be loaded from the workspace.";
+            return translate("The video could not be loaded from the workspace.");
         case 3:
-            return "The video is damaged, or its data could not be decoded.";
+            return translate("The video is damaged, or its data could not be decoded.");
         case 4:
-            return "Happy cannot play this video: its format is one this build cannot decode, or the file did not arrive.";
+            return translate(
+                "Happy cannot play this video: its format is one this build cannot decode, or the file did not arrive.",
+            );
         default:
-            return "The video could not be played.";
+            return translate("The video could not be played.");
     }
 }
 
@@ -646,7 +649,7 @@ export function VideoViewer(props: VideoViewerProps) {
             style={local.style}
         >
             <div
-                aria-label={`${local.name}, video`}
+                aria-label={translate("{0}, video", local.name)}
                 className="happy-video-viewer__frame"
                 data-happy-desktop-ui="video-viewer-frame"
                 onKeyDown={keyDown}
@@ -697,7 +700,11 @@ export function VideoViewer(props: VideoViewerProps) {
                         <div className="happy-video-viewer__group">
                             <Button
                                 aria-label={
-                                    live.playing ? "Pause" : live.ended ? "Play again" : "Play"
+                                    live.playing
+                                        ? translate("Pause")
+                                        : live.ended
+                                          ? translate("Play again")
+                                          : translate("Play")
                                 }
                                 disabled={!showing}
                                 iconOnly
@@ -738,8 +745,8 @@ export function VideoViewer(props: VideoViewerProps) {
                                 <Button
                                     aria-label={
                                         live.pictureInPicture
-                                            ? "Bring the video back"
-                                            : "Play in a floating window"
+                                            ? translate("Bring the video back")
+                                            : translate("Play in a floating window")
                                     }
                                     aria-pressed={live.pictureInPicture}
                                     disabled={!showing}
@@ -753,7 +760,11 @@ export function VideoViewer(props: VideoViewerProps) {
                             ) : null}
                             {document.fullscreenEnabled ? (
                                 <Button
-                                    aria-label={fullscreen ? "Leave full screen" : "Full screen"}
+                                    aria-label={
+                                        fullscreen
+                                            ? translate("Leave full screen")
+                                            : translate("Full screen")
+                                    }
                                     aria-pressed={fullscreen}
                                     iconOnly
                                     onClick={fullscreenToggle}
@@ -830,9 +841,9 @@ function VideoViewerStage(props: {
     if (content.type === "unavailable")
         return (
             <VideoViewerNotice
-                detail="This file is not a video Happy can play."
+                detail={translate("This file is not a video Happy can play.")}
                 name={name}
-                title={`${name} has no preview`}
+                title={translate("{0} has no preview", name)}
             />
         );
     if (content.type === "loading") return <VideoViewerOpening name={name} />;
@@ -940,7 +951,9 @@ function VideoViewerStage(props: {
                 out of the tab order — the frame around it is the focusable
                 surface, and it answers the same Space with far more besides. */}
             <button
-                aria-label={state.playing ? `Pause ${name}` : `Play ${name}`}
+                aria-label={
+                    state.playing ? translate("Pause {0}", name) : translate("Play {0}", name)
+                }
                 className="happy-video-viewer__surface"
                 data-happy-desktop-ui="video-viewer-surface"
                 onClick={onActivate}
@@ -965,10 +978,12 @@ function VideoViewerStage(props: {
                 >
                     <Icon name="play" size={20} />
                     <span className="happy-video-viewer__notice-title">
-                        {name} is ready to play
+                        {name} {translate("is ready to play")}
                     </span>
                     <span className="happy-video-viewer__notice-detail">
-                        The browser would not start it on its own. Press play to watch it.
+                        {translate(
+                            "The browser would not start it on its own. Press play to watch it.",
+                        )}
                     </span>
                 </div>
             ) : null}
@@ -979,16 +994,16 @@ function VideoViewerStage(props: {
                 >
                     <Ionicon name="tv-outline" size={20} />
                     <span className="happy-video-viewer__notice-title">
-                        Playing in a floating window
+                        {translate("Playing in a floating window")}
                     </span>
                     <span className="happy-video-viewer__notice-detail">
-                        The controls here still run it.
+                        {translate("The controls here still run it.")}
                     </span>
                 </div>
             ) : null}
             {state.waiting && state.status === "ready" ? (
                 <div
-                    aria-label="Buffering"
+                    aria-label={translate("Buffering")}
                     className="happy-video-viewer__buffering"
                     data-happy-desktop-ui="video-viewer-buffering"
                     role="status"
@@ -1087,7 +1102,7 @@ function VideoViewerTimeline(props: {
     return (
         <div
             aria-disabled={inert || undefined}
-            aria-label={`Seek through ${props.name}`}
+            aria-label={translate("Seek through {0}", props.name)}
             aria-valuemax={known ? Math.round(props.duration) : undefined}
             aria-valuemin={known ? 0 : undefined}
             aria-valuenow={known ? Math.floor(props.time) : undefined}
@@ -1160,8 +1175,8 @@ function VideoViewerClock(props: {
                 <button
                     aria-label={
                         props.remaining
-                            ? "Show the whole length instead of what is left"
-                            : "Show what is left instead of the whole length"
+                            ? translate("Show the whole length instead of what is left")
+                            : translate("Show what is left instead of the whole length")
                     }
                     className="happy-video-viewer__total"
                     data-happy-desktop-ui="video-viewer-total"
@@ -1206,7 +1221,7 @@ function VideoViewerVolume(props: {
     return (
         <span className="happy-video-viewer__volume" data-happy-desktop-ui="video-viewer-volume">
             <Button
-                aria-label={props.muted ? "Unmute" : "Mute"}
+                aria-label={props.muted ? translate("Unmute") : translate("Mute")}
                 aria-pressed={props.muted}
                 disabled={props.disabled}
                 iconOnly
@@ -1217,7 +1232,7 @@ function VideoViewerVolume(props: {
                 <Ionicon name={glyph} size={14} />
             </Button>
             <input
-                aria-label="Volume"
+                aria-label={translate("Volume")}
                 className="happy-video-viewer__level"
                 data-happy-desktop-ui="video-viewer-level"
                 disabled={props.disabled}
@@ -1261,7 +1276,7 @@ function VideoViewerRate(props: {
             <Button
                 aria-expanded={props.open}
                 aria-haspopup="menu"
-                aria-label={`Playback speed, ${rateFormat(props.rate)}`}
+                aria-label={translate("Playback speed, {0}", rateFormat(props.rate))}
                 disabled={props.disabled}
                 onClick={() => props.onOpen(!props.open)}
                 size="small"
@@ -1297,7 +1312,9 @@ function VideoViewerOpening(props: { name: string }) {
     return (
         <div className="happy-video-viewer__notice" data-happy-desktop-ui="video-viewer-loading">
             <Spinner size={16} />
-            <span className="happy-video-viewer__notice-title">Opening {props.name}…</span>
+            <span className="happy-video-viewer__notice-title">
+                {translate("Opening")} {props.name}…
+            </span>
         </div>
     );
 }
@@ -1323,7 +1340,7 @@ function VideoViewerNotice(props: {
         >
             <Icon name={props.tone === "danger" ? "close" : "play"} size={20} />
             <span className="happy-video-viewer__notice-title">
-                {props.title ?? `${props.name} could not be played`}
+                {props.title ?? translate("{0} could not be played", props.name)}
             </span>
             <span className="happy-video-viewer__notice-detail">{props.detail}</span>
         </div>

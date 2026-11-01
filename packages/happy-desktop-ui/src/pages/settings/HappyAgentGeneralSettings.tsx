@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type {
     HappyAgentCompletionSound,
     HappyAgentMenusSnapshot,
@@ -24,6 +25,8 @@ export type HappyAgentScrollbarVisibilityChoice = "always" | "automatic";
 export type HappyAgentLinkOpenPlacementChoice = "panel" | "browser";
 
 export type HappyAgentGeneralSettingsProps = {
+    language?: { readonly locale: "zh-CN" | "en"; readonly error?: string };
+    onLanguageChange?: (locale: "zh-CN" | "en") => void;
     appearance: HappyAgentAppearanceChoice;
     appearanceModes?: readonly HappyAgentAppearanceChoice[];
     scrollbarVisibility: HappyAgentScrollbarVisibilityChoice;
@@ -135,7 +138,7 @@ function statusBarRow(
         <FormRow
             control={
                 <Switch
-                    aria-label={`Show ${id} in status bar`}
+                    aria-label={label}
                     checked={shown}
                     id={`happy-agent-settings-status-bar-${id}`}
                     onChange={onChange}
@@ -149,19 +152,19 @@ function statusBarRow(
 }
 
 const scrollbarSegments = [
-    { value: "automatic", label: "Automatic" },
-    { value: "always", label: "Always visible" },
+    { value: "automatic", label: translate("Automatic") },
+    { value: "always", label: translate("Always visible") },
 ];
 
 const completionSoundSegments = [
-    { value: "always", label: "Always" },
-    { value: "focused", label: "When focused" },
-    { value: "never", label: "Never" },
+    { value: "always", label: translate("Always") },
+    { value: "focused", label: translate("When focused") },
+    { value: "never", label: translate("Never") },
 ];
 
 const linkOpenSegments = [
-    { value: "panel", label: "Side panel" },
-    { value: "browser", label: "Browser" },
+    { value: "panel", label: translate("Side panel") },
+    { value: "browser", label: translate("Browser") },
 ];
 
 /**
@@ -173,17 +176,43 @@ const linkOpenSegments = [
 export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps) {
     return (
         <>
+            {props.language && props.onLanguageChange ? (
+                <HappyAgentSettingsSection title={translate("Language")}>
+                    <FormRow
+                        label={translate("Interface language")}
+                        description={translate(
+                            "Saved for the next time this window loads. Your current work stays open.",
+                        )}
+                        control={
+                            <Select
+                                aria-label={translate("Interface language")}
+                                value={props.language.locale}
+                                onValueChange={(value) => {
+                                    if (value === "zh-CN" || value === "en")
+                                        props.onLanguageChange?.(value);
+                                }}
+                                options={[
+                                    { value: "zh-CN", label: "简体中文" },
+                                    { value: "en", label: "English" },
+                                ]}
+                                error={props.language.error}
+                                size="small"
+                            />
+                        }
+                    />
+                </HappyAgentSettingsSection>
+            ) : null}
             {props.error ? (
-                <Banner tone="danger" title="Models unavailable">
+                <Banner tone="danger" title={translate("Models unavailable")}>
                     {props.error}
                 </Banner>
             ) : null}
             {props.unavailable ? (
-                <Banner tone="neutral" title="Happy Agent reconnecting">
+                <Banner tone="neutral" title={translate("Happy Agent reconnecting")}>
                     {props.unavailable}
                 </Banner>
             ) : null}
-            <HappyAgentSettingsSection title="Appearance">
+            <HappyAgentSettingsSection title={translate("Appearance")}>
                 <FormRow
                     control={
                         <SegmentedControl
@@ -197,12 +226,12 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                             value={props.appearance}
                         />
                     }
-                    label="Theme"
+                    label={translate("Theme")}
                 />
                 {props.statusBar
                     ? statusBarRow(
                           "theme",
-                          "Theme switch in status bar",
+                          translate("Theme switch in status bar"),
                           props.statusBar.themeShown,
                           props.statusBar.onThemeShownChange,
                       )
@@ -220,47 +249,51 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                             value={props.scrollbarVisibility}
                         />
                     }
-                    description="Automatic hides them two seconds after scrolling stops"
-                    label="Scrollbars"
+                    description={translate(
+                        "Automatic hides them two seconds after scrolling stops",
+                    )}
+                    label={translate("Scrollbars")}
                 />
                 <FormRow
                     control={
                         <Switch
-                            aria-label="Shimmer active titles"
+                            aria-label={translate("Shimmer active titles")}
                             checked={props.titleShimmerEnabled}
                             id="happy-agent-settings-title-shimmer"
                             onChange={props.onTitleShimmerChange}
                             size="small"
                         />
                     }
-                    description="Animate running session, project, and workspace names"
+                    description={translate("Animate running session, project, and workspace names")}
                     htmlFor="happy-agent-settings-title-shimmer"
-                    label="Shimmer active titles"
+                    label={translate("Shimmer active titles")}
                 />
                 {props.onProjectsHiddenChange ? (
                     <FormRow
                         control={
                             <Switch
-                                aria-label="Hide projects"
+                                aria-label={translate("Hide projects")}
                                 checked={props.projectsHidden === true}
                                 id="happy-agent-settings-projects-hidden"
                                 onChange={props.onProjectsHiddenChange}
                                 size="small"
                             />
                         }
-                        description="Leave Projects out of the sidebar on every connection. Bots and tasks stay."
+                        description={translate(
+                            "Leave Projects out of the sidebar on every connection. Bots and tasks stay.",
+                        )}
                         htmlFor="happy-agent-settings-projects-hidden"
-                        label="Hide projects"
+                        label={translate("Hide projects")}
                     />
                 ) : null}
             </HappyAgentSettingsSection>
             {props.keepAwake && props.onKeepAwakeChange ? (
-                <HappyAgentSettingsSection title="Keep awake">
+                <HappyAgentSettingsSection title={translate("Keep awake")}>
                     <FormRow
                         control={
                             <Box width={280}>
                                 <Select
-                                    aria-label="Keep computer awake"
+                                    aria-label={translate("Keep computer awake")}
                                     fullWidth
                                     id="happy-agent-settings-keep-awake"
                                     onValueChange={(value) =>
@@ -272,14 +305,16 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                 />
                             </Box>
                         }
-                        description="Only agents on this computer count. The display can still sleep."
+                        description={translate(
+                            "Only agents on this computer count. The display can still sleep.",
+                        )}
                         htmlFor="happy-agent-settings-keep-awake"
-                        label="Keep computer awake"
+                        label={translate("Keep computer awake")}
                     />
                     {props.statusBar
                         ? statusBarRow(
                               "keep-awake",
-                              "Keep-awake switch in status bar",
+                              translate("Keep-awake switch in status bar"),
                               props.statusBar.keepAwakeShown,
                               props.statusBar.onKeepAwakeShownChange,
                           )
@@ -287,11 +322,11 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                 </HappyAgentSettingsSection>
             ) : null}
             {props.completionSound && props.onCompletionSoundChange ? (
-                <HappyAgentSettingsSection title="Sound">
+                <HappyAgentSettingsSection title={translate("Sound")}>
                     <FormRow
                         control={
                             <SegmentedControl
-                                aria-label="Completion sound"
+                                aria-label={translate("Completion sound")}
                                 onChange={(value) =>
                                     props.onCompletionSoundChange?.(
                                         value as HappyAgentCompletionSound,
@@ -302,16 +337,18 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                 value={props.completionSound}
                             />
                         }
-                        description="Plays when a conversation finishes. Saved per connection."
-                        label="Completion sound"
+                        description={translate(
+                            "Plays when a conversation finishes. Saved per connection.",
+                        )}
+                        label={translate("Completion sound")}
                     />
                 </HappyAgentSettingsSection>
             ) : null}
-            <HappyAgentSettingsSection title="Links">
+            <HappyAgentSettingsSection title={translate("Links")}>
                 <FormRow
                     control={
                         <SegmentedControl
-                            aria-label="Open links in"
+                            aria-label={translate("Open links in")}
                             onChange={(value) =>
                                 props.onLinkOpenPlacementChange(
                                     value as HappyAgentLinkOpenPlacementChoice,
@@ -322,20 +359,20 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                             value={props.linkOpenPlacement}
                         />
                     }
-                    description="A link's own menu can always open it the other way"
-                    label="Open links in"
+                    description={translate("A link's own menu can always open it the other way")}
+                    label={translate("Open links in")}
                 />
             </HappyAgentSettingsSection>
             <HappyAgentSettingsSection
-                description="Saved to your account, so they follow you across devices."
-                title="New sessions"
+                description={translate("Saved to your account, so they follow you across devices.")}
+                title={translate("New sessions")}
             >
                 <FormRow
                     control={
                         props.loading ? (
                             <Box className="happy-agent-settings__pending">
                                 <Spinner size={16} />
-                                <span>Reading the model catalog…</span>
+                                <span>{translate("Reading the model catalog…")}</span>
                             </Box>
                         ) : props.defaultModel ? (
                             <ComposerModelControl
@@ -348,8 +385,8 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                             />
                         ) : null
                     }
-                    description="Runs on the account you last picked in a chat"
-                    label="Default model"
+                    description={translate("Runs on the account you last picked in a chat")}
+                    label={translate("Default model")}
                 />
                 <FormRow
                     control={
@@ -368,12 +405,12 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                             variant="ghost"
                         />
                     }
-                    description="What a new session may do without asking"
-                    label="Default access mode"
+                    description={translate("What a new session may do without asking")}
+                    label={translate("Default access mode")}
                 />
             </HappyAgentSettingsSection>
             {props.agent || props.onPreviewUpdatesChange || props.desktopUpdate ? (
-                <HappyAgentSettingsSection title="Happy Agent">
+                <HappyAgentSettingsSection title={translate("Happy Agent")}>
                     {props.agent ? (
                         <FormRow
                             control={
@@ -388,15 +425,15 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                             <Spinner size={16} />
                                             <span>
                                                 {props.agent.operation === "checking"
-                                                    ? "Checking…"
-                                                    : "Downloading…"}
+                                                    ? translate("Checking…")
+                                                    : translate("Downloading…")}
                                             </span>
                                         </Box>
                                     ) : null}
                                     {props.agent.managed && props.onAgentVersionSelect ? (
                                         <Box width={220}>
                                             <Select
-                                                aria-label="Happy Agent version"
+                                                aria-label={translate("Happy Agent version")}
                                                 disabled={
                                                     props.agent.operation !== "idle" ||
                                                     props.agent.versions.length === 0
@@ -410,8 +447,8 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                                 )}
                                                 placeholder={
                                                     props.agent.versions.length === 0
-                                                        ? "No versions read yet"
-                                                        : "Choose a version"
+                                                        ? translate("No versions read yet")
+                                                        : translate("Choose a version")
                                                 }
                                                 size="small"
                                                 value={props.agent.installedVersion}
@@ -420,10 +457,10 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                     ) : (
                                         <span className="happy-agent-settings__agent-version">
                                             {!props.agent.managed
-                                                ? "External"
+                                                ? translate("External")
                                                 : props.agent.installedVersion
                                                   ? `v${props.agent.installedVersion}`
-                                                  : "Not installed"}
+                                                  : translate("Not installed")}
                                         </span>
                                     )}
                                     {props.agent.managed &&
@@ -440,10 +477,16 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                                 happened on its own, and what is left to
                                                 agree to is the interruption. */}
                                             {props.agent.readyVersion
-                                                ? `Install v${props.agent.readyVersion}`
+                                                ? translate(
+                                                      "Install v{0}",
+                                                      props.agent.readyVersion,
+                                                  )
                                                 : props.agent.availableVersion
-                                                  ? `Update to ${props.agent.availableVersion}`
-                                                  : "Update"}
+                                                  ? translate(
+                                                        "Update to {0}",
+                                                        props.agent.availableVersion,
+                                                    )
+                                                  : translate("Update")}
                                         </Button>
                                     ) : null}
                                     {props.agent.managed && props.onAgentCheck ? (
@@ -453,7 +496,7 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                             size="small"
                                             variant="ghost"
                                         >
-                                            Check for updates
+                                            {translate("Check for updates")}
                                         </Button>
                                     ) : null}
                                     {props.agent.managed && props.onAgentRestart ? (
@@ -463,16 +506,17 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                             size="small"
                                             variant="secondary"
                                         >
-                                            Restart
+                                            {translate("Restart")}
                                         </Button>
                                     ) : null}
                                 </Box>
                             }
-                            description={`${agentRuntimeLabel(
-                                props.agent.runtime,
-                                props.agent.runningVersion,
-                            )}. ${agentDescription(props.agent)} Switching or restarting lets running work finish first.`}
-                            label="Version"
+                            description={translate(
+                                "{0}. {1} Switching or restarting lets running work finish first.",
+                                agentRuntimeLabel(props.agent.runtime, props.agent.runningVersion),
+                                agentDescription(props.agent),
+                            )}
+                            label={translate("Version")}
                             layout="stacked"
                         />
                     ) : null}
@@ -482,10 +526,15 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                 <Box className="happy-agent-settings__agent-control">
                                     <span aria-live="polite" role="status">
                                         {props.desktopUpdate.status === "downloaded"
-                                            ? `Ready to ${props.desktopUpdate.action}`
+                                            ? translate("Ready to {0}", props.desktopUpdate.action)
                                             : props.desktopUpdate.status === "downloading"
-                                              ? `Downloading${props.desktopUpdate.detail ? ` · ${props.desktopUpdate.detail}` : "…"}`
-                                              : "Ready to download"}
+                                              ? translate(
+                                                    "Downloading{0}",
+                                                    props.desktopUpdate.detail
+                                                        ? ` · ${props.desktopUpdate.detail}`
+                                                        : "…",
+                                                )
+                                              : translate("Ready to download")}
                                     </span>
                                     {props.desktopUpdate.status === "downloaded" &&
                                     props.onDesktopUpdateApply ? (
@@ -495,34 +544,39 @@ export function HappyAgentGeneralSettings(props: HappyAgentGeneralSettingsProps)
                                             variant="secondary"
                                         >
                                             {props.desktopUpdate.action === "refresh"
-                                                ? "Refresh"
-                                                : "Restart"}
+                                                ? translate("Refresh")
+                                                : translate("Restart")}
                                         </Button>
                                     ) : null}
                                 </Box>
                             }
                             description={
                                 props.desktopUpdate.version
-                                    ? `Version ${props.desktopUpdate.version} · Updates download automatically.`
-                                    : "Updates download automatically."
+                                    ? translate(
+                                          "Version {0} · Updates download automatically.",
+                                          props.desktopUpdate.version,
+                                      )
+                                    : translate("Updates download automatically.")
                             }
-                            label="Desktop update"
+                            label={translate("Desktop update")}
                         />
                     ) : null}
                     {props.onPreviewUpdatesChange ? (
                         <FormRow
                             control={
                                 <Switch
-                                    aria-label="Preview updates"
+                                    aria-label={translate("Preview updates")}
                                     checked={props.previewUpdatesEnabled === true}
                                     id="happy-agent-settings-preview-updates"
                                     onChange={props.onPreviewUpdatesChange}
                                     size="small"
                                 />
                             }
-                            description="Offer preview Desktop and Happy Agent releases. Turning this off never downgrades."
+                            description={translate(
+                                "Offer preview Desktop and Happy Agent releases. Turning this off never downgrades.",
+                            )}
                             htmlFor="happy-agent-settings-preview-updates"
-                            label="Preview updates"
+                            label={translate("Preview updates")}
                         />
                     ) : null}
                 </HappyAgentSettingsSection>
@@ -561,12 +615,18 @@ function agentVersionOptions(
 }
 
 function agentDescription(agent: NonNullable<HappyAgentGeneralSettingsProps["agent"]>): string {
-    if (!agent.managed) return "This daemon is supplied by an external development environment.";
+    if (!agent.managed)
+        return translate("This daemon is supplied by an external development environment.");
     if (agent.error)
-        return `Happy Agent reported: ${agent.error} Update checks continue automatically.`;
+        return translate(
+            "Happy Agent reported: {0} Update checks continue automatically.",
+            agent.error,
+        );
     return (
         agent.message ??
-        (agent.updateAvailable ? "A newer verified release is ready." : "Up to date.")
+        (agent.updateAvailable
+            ? translate("A newer verified release is ready.")
+            : translate("Up to date."))
     );
 }
 
@@ -576,10 +636,12 @@ function agentRuntimeLabel(
 ): string {
     switch (runtime) {
         case "ready":
-            return runningVersion ? `Running · v${runningVersion}` : "Running";
+            return runningVersion
+                ? translate("Running · v{0}", runningVersion)
+                : translate("Running");
         case "starting":
-            return "Starting";
+            return translate("Starting");
         case "stopped":
-            return "Stopped";
+            return translate("Stopped");
     }
 }

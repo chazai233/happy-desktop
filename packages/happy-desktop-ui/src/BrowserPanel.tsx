@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useState, type ReactNode } from "react";
 import { Button } from "./Button";
 import { EmptyState } from "./EmptyState";
@@ -232,7 +233,7 @@ export function BrowserPanel(props: BrowserPanelProps) {
         >
             <div className="happy-browser-panel__toolbar" data-happy-desktop-ui="browser-toolbar">
                 <Button
-                    aria-label="Back"
+                    aria-label={translate("Back")}
                     disabled={props.unavailable !== undefined || !canGoBack}
                     iconOnly
                     onClick={() => (framed ? frameStep(-1) : controller?.browserBack())}
@@ -242,7 +243,7 @@ export function BrowserPanel(props: BrowserPanelProps) {
                     <Ionicon name="arrow-back-outline" size={14} />
                 </Button>
                 <Button
-                    aria-label="Forward"
+                    aria-label={translate("Forward")}
                     disabled={props.unavailable !== undefined || !canGoForward}
                     iconOnly
                     onClick={() => (framed ? frameStep(1) : controller?.browserForward())}
@@ -252,7 +253,7 @@ export function BrowserPanel(props: BrowserPanelProps) {
                     <Ionicon name="arrow-forward-outline" size={14} />
                 </Button>
                 <Button
-                    aria-label={view.loading ? "Stop loading" : "Reload"}
+                    aria-label={view.loading ? translate("Stop loading") : translate("Reload")}
                     disabled={props.unavailable !== undefined}
                     iconOnly
                     onClick={() => {
@@ -278,7 +279,7 @@ export function BrowserPanel(props: BrowserPanelProps) {
                     <Ionicon name={view.loading ? "close-outline" : "reload-outline"} size={14} />
                 </Button>
                 <TextField
-                    aria-label="Address and search"
+                    aria-label={translate("Address and search")}
                     autoFocus={blank}
                     className="happy-browser-panel__address"
                     fullWidth
@@ -288,17 +289,17 @@ export function BrowserPanel(props: BrowserPanelProps) {
                     onValueChange={(address) =>
                         viewSet((current) => ({ ...current, address, editing: true }))
                     }
-                    placeholder="Search or enter a URL"
+                    placeholder={translate("Search or enter a URL")}
                     size="small"
                     value={view.address}
                 />
                 <Button
-                    aria-label="Choose a saved password"
+                    aria-label={translate("Choose a saved password")}
                     disabled={props.unavailable !== undefined || !controller?.browserPasswordPick}
                     iconOnly
                     onClick={() => controller?.browserPasswordPick?.()}
                     size="small"
-                    title="Saved passwords"
+                    title={translate("Saved passwords")}
                     variant="ghost"
                 >
                     <Ionicon name="key-outline" size={14} />
@@ -394,7 +395,12 @@ export function BrowserPanel(props: BrowserPanelProps) {
                           >
                               <EmptyState
                                   {...(props.unavailable === undefined
-                                      ? { action: { label: "Try again", onClick: retry } }
+                                      ? {
+                                            action: {
+                                                label: translate("Try again"),
+                                                onClick: retry,
+                                            },
+                                        }
                                       : {})}
                                   description={page.description}
                                   icon={page.icon}
@@ -441,7 +447,9 @@ function BrowserStart(props: {
                 ))}
                 {props.recent.length > 0 ? (
                     <>
-                        <h3 className="happy-browser-panel__start-heading">Recent</h3>
+                        <h3 className="happy-browser-panel__start-heading">
+                            {translate("Recent")}
+                        </h3>
                         {props.recent.map((page) => (
                             <button
                                 className="happy-browser-panel__start-row"
@@ -536,7 +544,7 @@ function browserFailureDescribe(failure: BrowserFailure): BrowserFailurePage {
 
 /** Host label for failure copy; a malformed address is described as typed. */
 function browserFailureHost(url: string | undefined): string {
-    if (!url) return "This site";
+    if (!url) return translate("This site");
     try {
         return new URL(url).host || url;
     } catch {

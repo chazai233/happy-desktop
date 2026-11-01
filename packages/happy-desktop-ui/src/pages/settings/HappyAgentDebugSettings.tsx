@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Banner } from "../../Banner";
 import { Box } from "../../Box";
 import { Button } from "../../Button";
@@ -45,8 +46,10 @@ export type HappyAgentDebugSettingsProps = {
 export function HappyAgentDebugSettings(props: HappyAgentDebugSettingsProps) {
     if (!props.supported && !props.loading)
         return (
-            <Banner tone="neutral" title="Electron desktop only">
-                Live debugger attachment is available in Happy’s Electron desktop window.
+            <Banner tone="neutral" title={translate("Electron desktop only")}>
+                {translate(
+                    "Live debugger attachment is available in Happy’s Electron desktop window.",
+                )}
             </Banner>
         );
 
@@ -63,19 +66,19 @@ export function HappyAgentDebugSettings(props: HappyAgentDebugSettingsProps) {
     return (
         <>
             {props.error ? (
-                <Banner tone="danger" title="Dev tools unavailable">
+                <Banner tone="danger" title={translate("Dev tools unavailable")}>
                     {props.error}
                 </Banner>
             ) : null}
             {props.loading ? (
                 <Box className="happy-agent-settings__pending">
                     <Spinner size={16} />
-                    <span>Reading debugger status…</span>
+                    <span>{translate("Reading debugger status…")}</span>
                 </Box>
             ) : null}
             <HappyAgentSettingsSection
-                description="Happy stays open and nothing reloads"
-                title="Control"
+                description={translate("Happy stays open and nothing reloads")}
+                title={translate("Control")}
             >
                 <FormRow
                     control={
@@ -89,7 +92,7 @@ export function HappyAgentDebugSettings(props: HappyAgentDebugSettingsProps) {
                                 size="small"
                                 variant="secondary"
                             >
-                                Start all
+                                {translate("Start all")}
                             </Button>
                             <Button
                                 disabled={
@@ -100,28 +103,32 @@ export function HappyAgentDebugSettings(props: HappyAgentDebugSettingsProps) {
                                 size="small"
                                 variant="secondary"
                             >
-                                Stop all
+                                {translate("Stop all")}
                             </Button>
                         </Box>
                     }
-                    description="Electron main, this renderer, and the local Happy Agent"
-                    label="All debuggers"
+                    description={translate(
+                        "Electron main, this renderer, and the local Happy Agent",
+                    )}
+                    label={translate("All debuggers")}
                 />
             </HappyAgentSettingsSection>
             <HappyAgentSettingsSection
-                description="Local only (127.0.0.1). Copy a WebSocket URL into a CDP client."
-                title="Attachment points"
+                description={translate(
+                    "Local only (127.0.0.1). Copy a WebSocket URL into a CDP client.",
+                )}
+                title={translate("Attachment points")}
             >
                 <DebuggerRow
                     copyLabel="Copy Electron main debugger URL"
-                    label="Electron main"
+                    label={translate("Electron main")}
                     onStart={props.onMainStart}
                     onStop={props.onMainStop}
                     target={props.main}
                 />
                 <DebuggerRow
                     copyLabel="Copy Happy renderer CDP URL"
-                    label="Happy renderer"
+                    label={translate("Happy renderer")}
                     onStart={props.onRendererStart}
                     onStop={props.onRendererStop}
                     target={props.renderer}
@@ -129,7 +136,7 @@ export function HappyAgentDebugSettings(props: HappyAgentDebugSettingsProps) {
                 <DebuggerRow
                     copyLabel="Copy Happy Agent daemon debugger URL"
                     disabled={!props.daemonConnected}
-                    label="Happy Agent daemon"
+                    label={translate("Happy Agent daemon")}
                     onStart={props.onDaemonStart}
                     onStop={props.onDaemonStop}
                     target={props.daemon}
@@ -167,7 +174,7 @@ function DebuggerRow(props: {
                             size="small"
                             variant="secondary"
                         >
-                            Stop
+                            {translate("Stop")}
                         </Button>
                     </Box>
                 ) : (
@@ -178,7 +185,7 @@ function DebuggerRow(props: {
                         size="small"
                         variant="secondary"
                     >
-                        Start
+                        {translate("Start")}
                     </Button>
                 )
             }
@@ -194,11 +201,11 @@ function targetDescription(
     unavailableMessage: string | undefined,
 ): string {
     if (target.status === "running" && target.url) return target.url;
-    if (target.status === "starting") return "Starting…";
-    if (target.status === "stopping") return "Stopping…";
+    if (target.status === "starting") return translate("Starting…");
+    if (target.status === "stopping") return translate("Stopping…");
     if (target.error) return target.error;
-    if (unavailable) return unavailableMessage ?? "Unavailable";
-    return "Not listening";
+    if (unavailable) return unavailableMessage ?? translate("Unavailable");
+    return translate("Not listening");
 }
 
 function pending(target: HappyAgentDebugTarget): boolean {

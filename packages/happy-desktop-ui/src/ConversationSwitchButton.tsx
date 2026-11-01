@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useId, useRef, useState, type KeyboardEvent } from "react";
 import { Button } from "./Button";
 import {
@@ -169,7 +170,7 @@ export function ConversationSwitchButton(props: ConversationSwitchButtonProps) {
                 aria-controls={open ? menuId : undefined}
                 aria-expanded={open}
                 aria-haspopup="menu"
-                aria-label="Choose another account"
+                aria-label={translate("Choose another account")}
                 className="happy-conversation-switch__menu"
                 data-open={open ? "" : undefined}
                 iconOnly
@@ -190,7 +191,7 @@ export function ConversationSwitchButton(props: ConversationSwitchButtonProps) {
             {open ? (
                 <WindowOverlay>
                     <button
-                        aria-label="Close menu"
+                        aria-label={translate("Close menu")}
                         className="happy-conversation-switch__backdrop"
                         onClick={() => close(true)}
                         tabIndex={-1}
@@ -208,7 +209,7 @@ export function ConversationSwitchButton(props: ConversationSwitchButtonProps) {
                         }}
                     >
                         <div
-                            aria-label="Switch to"
+                            aria-label={translate("Switch to")}
                             className="happy-composer-model-control__popup happy-conversation-switch__popup"
                             data-happy-desktop-ui="conversation-switch-popup"
                             id={menuId}

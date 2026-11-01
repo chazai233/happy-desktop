@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useSyncExternalStore } from "react";
 
 /** The small, renderer-local diagnostic sample shown in an explicit debug window. */
@@ -28,7 +29,7 @@ function bytesShort(value: number | undefined): string {
 }
 
 function performanceLabel(snapshot: LivePerformanceSnapshot): string {
-    if (snapshot.paused) return "Performance paused while the window is hidden.";
+    if (snapshot.paused) return translate("Performance paused while the window is hidden.");
     const fps =
         snapshot.fps === undefined ? "waiting for a sample" : `${snapshot.fps} frames per second`;
     const heap =
@@ -44,7 +45,7 @@ function performanceLabel(snapshot: LivePerformanceSnapshot): string {
         snapshot.longestFrameMs === undefined
             ? ""
             : `; longest frame ${snapshot.longestFrameMs} milliseconds`;
-    return `Renderer performance: ${fps}; ${heap}; ${dropped}${longest}.`;
+    return translate("Renderer performance: {0}; {1}; {2}{3}.", fps, heap, dropped, longest);
 }
 
 /**
@@ -89,7 +90,7 @@ export function LivePerformanceIndicator(props: { store: LivePerformanceStore })
                 className="happy-live-performance__metric"
                 data-happy-desktop-ui="live-performance-heap-label"
             >
-                JS heap
+                {translate("JS heap")}
             </span>
             <span
                 className="happy-live-performance__value"
@@ -101,7 +102,7 @@ export function LivePerformanceIndicator(props: { store: LivePerformanceStore })
                 className="happy-live-performance__metric"
                 data-happy-desktop-ui="live-performance-longest-label"
             >
-                Longest frame
+                {translate("Longest frame")}
             </span>
             <span
                 className="happy-live-performance__value"
@@ -113,7 +114,7 @@ export function LivePerformanceIndicator(props: { store: LivePerformanceStore })
                 className="happy-live-performance__metric"
                 data-happy-desktop-ui="live-performance-dropped-label"
             >
-                Dropped
+                {translate("Dropped")}
             </span>
             <span
                 className="happy-live-performance__value"

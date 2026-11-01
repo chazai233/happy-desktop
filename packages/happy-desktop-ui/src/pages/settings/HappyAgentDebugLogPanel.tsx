@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import type { CSSProperties } from "react";
 import { CopyButton } from "../../CopyButton";
 import { FormRow } from "../../FormRow";
@@ -52,7 +53,7 @@ function logText(props: HappyAgentDebugLogPanelProps): string {
 export function HappyAgentDebugLogPanel(props: HappyAgentDebugLogPanelProps) {
     const count = props.entries.length;
     return (
-        <HappyAgentSettingsSection title="State log">
+        <HappyAgentSettingsSection title={translate("State log")}>
             <div
                 className={props.className}
                 data-happy-desktop-ui="happy-agent-debug-log"
@@ -66,7 +67,9 @@ export function HappyAgentDebugLogPanel(props: HappyAgentDebugLogPanelProps) {
                             copiedCaption="Copied"
                             data-happy-desktop-ui="happy-agent-debug-log-copy"
                             label={
-                                props.onPathWrite ? "Copy debug log file path" : "Copy debug log"
+                                props.onPathWrite
+                                    ? translate("Copy debug log file path")
+                                    : translate("Copy debug log")
                             }
                             text={() =>
                                 props.onPathWrite
@@ -75,8 +78,12 @@ export function HappyAgentDebugLogPanel(props: HappyAgentDebugLogPanelProps) {
                             }
                         />
                     }
-                    description={`${count.toLocaleString("en-US")} ${count === 1 ? "entry" : "entries"} retained: connection changes, reconciliation, raw events and failed mutations`}
-                    label="The log"
+                    description={translate(
+                        "{0} {1} retained: connection changes, reconciliation, raw events and failed mutations",
+                        count.toLocaleString("en-US"),
+                        count === 1 ? "entry" : "entries",
+                    )}
+                    label={translate("The log")}
                 />
             </div>
         </HappyAgentSettingsSection>

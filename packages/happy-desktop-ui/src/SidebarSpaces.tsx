@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     useLayoutEffect,
@@ -195,7 +196,7 @@ export function SidebarSpaces(props: SidebarSpacesProps) {
             <div className="happy-sidebar-spaces__bar" data-happy-desktop-ui="sidebar-spaces-bar">
                 <div className="happy-sidebar-spaces__lane">{local.leading}</div>
                 <div
-                    aria-label="Spaces"
+                    aria-label={translate("Spaces")}
                     className="happy-sidebar-spaces__dots"
                     data-happy-desktop-ui="sidebar-spaces-dots"
                     role="tablist"
@@ -239,7 +240,7 @@ export function SidebarSpaces(props: SidebarSpacesProps) {
                 <div className="happy-sidebar-spaces__lane happy-sidebar-spaces__lane--trailing">
                     {local.onSpaceCreate ? (
                         <button
-                            aria-label="New space"
+                            aria-label={translate("New space")}
                             className="happy-sidebar-spaces__add"
                             data-happy-desktop-ui="sidebar-spaces-add"
                             onClick={local.onSpaceCreate}

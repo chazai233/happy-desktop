@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useCallback, useId } from "react";
 import type { GptLiveAccount } from "happy-desktop-state";
 import { FormRow } from "./FormRow";
@@ -31,11 +32,11 @@ export function GptLiveSettings(props: GptLiveSettingsProps) {
     );
     return (
         <div ref={accountsMount} className="happy-gpt-live-settings">
-            <HappyAgentSettingsSection title="Calls" rows="cards">
+            <HappyAgentSettingsSection title={translate("Calls")} rows="cards">
                 <FormRow
                     control={
                         <Switch
-                            aria-label="Enable GPT-Live voice"
+                            aria-label={translate("Enable GPT-Live voice")}
                             checked={props.enabled}
                             disabled={props.callsUnavailable !== undefined}
                             id={switchId}
@@ -43,22 +44,24 @@ export function GptLiveSettings(props: GptLiveSettingsProps) {
                             size="small"
                         />
                     }
-                    description={props.callsUnavailable ?? "Adds a phone beside Settings."}
+                    description={
+                        props.callsUnavailable ?? translate("Adds a phone beside Settings.")
+                    }
                     htmlFor={switchId}
-                    label="Voice calls"
+                    label={translate("Voice calls")}
                 />
                 {props.enabled || props.accountsVisible ? (
                     <FormRow
-                        label="Account"
+                        label={translate("Account")}
                         description={
                             props.accounts?.find((account) => account.id === props.accountId)
                                 ?.kind === "api"
-                                ? "Billed to your OpenAI API account."
+                                ? translate("Billed to your OpenAI API account.")
                                 : undefined
                         }
                         control={
                             <Select
-                                aria-label="Voice account"
+                                aria-label={translate("Voice account")}
                                 value={props.accountId}
                                 onValueChange={props.onAccountSelect}
                                 options={(props.accounts ?? []).map((account) => ({
@@ -66,7 +69,9 @@ export function GptLiveSettings(props: GptLiveSettingsProps) {
                                     label: account.label,
                                 }))}
                                 placeholder={
-                                    props.checking ? "Checking accounts…" : "Choose an account"
+                                    props.checking
+                                        ? translate("Checking accounts…")
+                                        : translate("Choose an account")
                                 }
                                 disabled={props.checking}
                                 size="small"

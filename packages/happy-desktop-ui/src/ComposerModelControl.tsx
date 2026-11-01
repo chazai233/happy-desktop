@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import {
     Fragment,
     useCallback,
@@ -407,8 +408,8 @@ function usageWarning(usage: ComposerModelAccountUsage | undefined) {
         ...warning,
         label:
             warning.window.blocking === true
-                ? `${name} reached${resets}`
-                : `${name} · ${String(warning.left)}% left${resets}`,
+                ? translate("{0} reached{1}", name, resets)
+                : translate("{0} · {1}% left{2}", name, String(warning.left), resets),
     };
 }
 
@@ -453,7 +454,7 @@ export function ComposerModelAccountGauge(props: { usage: ComposerModelAccountUs
                 className="happy-composer-model-control__signed-out"
                 data-happy-desktop-ui="composer-model-control-signed-out"
             >
-                Signed out
+                {translate("Signed out")}
             </span>
         );
     const window = usage?.week ?? usage?.session;
@@ -462,7 +463,7 @@ export function ComposerModelAccountGauge(props: { usage: ComposerModelAccountUs
         <UsageGauge
             blocked={usage.limit !== undefined}
             text={`${String(usageLeft(window))}%`}
-            title={`${window.label}: ${String(usageLeft(window))}% left`}
+            title={translate("{0}: {1}% left", window.label, String(usageLeft(window)))}
             window={window}
         />
     );
@@ -551,7 +552,7 @@ export function ComposerModelAccountUsageDetails(props: {
                     className="happy-composer-model-control__usage-unknown"
                     data-happy-desktop-ui="composer-model-control-usage-unknown"
                 >
-                    Usage unknown
+                    {translate("Usage unknown")}
                 </span>
             )}
             {usage && props.now !== undefined ? (
@@ -608,7 +609,7 @@ function UsageLine(props: { window: ComposerModelUsageWindow; primary?: boolean 
             <span className="happy-composer-model-control__usage-resets">{window.resets}</span>
             <UsageGauge
                 blocked={window.blocking === true}
-                text={`${String(usageLeft(window))}% left`}
+                text={translate("{0}% left", String(usageLeft(window)))}
                 window={window}
             />
         </div>
@@ -654,11 +655,11 @@ function clockTime(at: number, now: number) {
 
 function usageAge(at: number, now: number) {
     const minutes = Math.floor((now - at) / 60_000);
-    if (minutes < 1) return "just now";
-    if (minutes < 60) return `${String(minutes)} min ago`;
+    if (minutes < 1) return translate("just now");
+    if (minutes < 60) return translate("{0} min ago", String(minutes));
     const hours = Math.floor(minutes / 60);
-    if (hours < 20) return `${String(hours)} hr ago`;
-    return `at ${clockTime(at, now)}`;
+    if (hours < 20) return translate("{0} hr ago", String(hours));
+    return translate("at {0}", clockTime(at, now));
 }
 
 /** The caption's lines, or `undefined` when it has nothing to say. */
@@ -716,14 +717,16 @@ function UsageFreshness(props: { usage: ComposerModelAccountUsage; now: number }
                     className="happy-composer-model-control__usage-limit"
                     data-happy-desktop-ui="composer-model-control-usage-signed-out"
                 >
-                    Signed out
+                    {translate("Signed out")}
                 </span>
             ) : usage.limit ? (
                 <span
                     className="happy-composer-model-control__usage-limit"
                     data-happy-desktop-ui="composer-model-control-usage-limit"
                 >
-                    {usage.limit.resets ? `Limit resets ${usage.limit.resets}` : "Limit reached"}
+                    {usage.limit.resets
+                        ? translate("Limit resets {0}", usage.limit.resets)
+                        : translate("Limit reached")}
                 </span>
             ) : null}
             {updated === undefined ? null : (
@@ -742,7 +745,11 @@ function UsageFreshness(props: { usage: ComposerModelAccountUsage; now: number }
                     data-happy-desktop-ui="composer-model-control-usage-window-age"
                     key={window.label}
                 >
-                    {`${window.label} as of ${clockTime(window.capturedAt ?? 0, now)}`}
+                    {translate(
+                        "{0} as of {1}",
+                        window.label,
+                        clockTime(window.capturedAt ?? 0, now),
+                    )}
                 </span>
             ))}
         </div>
@@ -769,9 +776,9 @@ function AccountNotice(props: {
     const [ask, setAsk] = useState<{ pending: boolean; error?: string }>({ pending: false });
     if (notice.kind === "hidden")
         return (
-            <Tooltip label="Hidden account" open={props.open}>
+            <Tooltip label={translate("Hidden account")} open={props.open}>
                 <span
-                    aria-label="Hidden account"
+                    aria-label={translate("Hidden account")}
                     className="happy-composer-model-control__notice"
                     data-happy-desktop-ui="composer-model-control-notice"
                     data-kind="hidden"
@@ -791,11 +798,11 @@ function AccountNotice(props: {
                 setOpen(false);
             }}
         >
-            <Tooltip label="Account unavailable">
+            <Tooltip label={translate("Account unavailable")}>
                 <button
                     aria-expanded={open}
                     aria-haspopup="dialog"
-                    aria-label="Account unavailable"
+                    aria-label={translate("Account unavailable")}
                     className="happy-composer-model-control__notice"
                     data-happy-desktop-ui="composer-model-control-notice"
                     data-kind="unavailable"
@@ -817,7 +824,7 @@ function AccountNotice(props: {
                         type="button"
                     />
                     <div
-                        aria-label="Account unavailable"
+                        aria-label={translate("Account unavailable")}
                         className="happy-composer-model-control__notice-popover"
                         data-happy-desktop-ui="composer-model-control-notice-popover"
                         role="dialog"
@@ -854,7 +861,7 @@ function AccountNotice(props: {
                                 size="small"
                                 variant="primary"
                             >
-                                Ask {props.chiefOfStaffName}
+                                {translate("Ask {0}", props.chiefOfStaffName)}
                             </Button>
                             {ask.error ? (
                                 <span
@@ -1002,7 +1009,7 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
         pending: false,
     });
     const modelLabel = !hasModels
-        ? "Models not configured"
+        ? translate("Models not configured")
         : (selectedModel?.label ?? selection?.model ?? "");
     const effortCurrent = selectedRow ? effortIndex(selectedRow) : -1;
     const effortLabel = selectedRow?.model.efforts[effortCurrent]?.label;
@@ -1138,7 +1145,7 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
     const accountSummary = (service: ComposerModelService) => {
         const account = service.accounts.find((candidate) => candidate.id === accountOf(service));
         if (account === undefined) return accountOf(service);
-        return account.default ? "default account" : account.label;
+        return account.default ? translate("default account") : account.label;
     };
     /** What the header's button is called: its account, then the window it warns of. */
     const headerLabel = (service: ComposerModelService) => {
@@ -1211,7 +1218,7 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
         const shownUsage = shown ? liveUsage?.accounts.get(shown.id) : undefined;
         return (
             <div
-                aria-label={`${service.label} account`}
+                aria-label={translate("{0} account", service.label)}
                 className="happy-composer-model-control__popup happy-composer-model-control__accounts"
                 data-happy-desktop-ui="composer-model-control-accounts"
                 data-popup=""
@@ -1262,7 +1269,7 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
                                 {account.members === undefined ||
                                 account.members.length === 0 ? null : (
                                     <div
-                                        aria-label={`${accountName(account)} accounts`}
+                                        aria-label={translate("{0} accounts", accountName(account))}
                                         className="happy-composer-model-control__members"
                                         data-happy-desktop-ui="composer-model-control-members"
                                         role="group"
@@ -1298,7 +1305,7 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
     const accountsService = props.services.find((service) => service.id === accounts);
     const renderEfforts = (row: Row) => (
         <div
-            aria-label="Select effort"
+            aria-label={translate("Select effort")}
             className="happy-composer-model-control__list-panel happy-composer-model-control__efforts"
             data-happy-desktop-ui="composer-model-control-efforts"
             ref={placeList}
@@ -1362,7 +1369,12 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
                 aria-haspopup={hasModels ? "dialog" : undefined}
                 aria-label={
                     hasModels
-                        ? `Model: ${modelLabel}.${effortLabel ? ` Effort: ${effortLabel}.` : ""}${warning ? ` ${warning.label}.` : ""}`
+                        ? translate(
+                              "Model: {0}.{1}{2}",
+                              modelLabel,
+                              effortLabel ? ` Effort: ${effortLabel}.` : "",
+                              warning ? ` ${warning.label}.` : "",
+                          )
                         : modelLabel
                 }
                 className="happy-composer-model-control__trigger"
@@ -1396,14 +1408,14 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
             </button>
             {hasModels && open ? (
                 <div
-                    aria-label="Model configuration"
+                    aria-label={translate("Model configuration")}
                     className="happy-composer-model-control__menu"
                     data-happy-desktop-ui="composer-model-control-menu"
                     role="dialog"
                 >
                     <Setting
                         kind="model"
-                        label="Model"
+                        label={translate("Model")}
                         onClick={() => panelToggle("model")}
                         open={panel === "model"}
                         value={modelLabel}
@@ -1411,7 +1423,7 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
                     {selectedRow && effortLabel ? (
                         <Setting
                             kind="effort"
-                            label="Effort"
+                            label={translate("Effort")}
                             onClick={() => panelToggle("effort")}
                             onKeyDown={(event) => {
                                 const direction = arrowStep(event);
@@ -1427,7 +1439,7 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
                     ) : null}
                     {panel === "model" ? (
                         <div
-                            aria-label="Select model"
+                            aria-label={translate("Select model")}
                             className="happy-composer-model-control__list-panel happy-composer-model-control__models"
                             data-happy-desktop-ui="composer-model-control-models"
                             onPointerDown={(event) => {
@@ -1577,7 +1589,7 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
                                         type="button"
                                     >
                                         <span className="happy-composer-model-control__name">
-                                            Manage accounts
+                                            {translate("Manage accounts")}
                                         </span>
                                     </button>
                                 ) : null}
@@ -1599,7 +1611,7 @@ export function ComposerModelControl(props: ComposerModelControlProps) {
                                     target="_blank"
                                 >
                                     <span className="happy-composer-model-control__name">
-                                        Latest benchmarks
+                                        {translate("Latest benchmarks")}
                                     </span>
                                     <Octicon name="link-external" size={12} />
                                 </a>

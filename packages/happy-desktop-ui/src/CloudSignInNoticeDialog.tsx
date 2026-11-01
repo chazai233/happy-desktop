@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties, ReactNode } from "react";
 import { Banner } from "./Banner";
 import { Button } from "./Button";
@@ -95,44 +96,44 @@ const FAILURES: Record<
         body: "Your Happy account wasn’t connected.",
         chiefOfStaff: false,
         retry: "Try again",
-        title: "Sign-in was cancelled",
+        title: translate("Sign-in was cancelled"),
     },
     expired: {
         body: "The sign-in expired before it finished.",
         chiefOfStaff: true,
         retry: "Sign in again",
-        title: "Sign-in expired",
+        title: translate("Sign-in expired"),
     },
     failed: {
         body: "Happy Agent didn’t answer while finishing the sign-in.",
         chiefOfStaff: true,
         retry: "Try again",
-        title: "Couldn’t finish signing in",
+        title: translate("Couldn’t finish signing in"),
     },
     notWaiting: {
         body: "Happy Agent wasn’t waiting for this sign-in, so it wasn’t used.",
         chiefOfStaff: true,
         retry: "Sign in again",
-        title: "Sign-in wasn’t used",
+        title: translate("Sign-in wasn’t used"),
     },
     rejected: {
         body: "The account service rejected this sign-in.",
         chiefOfStaff: true,
         retry: "Try again",
-        title: "Sign-in was rejected",
+        title: translate("Sign-in was rejected"),
     },
     unavailable: {
         body: "The account service couldn’t be reached.",
         chiefOfStaff: true,
         retry: "Try again",
-        title: "Couldn’t reach your Happy account",
+        title: translate("Couldn’t reach your Happy account"),
     },
 };
 
 /** "Connected" only from the live status; a saved connection alone is "Added". */
 function connectionWords(team: CloudSignInNoticeTeam): string {
-    if (team.connection === undefined) return "Not added";
-    return team.connection.status === "connected" ? "Connected" : "Added";
+    if (team.connection === undefined) return translate("Not added");
+    return team.connection.status === "connected" ? translate("Connected") : translate("Added");
 }
 
 interface Presentation {
@@ -193,12 +194,12 @@ function paragraph(text: string): ReactNode {
 }
 
 function chiefOfStaffName(props: CloudSignInNoticeDialogProps): string {
-    return props.chiefOfStaff.name ?? "Chief of Staff";
+    return props.chiefOfStaff.name ?? translate("Chief of Staff");
 }
 
 function chiefOfStaffBanner(props: CloudSignInNoticeDialogProps): ReactNode {
     return props.chiefOfStaff.status === "unavailable" ? (
-        <Banner tone="neutral" title={`${chiefOfStaffName(props)} unavailable`}>
+        <Banner tone="neutral" title={translate("{0} unavailable", chiefOfStaffName(props))}>
             {props.chiefOfStaff.reason}
         </Banner>
     ) : null;
@@ -237,7 +238,7 @@ function present(props: CloudSignInNoticeDialogProps): Presentation {
                 body: paragraph("Confirming your Happy account…"),
                 footer: closeButton(props),
                 icon: "users",
-                title: "Finishing sign-in",
+                title: translate("Finishing sign-in"),
                 tone: "default",
             };
         case "waiting":
@@ -248,19 +249,19 @@ function present(props: CloudSignInNoticeDialogProps): Presentation {
                           <>
                               {closeButton(props)}
                               <Button onClick={props.onSignIn} variant="primary">
-                                  Try again
+                                  {translate("Try again")}
                               </Button>
                           </>
                       ),
                       icon: "alert",
-                      title: "Couldn’t start sign-in",
+                      title: translate("Couldn’t start sign-in"),
                       tone: "danger",
                   }
                 : {
                       body: paragraph("Finish signing in to your Happy account in your browser."),
                       footer: closeButton(props),
                       icon: "open-external",
-                      title: "Continue in your browser",
+                      title: translate("Continue in your browser"),
                       tone: "default",
                   };
         case "signedIn":
@@ -301,7 +302,7 @@ function teamRows(props: CloudSignInNoticeDialogProps, teams: readonly CloudSign
     const chief = props.chiefOfStaff;
     return (
         <ul
-            aria-label="Teams"
+            aria-label={translate("Teams")}
             className="cloud-sign-in-notice__teams"
             data-happy-desktop-ui="cloud-sign-in-notice-teams"
         >
@@ -324,16 +325,20 @@ function teamRows(props: CloudSignInNoticeDialogProps, teams: readonly CloudSign
                     </span>
                     {team.connection ? (
                         <Button
-                            aria-label={`Open ${team.connection.label}`}
+                            aria-label={translate("Open {0}", team.connection.label)}
                             onClick={() => props.onConnectionOpen(team.id)}
                             size="small"
                             variant="secondary"
                         >
-                            Open
+                            {translate("Open")}
                         </Button>
                     ) : (
                         <Button
-                            aria-label={`Ask ${chiefOfStaffName(props)} to connect ${team.name}`}
+                            aria-label={translate(
+                                "Ask {0} to connect {1}",
+                                chiefOfStaffName(props),
+                                team.name,
+                            )}
                             disabled={chief.status === "unavailable"}
                             loading={chief.status === "pending" && chief.teamId === team.id}
                             onClick={() => props.onTeamConnect(team.id)}
@@ -341,7 +346,7 @@ function teamRows(props: CloudSignInNoticeDialogProps, teams: readonly CloudSign
                             title={chief.status === "unavailable" ? chief.reason : undefined}
                             variant="primary"
                         >
-                            Ask {chiefOfStaffName(props)} to connect
+                            {translate("Ask")} {chiefOfStaffName(props)} {translate("to connect")}
                         </Button>
                     )}
                 </li>
@@ -361,14 +366,14 @@ function signedIn(
             body: paragraph(account),
             footer: closeButton(props),
             icon: "check-circle",
-            title: "Signed in",
+            title: translate("Signed in"),
             tone: "default",
         };
     if (teams.status === "loading")
         return {
             body: paragraph(`${account} Checking your teams…`),
             icon: "users",
-            title: "Your teams",
+            title: translate("Your teams"),
             tone: "default",
         };
     if (teams.status === "error")
@@ -384,7 +389,7 @@ function signedIn(
                     {closeButton(props)}
                     {props.chiefOfStaff.status === "unavailable" ? (
                         <Button onClick={props.onAccountSettingsOpen} variant="secondary">
-                            Open account settings
+                            {translate("Open account settings")}
                         </Button>
                     ) : (
                         chiefOfStaffButton(props, `Ask ${chiefOfStaffName(props)}`, "secondary")
@@ -392,7 +397,7 @@ function signedIn(
                 </>
             ),
             icon: "alert",
-            title: "Couldn’t read your teams",
+            title: translate("Couldn’t read your teams"),
             tone: "danger",
         };
     if (teams.teams.length === 0)
@@ -404,7 +409,7 @@ function signedIn(
                 </>
             ),
             icon: "users",
-            title: "Your teams",
+            title: translate("Your teams"),
             tone: "default",
         };
     return {
@@ -419,7 +424,7 @@ function signedIn(
             </>
         ),
         icon: "users",
-        title: "Your teams",
+        title: translate("Your teams"),
         tone: "default",
     };
 }
@@ -433,7 +438,7 @@ function accountSettingsNote(props: CloudSignInNoticeDialogProps, reason?: strin
         >
             {reason ? <span className="cloud-sign-in-notice__note-text">{reason}</span> : null}
             <Button onClick={props.onAccountSettingsOpen} size="small" variant="ghost">
-                Open account settings
+                {translate("Open account settings")}
             </Button>
         </div>
     );
@@ -464,7 +469,7 @@ function unmatched(
                 {closeButton(props)}
                 {account.status === "signedIn" ? (
                     <Button onClick={props.onTeamsCheck} variant="primary">
-                        Check my teams
+                        {translate("Check my teams")}
                     </Button>
                 ) : (
                     <Button
@@ -472,13 +477,13 @@ function unmatched(
                         onClick={props.onSignIn}
                         variant="primary"
                     >
-                        Sign in again
+                        {translate("Sign in again")}
                     </Button>
                 )}
             </>
         ),
         icon: "shield",
-        title: "Sign in from Happy",
+        title: translate("Sign in from Happy"),
         tone: "default",
     };
 }

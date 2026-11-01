@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useId } from "react";
 import { Banner } from "./Banner";
 import { Button } from "./Button";
@@ -53,17 +54,17 @@ export function GptLiveVoiceSettings(props: GptLiveVoiceSettingsProps) {
     const fastModeId = useId();
     if (props.loading)
         return (
-            <HappyAgentSettingsSection title="Voice controller">
+            <HappyAgentSettingsSection title={translate("Voice controller")}>
                 <div className="happy-agent-settings__pending">
                     <Spinner size={16} />
-                    <span>Reading voice settings…</span>
+                    <span>{translate("Reading voice settings…")}</span>
                 </div>
             </HappyAgentSettingsSection>
         );
     if (props.unavailable)
         return (
-            <HappyAgentSettingsSection title="Voice controller">
-                <Banner tone="warning" title="Voice settings unavailable">
+            <HappyAgentSettingsSection title={translate("Voice controller")}>
+                <Banner tone="warning" title={translate("Voice settings unavailable")}>
                     {props.unavailable}
                 </Banner>
             </HappyAgentSettingsSection>
@@ -74,20 +75,23 @@ export function GptLiveVoiceSettings(props: GptLiveVoiceSettingsProps) {
             data-happy-desktop-ui="gpt-live-voice-settings"
         >
             <HappyAgentSettingsSection
-                description="Changes apply from the next call."
-                title="Voice controller"
+                description={translate("Changes apply from the next call.")}
+                title={translate("Voice controller")}
             >
                 <FormRow
                     control={
                         props.controller ? <ComposerModelControl {...props.controller} /> : null
                     }
-                    description={props.controllerNotice ?? "The model voice hands your requests to"}
-                    label="Model"
+                    description={
+                        props.controllerNotice ??
+                        translate("The model voice hands your requests to")
+                    }
+                    label={translate("Model")}
                 />
                 <FormRow
                     control={
                         <Switch
-                            aria-label="Fast mode"
+                            aria-label={translate("Fast mode")}
                             checked={props.fastMode && props.fastModeUnavailable === undefined}
                             disabled={props.fastModeUnavailable !== undefined}
                             id={fastModeId}
@@ -97,21 +101,23 @@ export function GptLiveVoiceSettings(props: GptLiveVoiceSettingsProps) {
                     }
                     description={
                         props.fastModeUnavailable ??
-                        "Asks for the priority tier: quicker answers, at a higher cost."
+                        translate("Asks for the priority tier: quicker answers, at a higher cost.")
                     }
                     htmlFor={fastModeId}
-                    label="Fast mode"
+                    label={translate("Fast mode")}
                 />
             </HappyAgentSettingsSection>
             <HappyAgentSettingsSection
-                description="What voice is told when a call starts. Changes apply from the next call."
+                description={translate(
+                    "What voice is told when a call starts. Changes apply from the next call.",
+                )}
                 rows="cards"
-                title="Voice prompt"
+                title={translate("Voice prompt")}
             >
                 <div className="happy-gpt-live-voice-settings__prompt">
                     <div className="happy-gpt-live-voice-settings__prompt-head">
                         <HappyAgentSettingsStatus
-                            label={props.promptCustom ? "Custom" : "Default"}
+                            label={props.promptCustom ? translate("Custom") : translate("Default")}
                             variant={props.promptCustom ? "accent" : "neutral"}
                         />
                         <div className="happy-gpt-live-voice-settings__prompt-tools">
@@ -121,7 +127,7 @@ export function GptLiveVoiceSettings(props: GptLiveVoiceSettingsProps) {
                                 size="small"
                                 variant="ghost"
                             >
-                                Copy default
+                                {translate("Copy default")}
                             </Button>
                             <Button
                                 disabled={!props.promptCustom || props.saving}
@@ -130,12 +136,12 @@ export function GptLiveVoiceSettings(props: GptLiveVoiceSettingsProps) {
                                 size="small"
                                 variant="ghost"
                             >
-                                Reset saved prompt
+                                {translate("Reset saved prompt")}
                             </Button>
                         </div>
                     </div>
                     <TextField
-                        aria-label="Voice prompt"
+                        aria-label={translate("Voice prompt")}
                         fullWidth
                         multiline
                         onValueChange={props.onPromptChange}
@@ -143,12 +149,12 @@ export function GptLiveVoiceSettings(props: GptLiveVoiceSettingsProps) {
                         value={props.prompt}
                     />
                     {props.saveError ? (
-                        <Banner tone="danger" title="Not saved">
+                        <Banner tone="danger" title={translate("Not saved")}>
                             {props.saveError}
                         </Banner>
                     ) : null}
                     {props.promptRestartError ? (
-                        <Banner tone="danger" title="Call not restarted">
+                        <Banner tone="danger" title={translate("Call not restarted")}>
                             {props.promptRestartError}
                         </Banner>
                     ) : null}
@@ -162,8 +168,8 @@ export function GptLiveVoiceSettings(props: GptLiveVoiceSettingsProps) {
                                 variant="secondary"
                             >
                                 {props.promptRestart === "restarting"
-                                    ? "Restarting call…"
-                                    : "Restart call to apply changes"}
+                                    ? translate("Restarting call…")
+                                    : translate("Restart call to apply changes")}
                             </Button>
                         </div>
                     ) : null}
@@ -175,7 +181,7 @@ export function GptLiveVoiceSettings(props: GptLiveVoiceSettingsProps) {
                                 size="small"
                                 variant="secondary"
                             >
-                                Cancel
+                                {translate("Cancel")}
                             </Button>
                             <Button
                                 loading={props.saving}
@@ -183,7 +189,7 @@ export function GptLiveVoiceSettings(props: GptLiveVoiceSettingsProps) {
                                 size="small"
                                 variant="primary"
                             >
-                                Save
+                                {translate("Save")}
                             </Button>
                         </div>
                     ) : null}

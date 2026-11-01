@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import {
     memo,
@@ -1688,7 +1689,7 @@ function SidebarRow({
             return {
                 kind: "spinner",
                 tone: "accent",
-                label: `${item().label} is being created`,
+                label: translate("{0} is being created", item().label),
             };
         if (lifecycle() !== undefined)
             return {
@@ -1706,19 +1707,23 @@ function SidebarRow({
         if (item().status === "working")
             return item().workingIndicator === "none"
                 ? undefined
-                : { kind: "spinner", tone: "muted", label: `${item().label} is working` };
+                : {
+                      kind: "spinner",
+                      tone: "muted",
+                      label: translate("{0} is working", item().label),
+                  };
         if (item().status === "waiting")
             return {
                 kind: "glyph",
                 icon: "clock",
-                label: `${item().label} is waiting`,
+                label: translate("{0} is waiting", item().label),
                 lifecycle: "waiting",
             };
         if (item().status === "awaitingInput")
             return {
                 kind: "glyph",
                 icon: "question",
-                label: `${item().label} is waiting for your answer`,
+                label: translate("{0} is waiting for your answer", item().label),
                 lifecycle: "awaitingInput",
             };
         return undefined;
@@ -1826,7 +1831,7 @@ function SidebarRow({
                is a control that announces itself as a separator. */
             <button
                 aria-keyshortcuts={props.reorderable ? "Alt+ArrowUp Alt+ArrowDown" : undefined}
-                aria-label="Separator"
+                aria-label={translate("Separator")}
                 aria-roledescription="separator"
                 className="happy-sidebar__item happy-sidebar__separator"
                 data-dragging={props.dragging ? "" : undefined}
@@ -1862,7 +1867,7 @@ function SidebarRow({
                 ref={(node) => nodeRef?.(node)}
             >
                 <span
-                    aria-label={`Rename ${props.rename.initialValue}`}
+                    aria-label={translate("Rename {0}", props.rename.initialValue)}
                     aria-multiline={false}
                     className="happy-sidebar__section-item-label happy-sidebar__item-rename"
                     contentEditable="plaintext-only"
@@ -2128,7 +2133,7 @@ function SidebarRow({
                     )}
                     {unreadOnLeading() ? (
                         <span
-                            aria-label="Unread activity"
+                            aria-label={translate("Unread activity")}
                             className="happy-sidebar__item-leading-unread"
                             data-happy-desktop-ui="sidebar-item-leading-unread"
                         />
@@ -2166,7 +2171,9 @@ function SidebarRow({
                     <>
                         <span
                             aria-label={
-                                props.rename ? `Rename ${props.rename.initialValue}` : undefined
+                                props.rename
+                                    ? translate("Rename {0}", props.rename.initialValue)
+                                    : undefined
                             }
                             aria-multiline={props.rename ? false : undefined}
                             className={
@@ -2244,7 +2251,7 @@ function SidebarRow({
                         </span>
                         {item().voiceFocus ? (
                             <span
-                                aria-label="Voice focus"
+                                aria-label={translate("Voice focus")}
                                 className="happy-sidebar__item-voice"
                                 data-happy-desktop-ui="sidebar-item-voice"
                                 role="img"
@@ -2261,7 +2268,7 @@ function SidebarRow({
                         ) : null}
                         {unreadDot() && !unreadOnLeading() && !mentioned() ? (
                             <span
-                                aria-label="Unread"
+                                aria-label={translate("Unread")}
                                 className="happy-sidebar__item-unread"
                                 data-happy-desktop-ui="sidebar-item-unread"
                             />
@@ -4023,7 +4030,7 @@ export function Sidebar(props: SidebarProps) {
                 {local.onBack ? (
                     <div className="happy-sidebar__heading" data-happy-desktop-ui="sidebar-heading">
                         <button
-                            aria-label="Back"
+                            aria-label={translate("Back")}
                             className="happy-sidebar__back"
                             data-happy-desktop-ui="sidebar-back"
                             onClick={local.onBack}
@@ -4042,8 +4049,8 @@ export function Sidebar(props: SidebarProps) {
                     <div className="happy-sidebar__heading" data-happy-desktop-ui="sidebar-heading">
                         {local.brand ? (
                             <img
-                                alt="Happy Engineering"
-                                aria-label="Happy Engineering"
+                                alt={translate("Happy Engineering")}
+                                aria-label={translate("Happy Engineering")}
                                 className="happy-wordmark happy-sidebar__brand-logo"
                                 data-happy-desktop-ui="sidebar-brand-logo"
                                 draggable={false}
@@ -4213,7 +4220,7 @@ export function Sidebar(props: SidebarProps) {
                                 icon: "plus",
                                 id: "new-chat",
                                 kind: "action",
-                                label: local.composeLabel ?? "Create",
+                                label: local.composeLabel ?? translate("Create"),
                             }}
                             onSelect={local.onCompose}
                             shortcut={local.composeShortcut}
@@ -4423,7 +4430,10 @@ export function Sidebar(props: SidebarProps) {
                                             {section.attentionCount ? (
                                                 <span
                                                     className="happy-sidebar__section-attention"
-                                                    aria-label={`${section.attentionCount} waiting on you`}
+                                                    aria-label={translate(
+                                                        "{0} waiting on you",
+                                                        section.attentionCount,
+                                                    )}
                                                     data-happy-desktop-ui="sidebar-section-attention"
                                                     role="status"
                                                 >
@@ -4519,7 +4529,7 @@ export function Sidebar(props: SidebarProps) {
                                         )}
                                         {section.voiceFocus ? (
                                             <span
-                                                aria-label="Voice focus inside"
+                                                aria-label={translate("Voice focus inside")}
                                                 className="happy-sidebar__section-voice"
                                                 data-happy-desktop-ui="sidebar-section-voice"
                                                 role="img"
@@ -4534,7 +4544,10 @@ export function Sidebar(props: SidebarProps) {
                                                         className="happy-sidebar__section-attention"
                                                         aria-label={
                                                             section.attentionCount
-                                                                ? `${section.attentionCount} waiting on you`
+                                                                ? translate(
+                                                                      "{0} waiting on you",
+                                                                      section.attentionCount,
+                                                                  )
                                                                 : undefined
                                                         }
                                                         aria-hidden={!section.attentionCount}

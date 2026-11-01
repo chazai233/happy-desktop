@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties } from "react";
 import {
     happyAgentServiceName,
@@ -89,7 +90,9 @@ function QuotaRow(props: { quota: HappyAgentUsageQuota }) {
                 {quota.providerName ?? quota.providerId}
             </span>
             {quota.windows.length === 0 ? (
-                <span className="happy-agent-usage__quota-empty">No limits reported</span>
+                <span className="happy-agent-usage__quota-empty">
+                    {translate("No limits reported")}
+                </span>
             ) : (
                 quota.windows.map((window) => {
                     const percent = usagePercentClamp(window.usedPercent);
@@ -111,14 +114,18 @@ function QuotaRow(props: { quota: HappyAgentUsageQuota }) {
                                 />
                             </span>
                             <span
-                                aria-label={`${String(Math.round(percent))}% of ${QUOTA_LABELS[window.kind]} used`}
+                                aria-label={translate(
+                                    "{0}% of {1} used",
+                                    String(Math.round(percent)),
+                                    QUOTA_LABELS[window.kind],
+                                )}
                                 className="happy-agent-usage__quota-percent"
                                 role="img"
                             >
                                 {Math.round(percent)}%
                             </span>
                             <span className="happy-agent-usage__quota-reset">
-                                resets {formatReset(window.resetsAt)}
+                                {translate("resets")} {formatReset(window.resetsAt)}
                             </span>
                         </span>
                     );
@@ -169,7 +176,7 @@ export function HappyAgentUsagePanel(props: HappyAgentUsagePanelProps) {
                     className="happy-agent-usage__empty"
                     data-happy-desktop-ui="happy-agent-usage-empty"
                 >
-                    Loading usage…
+                    {translate("Loading usage…")}
                 </p>
             ) : (
                 <>
@@ -187,7 +194,9 @@ export function HappyAgentUsagePanel(props: HappyAgentUsagePanelProps) {
                             <span className="happy-agent-usage__total-value">
                                 {formatCost(usage.totalCost)}
                             </span>
-                            <span className="happy-agent-usage__total-label">cost</span>
+                            <span className="happy-agent-usage__total-label">
+                                {translate("cost")}
+                            </span>
                         </span>
                     </div>
 
@@ -198,12 +207,12 @@ export function HappyAgentUsagePanel(props: HappyAgentUsagePanelProps) {
                         >
                             <thead>
                                 <tr>
-                                    <th scope="col">Model</th>
-                                    <th scope="col">In</th>
-                                    <th scope="col">Out</th>
-                                    <th scope="col">Cache</th>
-                                    <th scope="col">Total</th>
-                                    <th scope="col">Cost</th>
+                                    <th scope="col">{translate("Model")}</th>
+                                    <th scope="col">{translate("In")}</th>
+                                    <th scope="col">{translate("Out")}</th>
+                                    <th scope="col">{translate("Cache")}</th>
+                                    <th scope="col">{translate("Total")}</th>
+                                    <th scope="col">{translate("Cost")}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -217,7 +226,9 @@ export function HappyAgentUsagePanel(props: HappyAgentUsagePanelProps) {
                             </tbody>
                         </table>
                     ) : (
-                        <p className="happy-agent-usage__empty">No model usage yet.</p>
+                        <p className="happy-agent-usage__empty">
+                            {translate("No model usage yet.")}
+                        </p>
                     )}
 
                     {usage.context ? (
@@ -225,8 +236,8 @@ export function HappyAgentUsagePanel(props: HappyAgentUsagePanelProps) {
                             className="happy-agent-usage__context"
                             data-happy-desktop-ui="happy-agent-usage-context"
                         >
-                            Context: {formatTokens(usage.context.totalTokens)} tokens
-                            {usage.context.approximate ? " (approximate)" : ""} on{" "}
+                            {translate("Context:")} {formatTokens(usage.context.totalTokens)} tokens
+                            {usage.context.approximate ? translate(" (approximate)") : ""} on{" "}
                             {usage.context.modelId}
                         </p>
                     ) : null}

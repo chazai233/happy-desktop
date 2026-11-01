@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { Avatar } from "./Avatar";
@@ -49,8 +50,8 @@ export type ReviewCommentProps = {
  * line, so it says so rather than claiming line zero.
  */
 export function reviewCommentPlace(lineNumber: number, side: ReviewCommentSide): string {
-    if (lineNumber === 0) return "this file";
-    return `line ${side === "deletions" ? "L" : "R"}${String(lineNumber)}`;
+    if (lineNumber === 0) return translate("this file");
+    return translate("line {0}{1}", side === "deletions" ? "L" : "R", String(lineNumber));
 }
 
 /**
@@ -106,12 +107,12 @@ export function ReviewComment(props: ReviewCommentProps) {
                         several of them needs to know which line each is about
                         without tracing it back up the column. */}
                     {local.stale
-                        ? `Local comment on ${place}, before the file changed`
-                        : `Local comment on ${place}`}
+                        ? translate("Local comment on {0}, before the file changed", place)
+                        : translate("Local comment on {0}", place)}
                 </span>
                 {local.onRemove ? (
                     <Button
-                        aria-label="Remove this comment"
+                        aria-label={translate("Remove this comment")}
                         icon="close"
                         iconOnly
                         onClick={() => local.onRemove?.()}
@@ -123,18 +124,18 @@ export function ReviewComment(props: ReviewCommentProps) {
             {writing ? (
                 <>
                     <TextField
-                        aria-label={`Comment on ${place}`}
+                        aria-label={translate("Comment on {0}", place)}
                         autoFocus
                         className="happy-review-comment__field"
                         multiline
                         onValueChange={(value) => local.onDraftChange?.(value)}
-                        placeholder="Request a change"
+                        placeholder={translate("Request a change")}
                         rows={2}
                         value={local.draft ?? ""}
                     />
                     <div className="happy-review-comment__actions">
                         <Button onClick={() => local.onCancel?.()} size="small" variant="ghost">
-                            Cancel
+                            {translate("Cancel")}
                         </Button>
                         <Button
                             /* Empty is not a comment. The control stays visible
@@ -145,7 +146,7 @@ export function ReviewComment(props: ReviewCommentProps) {
                             size="small"
                             variant="secondary"
                         >
-                            Comment
+                            {translate("Comment")}
                         </Button>
                     </div>
                 </>

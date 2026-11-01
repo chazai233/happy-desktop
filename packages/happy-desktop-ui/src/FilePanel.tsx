@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { partitionComponentProps } from "./componentProps";
 import { type CSSProperties } from "react";
 import { Button } from "./Button";
@@ -67,11 +68,11 @@ export function FilePanel(props: FilePanelProps) {
                 height={SURFACE_HEADER_HEIGHT}
                 leading={<Icon name="files" size={16} />}
                 subtitle={local.subtitle}
-                title={local.title ?? "Files"}
+                title={local.title ?? translate("Files")}
                 trailing={
                     local.onClose ? (
                         <Button
-                            aria-label={local.closeLabel ?? "Close files"}
+                            aria-label={local.closeLabel ?? translate("Close files")}
                             icon="close"
                             iconOnly
                             onClick={() => local.onClose?.()}

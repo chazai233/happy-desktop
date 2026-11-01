@@ -1,3 +1,4 @@
+import { translate } from "../../localization/translate";
 import { Banner } from "../../Banner";
 import { Box } from "../../Box";
 import { Button } from "../../Button";
@@ -52,7 +53,7 @@ export function HappyAgentFileTierSettings<TierId extends string>(
     return (
         <>
             {props.unavailable ? (
-                <Banner tone="neutral" title="Happy Agent reconnecting">
+                <Banner tone="neutral" title={translate("Happy Agent reconnecting")}>
                     {props.unavailable}
                 </Banner>
             ) : null}
@@ -67,30 +68,32 @@ export function HappyAgentFileTierSettings<TierId extends string>(
                             variant="secondary"
                             {...(canAdd || props.unavailable
                                 ? {}
-                                : { title: "Remove a tier to add another." })}
+                                : { title: translate("Remove a tier to add another.") })}
                         >
-                            Add tier
+                            {translate("Add tier")}
                         </Button>
                     }
-                    description="Matching changed files get their own section below the rest. One glob per line; ! excludes."
-                    label="Tiers"
+                    description={translate(
+                        "Matching changed files get their own section below the rest. One glob per line; ! excludes.",
+                    )}
+                    label={translate("Tiers")}
                 />
             </HappyAgentSettingsSection>
             {props.tiers.length === 0 ? (
                 <EmptyState
-                    description="Every changed file is listed together."
+                    description={translate("Every changed file is listed together.")}
                     icon="files"
                     size="inline"
-                    title="No tiers yet"
+                    title={translate("No tiers yet")}
                 />
             ) : (
                 <HappyAgentSettingsSection
-                    description="A changed file goes to the first tier it matches."
-                    title="In match order"
+                    description={translate("A changed file goes to the first tier it matches.")}
+                    title={translate("In match order")}
                 >
                     {props.tiers.map((tier, index) => (
                         <article
-                            aria-label={`Tier ${String(index + 1)}`}
+                            aria-label={translate("Tier {0}", String(index + 1))}
                             className="happy-agent-file-tier"
                             data-happy-desktop-ui="happy-agent-file-tier"
                             key={tier.id}
@@ -104,51 +107,51 @@ export function HappyAgentFileTierSettings<TierId extends string>(
                                     {index + 1}
                                 </span>
                                 <TextField
-                                    aria-label={`Tier ${String(index + 1)} name`}
+                                    aria-label={translate("Tier {0} name", String(index + 1))}
                                     // A tier is added blank, and naming it
                                     // is the next thing anyone does.
                                     autoFocus={tier.name === "" && tier.patterns.length === 0}
                                     className="happy-agent-file-tier__name"
                                     fullWidth
                                     onValueChange={(name) => props.onTierNameChange(tier.id, name)}
-                                    placeholder="Name, e.g. Tests"
+                                    placeholder={translate("Name, e.g. Tests")}
                                     value={tier.name}
                                 />
                                 <Box className="happy-agent-file-tier__actions">
                                     <Button
-                                        aria-label="Move earlier"
+                                        aria-label={translate("Move earlier")}
                                         disabled={index === 0}
                                         icon="chevron-up"
                                         iconOnly
                                         onClick={() => props.onTierMove(tier.id, "earlier")}
                                         size="small"
-                                        title="Move earlier"
+                                        title={translate("Move earlier")}
                                         variant="ghost"
                                     />
                                     <Button
-                                        aria-label="Move later"
+                                        aria-label={translate("Move later")}
                                         disabled={index === props.tiers.length - 1}
                                         icon="chevron-down"
                                         iconOnly
                                         onClick={() => props.onTierMove(tier.id, "later")}
                                         size="small"
-                                        title="Move later"
+                                        title={translate("Move later")}
                                         variant="ghost"
                                     />
                                     <Button
-                                        aria-label="Remove tier"
+                                        aria-label={translate("Remove tier")}
                                         icon="trash"
                                         iconOnly
                                         onClick={() => props.onTierRemove(tier.id)}
                                         size="small"
-                                        title="Remove tier"
+                                        title={translate("Remove tier")}
                                         variant="ghost"
                                     />
                                 </Box>
                             </header>
                             <Box className="happy-agent-file-tier__patterns">
                                 <TextField
-                                    aria-label={`Tier ${String(index + 1)} patterns`}
+                                    aria-label={translate("Tier {0} patterns", String(index + 1))}
                                     fullWidth
                                     multiline
                                     onValueChange={(value) =>

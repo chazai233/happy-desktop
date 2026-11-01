@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import type { CSSProperties } from "react";
 import type { DelegatedAgentSummary } from "happy-desktop-state";
 import { elapsedTimeFormat } from "./elapsedTimeFormat";
@@ -91,7 +92,7 @@ export function DelegatedAgentActivity(props: DelegatedAgentActivityProps) {
                 {preparing ? (
                     <Spinner
                         frame={props.spinnerFrame}
-                        label={`Preparing ${label}`}
+                        label={translate("Preparing {0}", label)}
                         size={12}
                         tone="muted"
                         variant="circle"
@@ -102,7 +103,7 @@ export function DelegatedAgentActivity(props: DelegatedAgentActivityProps) {
             </span>
             <span className="happy-delegated-agent__content">
                 <span className="happy-delegated-agent__primary">
-                    <span className="happy-delegated-agent__verb">Agent</span>
+                    <span className="happy-delegated-agent__verb">{translate("Agent")}</span>
                     <span className="happy-delegated-agent__arguments">
                         <span className="happy-delegated-agent__task">{label}</span>
                         <span aria-hidden="true">·</span>

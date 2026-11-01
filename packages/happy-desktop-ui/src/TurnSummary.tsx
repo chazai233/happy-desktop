@@ -1,3 +1,4 @@
+import { translate } from "./localization/translate";
 import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { partitionComponentProps } from "./componentProps";
 import { Icon } from "./Icon";
@@ -99,7 +100,9 @@ export function TurnSummary(props: TurnSummaryProps) {
         >
             {local.status === "complete" && local.copyText !== undefined ? (
                 <button
-                    aria-label={copied ? "Final message copied" : "Copy final message"}
+                    aria-label={
+                        copied ? translate("Final message copied") : translate("Copy final message")
+                    }
                     className="happy-turn-summary__copy"
                     data-copied={copied ? "" : undefined}
                     data-happy-desktop-ui="turn-summary-copy"

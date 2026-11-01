@@ -1,3 +1,4 @@
+import { translate } from "happy-desktop-ui";
 import { UserError } from "happy-desktop-state";
 
 /** Browser-only media. Provider credentials and provider control events never enter here. */
@@ -13,7 +14,7 @@ export interface GptLiveMedia {
 }
 
 function aborted(): DOMException {
-    return new DOMException("The voice call ended.", "AbortError");
+    return new DOMException(translate("The voice call ended."), "AbortError");
 }
 
 /**
